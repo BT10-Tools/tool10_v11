@@ -81,159 +81,79 @@ public class MakeFileSetSimilarity {
 		}
 		return(newSimilarity);
 	}
-	private static final double minCompValue = 0.6d; 
 	
 	private static void updateOneSimilarity(NodeF10 f10, NodeSimilarity nodeSim, NodePair onePair, 
 			ArrayList<Double> simList, ArrayList<String> algList)	{
 		for (int i=0; i<simList.size(); i++) { updateSim(nodeSim,simList,i); }
 		for (int i=0; i<algList.size(); i++) { updateAlg(nodeSim,algList,i); }	
 	}
-	private static void findFileSimilarityPairsByByteComparison(NodeF10 f10, HashSet<NodePair> pairSet)	{
-		if (f10.getFileSet().getListFile()==null) return;
-		HashMap<Long,Integer> mapHashId2Count = new HashMap<Long,Integer>();
-		for (NodeFile nodeFile1 : f10.getFileSet().getListFile())	{
-			if (nodeFile1.getHashId()==null) continue;
-			if (!"true".equals(nodeFile1.getIsFile())) continue;
-			long fSize1 = nodeFile1.getFileSize();
-			System.out.println("MakeFileSetSimilarity findFileSimilarityPairsByByteComparison fileName1: "+nodeFile1.getFileName());
-			for (NodeFile nodeFile2 : f10.getFileSet().getListFile())	{
-				if (nodeFile2.getHashId()==null) continue;
-				if (!"true".equals(nodeFile2.getIsFile())) continue;
-				if (nodeFile2.getFileId().longValue()<=nodeFile1.getFileId().longValue()) continue;
-					long fSize2 = nodeFile2.getFileSize();
-				if ((Math.abs(fSize1-fSize2)>1024) && 
-					(((1.0d * fSize1 / fSize2) > 2.0d) || (1.0d * fSize2 / fSize1) > 2.0d)) continue;
-				double byteComp = MakeFileSetByteComparison.calculateByteComparison(f10, nodeFile1, nodeFile2, minCompValue);
-				System.out.println("MakeFileSetSimilarity findFileSimilarityPairsByByteComparison fileName2: "+nodeFile2.getFileName()+
-						"  ,byteComp:"+byteComp);
-				if (byteComp>minCompValue)	{
-					pairSet.add(new NodePair(nodeFile1, nodeFile2, "file2file_bytecomp",byteComp));
-				}
-			}
-		}
-	}
-	private static void findFileSimilarityPairsByHashId(NodeF10 f10, HashSet<NodePair> pairSet)	{
-		if (f10.getFileSet().getListFile()==null) return;
-		HashMap<Long,Integer> mapHashId2Count = new HashMap<Long,Integer>();
-		for (NodeFile nodeFile : f10.getFileSet().getListFile())	{
-			if (nodeFile.getHashId()==null) continue;
-			if (!"true".equals(nodeFile.getIsFile())) continue;
-			if (mapHashId2Count.get(nodeFile.getHashId())==null)	{mapHashId2Count.put(nodeFile.getHashId(),1);}
-			int cnt = mapHashId2Count.get(nodeFile.getHashId());
-			mapHashId2Count.put(nodeFile.getHashId(),cnt + 1);
-		}
-		for (NodeFile nodeFile1 : f10.getFileSet().getListFile())	{
-			if (nodeFile1.getHashId()==null) continue;
-			if (!"true".equals(nodeFile1.getIsFile())) continue;
-			if (mapHashId2Count.get(nodeFile1.getHashId())==null) continue;
-			int cnt1  = mapHashId2Count.get(nodeFile1.getHashId()).intValue(); 	
-			if ((cnt1<2) || (cnt1>10)) continue; //more than 10, too many comparisons n^2 
-			for (NodeFile nodeFile2 : f10.getFileSet().getListFile())	{
-				if (nodeFile2.getFileId().longValue()<=nodeFile1.getFileId().longValue()) continue;
-				if (nodeFile2.getHashId()==null) continue;
-				if (nodeFile2.getHashId().longValue()!=nodeFile1.getHashId().longValue()) continue;
-				pairSet.add(new NodePair(nodeFile1, nodeFile2, "file2file_hash",1.0d));
-			}	
-		}
-	}
-	private static void findDirectorySimilarityPairsByHashId(NodeF10 f10, HashSet<NodePair> pairSet)	{
-		if (f10.getFileSet().getListFile()==null) return;
-		HashMap<Long,Integer> mapHashId2Count = new HashMap<Long,Integer>();
-		for (NodeFile nodeFile : f10.getFileSet().getListFile())	{
-			if (nodeFile.getHashId()==null) continue;
-			if (!"true".equals(nodeFile.getIsDirectory())) continue;
-			if (mapHashId2Count.get(nodeFile.getHashId())==null)	{mapHashId2Count.put(nodeFile.getHashId(),1);}
-			int cnt = mapHashId2Count.get(nodeFile.getHashId());
-			mapHashId2Count.put(nodeFile.getHashId(),cnt + 1);
-		}
-		for (NodeFile nodeFile1 : f10.getFileSet().getListFile())	{
-			if (nodeFile1.getHashId()==null) continue;
-			if (!"true".equals(nodeFile1.getIsDirectory())) continue;
-			if (mapHashId2Count.get(nodeFile1.getHashId())==null) continue;
-			int cnt1  = mapHashId2Count.get(nodeFile1.getHashId()); 	
-			if ((cnt1<2) || (cnt1>10)) continue; //more than 10, too many comparisons n^2 
-			for (NodeFile nodeFile2 : f10.getFileSet().getListFile())	{
-				if (nodeFile2.getFileId().longValue()<=nodeFile1.getFileId().longValue()) continue;
-				if (nodeFile2.getHashId()==null) continue;
-				if (nodeFile2.getHashId().longValue()!=nodeFile1.getHashId().longValue()) continue;
-				pairSet.add(new NodePair(nodeFile1, nodeFile2, "dir2dir_hash",1.0d));
-			}	
-		}
-	}
-	private static double fileNameSimilarityScore(String filenameStr1,String filenameStr2) {
-		double similarityScore = 0.0d; 
-		return(similarityScore);
-	}
-	private static final double minFileNameSmilarityScore = 0.8d;
+
+	private static final String[] algArray = new String[] {
+			"weightedAverage","file2file_bytecomp","file2file_hash","dir2dir_hash",
+			"file2file_samename","file2file_similar","dir2dir_samename","dir2dir_similar"};
 	
-	private static void findFileSimilarityPairsByFileName(NodeF10 f10, HashSet<NodePair> pairSet)	{
-		if (f10.getFileSet().getListFile()==null) return;
-		for (NodeFile nodeFile1 : f10.getFileSet().getListFile())	{
-			if (!"true".equals(nodeFile1.getIsFile())) continue;
-			if (nodeFile1.getFileName()==null) continue;
-			for (NodeFile nodeFile2 : f10.getFileSet().getListFile())	{
-				if (!"true".equals(nodeFile2.getIsFile())) continue;
-				if (nodeFile2.getFileId().longValue()<=nodeFile1.getFileId().longValue()) continue;
-				if (nodeFile2.getFileName()==null) continue;
-				if (nodeFile2.getFileName().equals(nodeFile1.getFileName()))	{
-					pairSet.add(new NodePair(nodeFile1, nodeFile2, "file2file_samename",1.0d));
-				} else {
-					double simValue = fileNameSimilarityScore(nodeFile2.getFileName(),nodeFile1.getFileName());
-					if (simValue > minFileNameSmilarityScore) {
-						pairSet.add(new NodePair(nodeFile1, nodeFile2, "file2file_similar",simValue));
-					}	
-				}
-			}	
-		}
-	}
-	private static void findDirectorySimilarityPairsByFileName(NodeF10 f10, HashSet<NodePair> pairSet)	{
-		if (f10.getFileSet().getListFile()==null) return;
-		for (NodeFile nodeFile1 : f10.getFileSet().getListFile())	{
-			if (nodeFile1.getFileName()==null) continue;
-			if (!"true".equals(nodeFile1.getIsDirectory())) continue;
-			for (NodeFile nodeFile2 : f10.getFileSet().getListFile())	{
-				if (!"true".equals(nodeFile2.getIsDirectory())) continue;
-				if (nodeFile2.getFileId().longValue()<=nodeFile1.getFileId().longValue()) continue;
-				if (nodeFile2.getFileName()==null) continue;
-				if (nodeFile2.getFileName().equals(nodeFile1.getFileName()))	{
-					pairSet.add(new NodePair(nodeFile1, nodeFile2, "dir2dir_samename",1.0d));
-				} else {
-					double simValue = fileNameSimilarityScore(nodeFile2.getFileName(),nodeFile1.getFileName());
-					if (simValue > minFileNameSmilarityScore) {
-						pairSet.add(new NodePair(nodeFile1, nodeFile2, "dir2dir_similar",simValue));
-					}	
-				}
-			}	
-		}
-	}
 	private static void processSimilarityPairs(NodeF10 f10, HashSet<NodePair> pairSet)	{
 		System.out.println("processSimilarityPairs pairSet.size():"+pairSet.size());
+		HashMap<String,Integer> idxMap = new HashMap<String,Integer>();
+		for (int i=0; i<algArray.length; i++) {idxMap.put(algArray[i],i); }
+		
+		//puts the pairSet entries in one record for each pair, the scores are pivoted   
+		HashMap<String,ArrayList<Double>> simMap = new HashMap<String,ArrayList<Double>>();  //map pairStr to score list
+		HashMap<String,ArrayList<String>> algMap = new HashMap<String,ArrayList<String>>();  //map pairStr to algorithm name list
 		for (NodePair onePair : pairSet)	{
-			System.out.println("processSimilarityPairs strPair:"+onePair.toString());
+			//System.out.println("processSimilarityPairs strPair:"+onePair.toString());
+			String pairStr = onePair.getPairStr(); 
+			if (simMap.get(pairStr)==null)	{
+				ArrayList<Double> simList = new ArrayList<Double>(); 
+				simList.add(0.0d); 
+				simMap.put(pairStr, simList);
+				ArrayList<String> algList = new ArrayList<String>(); 
+				algList.add(algArray[0]); 
+				algMap.put(pairStr, algList);
+			}	
+			simMap.get(pairStr).add(onePair.getScore());
+			algMap.get(pairStr).add(onePair.getAlgName());
+		}
+		//set the weighted averages, the first entry in the arraylist
+		for (String key : simMap.keySet())	{
+			ArrayList<Double> simList = simMap.get(key);
+			double sumSimilarity = 0.0d;
+			int cnt = 0;
+			for (int i=1; i<simList.size(); i++)	{
+				sumSimilarity += simList.get(i).doubleValue();
+				cnt++;
+			}
+			if (cnt>0)	{simList.set(0,sumSimilarity / cnt);}
+		}
+		for (NodePair onePair : pairSet)	{
+			//System.out.println("processSimilarityPairs strPair:"+onePair.toString());
 			NodeFile nodeFile1 = onePair.getNodeFile1();
 			NodeFile nodeFile2 = onePair.getNodeFile2();
-			ArrayList<Double> simList = new ArrayList<Double>();  
-			ArrayList<String> algList = new ArrayList<String>();
-			String similarityKey = "file2file"+nodeFile1.getFileId() +"_"+ nodeFile2.getFileId() ;
-			if (f10.getFileSet().getMapKey2Similarity().get(similarityKey)==null)	{
-				NodeSimilarity newSim = createOneSimilarity (f10, nodeFile1.getFileId(), nodeFile2.getFileId(), "file2file", similarityKey, simList, algList);
-				f10.getFileSet().getListSimilarity().add(newSim);
-				f10.getFileSet().getMapId2Similarity().put(newSim.getSimilarityId(), newSim);
-				f10.getFileSet().getMapKey2Similarity().put(similarityKey, newSim);
+			String pairStr = onePair.getPairStr(); 
+			if (simMap.get(pairStr)==null)	continue; 
+			if (algMap.get(pairStr)==null)	continue; 
+			ArrayList<Double> simList = simMap.get(pairStr);  
+			ArrayList<String> algList = algMap.get(pairStr);
+			//String similarityKey = "file2file"+nodeFile1.getFileId() +"_"+ nodeFile2.getFileId() ;
+			if (f10.getFileSet().getMapKey2Similarity().get(pairStr)==null)	{
+				NodeSimilarity newSim = createOneSimilarity (f10, nodeFile1.getFileId(), nodeFile2.getFileId(), "file2file", pairStr, simList, algList);
+				f10.getFileSet().getMapKey2Similarity().put(pairStr, newSim);
 			} else {
-				NodeSimilarity updateSim = f10.getFileSet().getMapKey2Similarity().get(similarityKey);
-				updateOneSimilarity (f10, updateSim, onePair, simList, algList);
+				//no need anymore
+				//NodeSimilarity updateSim = f10.getFileSet().getMapKey2Similarity().get(similarityKey);
+				//updateOneSimilarity (f10, updateSim, onePair, simList, algList);
 			}
 		}
+		System.out.println("processSimilarityPairs f10.getFileSet().getListSimilarity().size():"+f10.getFileSet().getListSimilarity().size());
+		for (NodeSimilarity sim : f10.getFileSet().getListSimilarity())	{
+			//System.out.print(sim.getSimilarityId().longValue()+",");
+		}
+		System.out.println();
 	}
 	private static void createSimilarities(NodeF10 f10)	{
 		HashSet<NodePair> pairSet = new HashSet<NodePair>(); //file2File_361736_123712 id1, id2 
-		findFileSimilarityPairsByHashId(f10, pairSet);
-		findFileSimilarityPairsByFileName(f10, pairSet);
-		findFileSimilarityPairsByByteComparison(f10, pairSet);
 		
-		findDirectorySimilarityPairsByHashId(f10, pairSet);
-		findDirectorySimilarityPairsByFileName(f10, pairSet);
+		MakeFileSetSimilarityAlg.createSimilarities(f10, pairSet);
 		
 		processSimilarityPairs(f10, pairSet);
 	}

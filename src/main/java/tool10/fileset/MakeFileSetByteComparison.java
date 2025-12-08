@@ -31,15 +31,15 @@ public class MakeFileSetByteComparison {
 		String sizeType1 = nodeFile1.getFileBlobSizeType();  //regular, big, small, null
 		String sizeType2 = nodeFile2.getFileBlobSizeType();
 		if ((sizeType1==null) || (sizeType2==null)) return(-1d);
-		System.out.println("MakeFileSetSimilarity calculateByteComparison fileName1: "+nodeFile1.getFileName()+" ,fileName2: "+nodeFile2.getFileName()+
-				"  ,sizeType1:"+sizeType1 + "  ,sizeType2:"+sizeType2);
+		//System.out.println("MakeFileSetSimilarity calculateByteComparison fileName1: "+nodeFile1.getFileName()+" ,fileName2: "+nodeFile2.getFileName()+
+		//		"  ,sizeType1:"+sizeType1 + "  ,sizeType2:"+sizeType2);
 		if ((("regular".equals(sizeType1)) || ("small".equals(sizeType1))) && 
 			(("regular".equals(sizeType2)) || ("small".equals(sizeType2))))	{
 			byte[] bytes1 = getNodeBytes(f10,nodeFile1,sizeType1,-1);
 			byte[] bytes2 = getNodeBytes(f10,nodeFile2,sizeType2,-1);
 			double sequentialCompValue= getSequentialByteComparison(bytes1,bytes2,minCompValue);
-			System.out.println("MakeFileSetSimilarity calculateByteComparison fileName1: "+nodeFile1.getFileName()+" ,fileName2: "+nodeFile2.getFileName()+
-					" ,bytes1.length:"+bytes1.length+" ,bytes2.length:"+bytes2.length+"  ,sequentialCompValue:"+sequentialCompValue );
+			//System.out.println("MakeFileSetSimilarity calculateByteComparison fileName1: "+nodeFile1.getFileName()+" ,fileName2: "+nodeFile2.getFileName()+
+			//		" ,bytes1.length:"+bytes1.length+" ,bytes2.length:"+bytes2.length+"  ,sequentialCompValue:"+sequentialCompValue );
 			return(sequentialCompValue);
 		} else if (("big".equals(sizeType1)) || ("big".equals(sizeType2)))	{ 
 			int cntPart1 = nodeFile1.getListFileBlobBig().size();

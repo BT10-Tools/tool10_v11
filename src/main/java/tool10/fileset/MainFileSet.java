@@ -2,6 +2,12 @@ package tool10.fileset;
 
 import tool10.sql.Conn10;
 
+/**
+ * The main program for File10.  
+ * It processes the arguments and runs File10 operations.  
+ * @author nhaney
+ *
+ */
 public class MainFileSet {  
 	
 	private static void writeFileSetTables (Conn10 conn10, NodeFileSet fileSet)	{
@@ -22,7 +28,7 @@ public class MainFileSet {
 	private static NodeFileSet readFileSet (Conn10 conn10, long fileSetId)	{
 		NodeFileSet fileSet = null; 
 		
-		conn10.getTableManager().checkAllTables();
+		//conn10.getTableManager().checkAllTables();
 		
 		fileSet = ReadFsTablesFromDb.readFileSetTables(conn10.getConn(), fileSetId);
 		return(fileSet);	
@@ -30,7 +36,7 @@ public class MainFileSet {
 	private static Conn10 getConn10 (NodeF10 f10)	{
 		Conn10 conn10 = new Conn10("fsDb",f10.getCliParams().getDbType(),f10.getCliParams().getDbName(), 
 				f10.getCliParams().getDbReadOnly(), f10.getCliParams().getDbMem()); //"sqlite","C:\\app\\sqlite\\similarity\\fileSet01.db");
-		System.out.println("sqlite conn = "+conn10.getConn());  
+		//System.out.println("sqlite conn = "+conn10.getConn());  
 		f10.setConn10(conn10);
 		if (conn10.getConn()==null)	{
 			f10.println("Database connection is null dbName:"+f10.getCliParams().getDbName());
@@ -59,6 +65,7 @@ public class MainFileSet {
         f10.setFileSet(fileSet);
         fileSet.getListSimilarity().clear();
         fileSet.getMapId2Similarity().clear();
+        fileSet.getMapKey2Similarity().clear();
         
         MakeFileSetSimilarity.makeSimilarity(f10);
 	    WriteFsTablesToDb.writeSimilarity(f10.getConn10().getConn(), fileSet);
@@ -114,9 +121,5 @@ public class MainFileSet {
 		else if ("help".equals(action))	{CliFileSetPrint.printHelp(f10.getCliParams().getCommandLine(), f10.getCliParams().getOpt()); }
 		else if ("credits".equals(action))	{CliFileSetPrint.printCredits();}
 	}
-	public static void main(String[] args) {
-        NodeF10 f10 = new NodeF10();
-        String[] args0 = CliFileSetRun.getArgs0();
-        runF10(f10,args0);        		
-	}
+	
 }

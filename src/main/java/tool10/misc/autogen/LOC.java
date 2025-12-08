@@ -146,7 +146,7 @@ public class LOC {
 	public static void main(String[] args) {
         System.out.println("Hello World!");
         //String dirName = "C:\\Users\\nursa\\eclipse-workspace-20250914\\sim10_v10\\src\\main\\java\\sim10";
-        String dirName = "C:\\Users\\nursa\\eclipse-workspace-20250914\\sim10_v10\\src";
+        String dirName = "C:\\Users\\nursa\\eclipse-workspace-20250914\\tool10_v10\\src";
         	
         
         dirWc (dirName);

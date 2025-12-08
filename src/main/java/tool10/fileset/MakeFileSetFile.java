@@ -343,7 +343,10 @@ public class MakeFileSetFile {
 		}	
 	}
 	public static void createFilesForRootFile(NodeF10 f10, String rootFileName)	{
-		
+		//will be written
+	}
+	public static void createFilesForRootDrive(NodeF10 f10, String rootFileName)	{
+		//will be written
 	}
 	public static void createFilesForRootDirectory(NodeF10 f10, String rootFileName)	{
 		if (rootFileName==null) return; 
@@ -360,7 +363,12 @@ public class MakeFileSetFile {
 		
 		ArrayList<String> fileNameList = new ArrayList<String>();
 		String[] extArray = new String[] {"pdf"}; 
-		TraverseFiles.traverseFiles(fileNameList, extArray,rootFile);
+		int maxNumberOfFiles = 256*1024;
+		int cntNumberOfFiles = TraverseFiles.traverseFiles(fileNameList, extArray,rootFile,maxNumberOfFiles);
+		if (cntNumberOfFiles > maxNumberOfFiles)	{
+			System.out.println("MakeFileSetFile createFilesForRootDirectory file number exceeded maximum cntNumberOfFiles:"+cntNumberOfFiles + ", maxNumberOfFiles:"+ maxNumberOfFiles + 
+					", fileNameList.size():"+fileNameList.size());
+		}
 		for (String fileName : fileNameList)	{
 			Path filePath = Paths.get(fileName);
 			if (filePath==null) continue;

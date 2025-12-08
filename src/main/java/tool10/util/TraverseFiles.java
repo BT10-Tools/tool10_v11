@@ -31,15 +31,25 @@ public class TraverseFiles {
 	    }
 	    return filename;
 	}
-	public static void traverseFiles(ArrayList<String> filenameList,String[] extArray, File folder) {
-		if (folder==null) return;
+	public static int traverseFiles(ArrayList<String> filenameList,String[] extArray, File folder) {
+		int maxNumberOfFiles = 256*1024;
+		int cntNumberOfFiles = 0; 
+		return(traverseFiles(filenameList,extArray,folder,maxNumberOfFiles,cntNumberOfFiles)); 
+	}
+	public static int traverseFiles(ArrayList<String> filenameList,String[] extArray, File folder, int maxNumberOfFiles) {
+		int cntNumberOfFiles = 0;
+		return(traverseFiles(filenameList,extArray,folder,maxNumberOfFiles,cntNumberOfFiles));
+	}
+	public static int traverseFiles(ArrayList<String> filenameList,String[] extArray, File folder, int maxNumberOfFiles, int cntNumberOfFiles) {
+		if (folder==null) return(0);
         if (folder.isDirectory()) {
             File[] files = folder.listFiles();
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory()) {
                     	filenameList.add(file.getAbsolutePath());
-                        traverseFiles(filenameList,extArray,file); // Recursive call for subdirectories
+                    	cntNumberOfFiles++;
+                        traverseFiles(filenameList,extArray,file,maxNumberOfFiles,cntNumberOfFiles); // Recursive call for subdirectories
                     } else {
                         //System.out.println("File: " + file.getAbsolutePath());
                     	//String ext = FilenameUtils.getExtension(file);
@@ -49,9 +59,12 @@ public class TraverseFiles {
                     		if (extArray[i].equals(ext)) {	found = true; }
                     	}
                     	filenameList.add(file.getAbsolutePath());
+                    	cntNumberOfFiles++;
                     }
+                    if (cntNumberOfFiles>maxNumberOfFiles) return(cntNumberOfFiles);
                 }
             }
         }
+        return(cntNumberOfFiles);
 	}
 }

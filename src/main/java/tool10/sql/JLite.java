@@ -1,15 +1,11 @@
 package tool10.sql;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import tool10.util.FileUtil;
 

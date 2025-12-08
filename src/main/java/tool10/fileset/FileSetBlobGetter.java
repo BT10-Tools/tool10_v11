@@ -13,8 +13,8 @@ public class FileSetBlobGetter {
 		byte[] decryptedBytes = ByteEncryption.decryptByType(fileBlob.getEncryptionType(), encrpytionKey, fileBlob.getEncryptedBytes());
 		if (decryptedBytes==null) return(null);
 		if (decryptedBytes.length != fileBlob.getCompressedFileSize()) {
-			System.out.println("FileSetBlobGetter getFileBlobBytes file: "+nodeFile.getFileNameAbsolute()+" ,decryptedBytes.length :"+decryptedBytes.length + 
-				" ,fileBlob.getCompressedFileSize():"+fileBlob.getCompressedFileSize());
+			//System.out.println("FileSetBlobGetter getFileBlobBytes file: "+nodeFile.getFileNameAbsolute()+" ,decryptedBytes.length :"+decryptedBytes.length + 
+			//	" ,fileBlob.getCompressedFileSize():"+fileBlob.getCompressedFileSize());
 		}
 		byte[] decompressedBytes = ByteCompression.decompressByType(fileBlob.getCompressionType(), decryptedBytes);
 		boolean hashMatch = false;
@@ -27,9 +27,9 @@ public class FileSetBlobGetter {
 				}
 			}
 		}
-		System.out.println("FileSetBlobGetter getFileBlobBytes file: "+nodeFile.getFileNameAbsolute()+" ,decryptedBytes.length :"+decryptedBytes.length + 
-				" ,fileBlob.getCompressedFileSize():"+fileBlob.getCompressedFileSize() +
-				" ,hashMatch:"+hashMatch);
+	//	System.out.println("FileSetBlobGetter getFileBlobBytes file: "+nodeFile.getFileNameAbsolute()+" ,decryptedBytes.length :"+decryptedBytes.length + 
+	//			" ,fileBlob.getCompressedFileSize():"+fileBlob.getCompressedFileSize() +
+	//			" ,hashMatch:"+hashMatch);
 		
 		return(decompressedBytes);
 	}
@@ -40,7 +40,7 @@ public class FileSetBlobGetter {
 				System.out.println("FileSetBlobGetter writeBlobBytesForFileRegular, different filesize: "+nodeFile.getFileSize().longValue()+" ,bytes length:"+bytes.length);
 				return(null);
 			}
-			System.out.println("FileSetBlobGetter getBlobBytesForFileRegular returning bytes length:"+bytes.length);
+			//System.out.println("FileSetBlobGetter getBlobBytesForFileRegular returning bytes length:"+bytes.length);
 			return(bytes);
 		}
 		return(null);
@@ -48,7 +48,7 @@ public class FileSetBlobGetter {
 	private static String writeBlobBytesForFileRegular(NodeFileSet fileSet, NodeFile nodeFile, String fileName) {
 		byte[] bytes = getBlobBytesForFileRegular(fileSet,nodeFile);
 		if (bytes!=null) {
-			System.out.println("FileSetBlobGetter writeBlobBytesForFileRegular creating file: "+fileName+" ,bytes length:"+bytes.length);
+			//System.out.println("FileSetBlobGetter writeBlobBytesForFileRegular creating file: "+fileName+" ,bytes length:"+bytes.length);
 			boolean created = FileUtil.writeBytesToFile(fileName, bytes);	
 			if (created) return("ok"); else return("nok");
 		}
@@ -72,8 +72,8 @@ public class FileSetBlobGetter {
 				System.out.println("FileSetBlobGetter writeBlobBytesForFileBig, different filesize: "+blobPart.getBlobSize().longValue()+" ,bytes length:"+bytes.length);
 				return(null);
 			}
-			System.out.println("FileSetBlobGetter getBlobBytesForFileBig returning bytes length:"+bytes.length+
-					" ,partNumber:"+blobPart.getPartNumber());
+			//System.out.println("FileSetBlobGetter getBlobBytesForFileBig returning bytes length:"+bytes.length+
+			//		" ,partNumber:"+blobPart.getPartNumber());
 			return(bytes);
 		}
 		return(null);
@@ -86,8 +86,8 @@ public class FileSetBlobGetter {
 			if (blobPart.getPartNumber()==null) continue;
 			int partNumber = blobPart.getPartNumber().intValue();
 			bytes = getBlobBytesForFileBig(fileSet,nodeFile,partNumber);
-			System.out.println("FileSetBlobGetter writeBlobBytesForFileBig creating file: "+fileName+" ,bytes length:"+bytes.length+
-					" ,partNumber:"+blobPart.getPartNumber());
+			//System.out.println("FileSetBlobGetter writeBlobBytesForFileBig creating file: "+fileName+" ,bytes length:"+bytes.length+
+			//		" ,partNumber:"+blobPart.getPartNumber());
 			if (appendFile==null) {
 				appendFile = FileUtil.appendBytesToFile(fileName, bytes);
 			} else {
@@ -114,7 +114,7 @@ public class FileSetBlobGetter {
 		    byte bytesSmall[] = new byte[indexEnd - indexStart + 1];
 	        System.arraycopy(bytes, indexStart, bytesSmall, 0, indexEnd - indexStart + 1);
 	        
-			System.out.println("FileSetBlobGetter getBlobBytesForFileSmall returning bytesSmall length:"+bytesSmall.length);
+			//System.out.println("FileSetBlobGetter getBlobBytesForFileSmall returning bytesSmall length:"+bytesSmall.length);
 			return (bytesSmall);
 		}
 		return(null);
@@ -122,7 +122,7 @@ public class FileSetBlobGetter {
 	private static String writeBlobBytesForFileSmall(NodeFileSet fileSet, NodeFile nodeFile, String fileName) {
 		byte[] bytesSmall = getBlobBytesForFileSmall(fileSet, nodeFile); 
 		if (bytesSmall!=null) {
-			System.out.println("FileSetBlobGetter writeBlobBytesForFileSmall creating file: "+fileName+" ,bytesSmall length:"+bytesSmall.length);
+			//System.out.println("FileSetBlobGetter writeBlobBytesForFileSmall creating file: "+fileName+" ,bytesSmall length:"+bytesSmall.length);
 			boolean created = FileUtil.writeBytesToFile(fileName, bytesSmall);
 			if (created) return("ok"); else return("nok");
 		}
@@ -150,8 +150,8 @@ public class FileSetBlobGetter {
 		
 		long fileSize = FileUtil.getFileSize(fileName);
 		if (nodeFile.getFileSize().longValue()!=fileSize)	{
-			System.out.println(" ====checkWrittenFile fileSize id different db File Size:"+nodeFile.getFileSize().longValue() +
-					" ,written file size:"+fileSize);	
+			//System.out.println(" ====checkWrittenFile fileSize id different db File Size:"+nodeFile.getFileSize().longValue() +
+			//		" ,written file size:"+fileSize);	
 		}
 		System.out.println("");
 		return(checkStr);

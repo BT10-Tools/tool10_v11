@@ -9,7 +9,7 @@ public class SqlUtil {
 
 	public static int executeUpdate(Connection connection,String cmd)	{
 		int cntUpdated = -1;
-		System.out.println("cmd:"+cmd);
+		//System.out.println("cmd:"+cmd);
 	    try	{  
 	    	Statement statement = connection.createStatement();
 	    	statement.setQueryTimeout(30);  // set timeout to 30 sec.
