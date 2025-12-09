@@ -5,9 +5,17 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class TimeUtil {
 
+	public static long diffInMillisZDT (ZonedDateTime startZdt, ZonedDateTime endZdt)	{
+		if ((startZdt==null) || (endZdt==null)) return(Long.MIN_VALUE);
+
+		// Calculate the difference
+		long days = ChronoUnit.MILLIS.between(startZdt, endZdt);
+		return(days);
+	}
 	public static ZonedDateTime FileTime2ZDT(FileTime fTime)	{
 		if (fTime==null) return(null);
 		ZonedDateTime zdt = fTime.toInstant().atZone(ZoneId.systemDefault());
