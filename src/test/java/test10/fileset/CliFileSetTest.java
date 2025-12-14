@@ -4,7 +4,7 @@ import tool10.fileset.CliFileSetInitialize;
 import tool10.fileset.CliFileSetParseAndValidate;
 import tool10.fileset.CliParameter;
 import tool10.fileset.MainFileSet;
-import tool10.fileset.NodeF10;
+import tool10.fileset.nodes.NodeF10;
 
 public class CliFileSetTest {
 	

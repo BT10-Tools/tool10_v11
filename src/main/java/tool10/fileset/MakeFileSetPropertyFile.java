@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileSet;
 import tool10.sql.Conn10;
 
 public class MakeFileSetPropertyFile {

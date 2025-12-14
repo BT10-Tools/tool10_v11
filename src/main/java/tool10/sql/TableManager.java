@@ -73,7 +73,8 @@ public class TableManager {
 		String tblList[] = null;
 		if ("fsDb".equals(managerName))			{
 			tblList = new String[] {"REG_ENTITYID","FS_FILESET","FS_FILESYSTEM","FS_FILESTORE","FS_FILE","FS_FILEBLOB","FS_FILEBLOBSMALL",
-									"FS_FILEGROUP","FS_FILEGROUPMEMBER","FS_HASH","FS_HOST","FS_PROPERTY","FS_QUERY","FS_SIMILARITY","FS_STAT"}; }
+									"FS_FILEGROUP","FS_FILEGROUPMEMBER","FS_HASH","FS_HOST","FS_PROPERTY","FS_QUERY","FS_SIMILARITY","FS_STAT",
+									"FS_ARCHIVE","FS_CONTAINER", "FS_TRANSFORM"}; }
 		return(tblList);
 	}
 

@@ -34,6 +34,14 @@ public class StrUtil {
 		}
 		return(dt);
 	}
+	public static String padLeft(String inputString, int length, String letterToBePadded) {
+		if (length<=0) return(inputString);		
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+		    sb.append(letterToBePadded);
+		}
+		return (sb.toString()+inputString);
+	}
 	public static String initcap(String str)	{
 		if (str==null) return(null);
 		if ((str.isBlank()) || (str.isEmpty())) return(str);

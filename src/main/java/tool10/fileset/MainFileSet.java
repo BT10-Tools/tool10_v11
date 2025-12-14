@@ -1,7 +1,10 @@
 package tool10.fileset;
 
-import java.time.ZonedDateTime;
-
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFileSet;
+import tool10.fileset.transform.TransformFileSet;
+import tool10.fileset.transform.UnembedFileSet;
+import tool10.fileset.transform.UnzipFileSet;
 import tool10.sql.Conn10;
 
 /**
@@ -100,6 +103,36 @@ public class MainFileSet {
         ExportFileSet.exportFileSet(f10);
         f10.getConn10().closeConnection();
 	}
+	public static void runUnzip(NodeF10 f10) {
+        NodeFileSet fileSet = getReadFileSet(f10);
+        if (fileSet==null) return;
+        f10.setFileSet(fileSet);
+        UnzipFileSet.unzipFileSet(f10,fileSet);
+        if (f10.getOutputFileSet()!=null)	{
+        	writeFileSetTables (f10.getConn10(),f10.getOutputFileSet());
+        }
+        f10.getConn10().closeConnection();
+	}
+	public static void runUnembed(NodeF10 f10) {
+        NodeFileSet fileSet = getReadFileSet(f10);
+        if (fileSet==null) return;
+        f10.setFileSet(fileSet);
+        UnembedFileSet.unembedFileSet(f10,fileSet);
+        if (f10.getOutputFileSet()!=null)	{
+        	writeFileSetTables (f10.getConn10(),f10.getOutputFileSet());
+        }
+        f10.getConn10().closeConnection();
+	}
+	public static void runTransform(NodeF10 f10) {
+        NodeFileSet fileSet = getReadFileSet(f10);
+        if (fileSet==null) return;
+        f10.setFileSet(fileSet);
+        TransformFileSet.transformFileSet(f10,fileSet);
+        if (f10.getOutputFileSet()!=null)	{
+        	writeFileSetTables (f10.getConn10(),f10.getOutputFileSet());
+        }
+        f10.getConn10().closeConnection();
+	}
 	public static void runF10(NodeF10 f10, String[] args0)	{
 		PropConfig propConfig = new PropConfig();
 	    f10.setPropConfig(propConfig);
@@ -119,6 +152,9 @@ public class MainFileSet {
 		if ("load".equals(action))	{runLoad(f10);}
 		else if ("extract".equals(action))	{runExtract(f10);}
 		else if ("export".equals(action))	{runExport(f10);}
+		else if ("unzip".equals(action))	{runUnzip(f10);}
+		else if ("unembed".equals(action))	{runUnembed(f10);}
+		else if ("transform".equals(action))	{runTransform(f10);}
 		else if ("similarity".equals(action))	{runSimilarity(f10);}
 		else if ("help".equals(action))	{CliFileSetPrint.printHelp(f10.getCliParams().getCommandLine(), f10.getCliParams().getOpt()); }
 		else if ("credits".equals(action))	{CliFileSetPrint.printCredits();}

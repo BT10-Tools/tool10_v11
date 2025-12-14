@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.UserPrincipal;
 import java.nio.file.attribute.UserPrincipalLookupService;
 
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileSet;
 import tool10.util.TimeUtil;
 
 public class FilePropertySetter {

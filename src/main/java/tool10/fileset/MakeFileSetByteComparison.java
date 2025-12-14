@@ -1,5 +1,8 @@
 package tool10.fileset;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFile;
+
 public class MakeFileSetByteComparison {
 	
 	private static double getSequentialByteComparison(byte[] bytes1,byte[] bytes2, double minCompValue)	{

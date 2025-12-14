@@ -1,6 +1,7 @@
 package tool10.fileset;
 
 import java.sql.Connection;
+import java.time.ZonedDateTime;
 
 public class CreateFileSetTableSql {
 	
@@ -136,9 +137,9 @@ public class CreateFileSetTableSql {
 			alg15 , alg16 , alg17 , alg18 , alg19 ,
 	*/		
 			String fieldStr = 	"similarityId INTEGER PRIMARY KEY, fileSetId INTEGER, entityId1 INTEGER, entityId2 INTEGER, similarityType TEXT, similarityKey TEXT, \r\n"
-					+ "			sim00 INTEGER, sim01 INTEGER, sim02 INTEGER, sim03 INTEGER, sim04 INTEGER, sim05 INTEGER, sim06 INTEGER, \r\n"
-					+ "			sim07 INTEGER, sim08 INTEGER, sim09 INTEGER, sim10 INTEGER, sim11 INTEGER, sim12 INTEGER, sim13 INTEGER,\r\n"
-					+ "			sim14 INTEGER, sim15 INTEGER, sim16 INTEGER, sim17 INTEGER, sim18 INTEGER, sim19 INTEGER, alg00 TEXT,\r\n"
+					+ "			sim00 REAL, sim01 REAL, sim02 REAL, sim03 REAL, sim04 REAL, sim05 REAL, sim06 REAL, \r\n"
+					+ "			sim07 REAL, sim08 REAL, sim09 REAL, sim10 REAL, sim11 REAL, sim12 REAL, sim13 REAL,\r\n"
+					+ "			sim14 REAL, sim15 REAL, sim16 REAL, sim17 REAL, sim18 REAL, sim19 REAL, alg00 TEXT,\r\n"
 					+ "			alg01 TEXT, alg02 TEXT, alg03 TEXT, alg04 TEXT, alg05 TEXT, alg06 TEXT, alg07 TEXT,\r\n"
 					+ "			alg08 TEXT, alg09 TEXT, alg10 TEXT, alg11 TEXT, alg12 TEXT, alg13 TEXT, alg14 TEXT,\r\n"
 					+ "			alg15 TEXT, alg16 TEXT, alg17 TEXT, alg18 TEXT, alg19 TEXT, creationDate TEXT,modificationDate TEXT";
@@ -167,6 +168,38 @@ public class CreateFileSetTableSql {
 								"maxLineLength INTEGER, sumLineLength INTEGER, avgLineLength REAL, crc64 INTEGER,"+
 								"creationDate TEXT,modificationDate TEXT";
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
+		} else if ("FS_ARCHIVE".equals(tableName))	{
+			//public NodeArchive(Long archiveId, Long fileSetId, Long archiveFileId, Long archiveFileSetId, String archiveType,
+			//String extensionType, String algorithmName, String multipleFileArchive, String archiveRemark, Long cntFile,
+			//Long cntArchive, Long cntDirectory, Long cntFileTree, Long cntDirectoryTree, Long originalFileSize,
+			//Long unzippedFileSize, Double unzipGainRatio, Long unzippedGainBytes, ZonedDateTime archiveCreationDate,
+			//ZonedDateTime archiveModificationDate, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+			String fieldStr = 	
+					"archiveId INTEGER PRIMARY KEY, fileSetId INTEGER, archiveFileId INTEGER, archiveFileSetId INTEGER,archiveType TEXT, "+
+					"extensionType TEXT, algorithmName TEXT, multipleFileArchive TEXT, archiveRemark TEXT, cntFile INTEGER, "+
+					"cntArchive INTEGER, cntDirectory, cntFileTree INTEGER, cntDirectoryTree INTEGER, originalFileSize INTEGER, "+
+					"unzippedFileSize INTEGER, unzipGainRatio REAL,unzippedGainBytes INTEGER, archiveCreationDate TEXT, "+
+					"archiveModificationDate TEXT, creationDate TEXT,modificationDate TEXT";
+			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";					
+		} else if ("FS_CONTAINER".equals(tableName))	{
+			//public NodeContainer(Long containerId, Long fileSetId, Long containerFileId, Long containerFileSetId,
+			//String containerType, String extensionType, String algorithmName, String containerRemark, Long cntFile,
+			//Long originalFileSize, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+			String fieldStr = 	
+					"containerId INTEGER PRIMARY KEY, fileSetId INTEGER, containerFileId INTEGER, containerFileSetId INTEGER," + 
+					"containerType TEXT, extensionType TEXT, algorithmName TEXT, containerRemark TEXT, cntFile INTEGER, "+
+					"originalFileSize INTEGER, creationDate TEXT,modificationDate TEXT";
+			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";					
+		} else if ("FS_TRANSFORM".equals(tableName))	{
+			//public NodeTransform(Long transformId, Long fileSetId, Long transformFileId, Long transformFileSetId,
+			//Long transformedFileId, String transformType, String extensionType, String algorithmName,
+			//String transformRemark, String tmpFileName, Long cntFile, Long originalFileSize, Long transformedFileSize,
+			//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+			String fieldStr = 	
+					"transformId INTEGER PRIMARY KEY, fileSetId INTEGER, transformFileId INTEGER, transformFileSetId INTEGER," + 
+					"transformedFileId INTEGER, transformType TEXT, extensionType TEXT, algorithmName TEXT, transformRemark TEXT, tmpFileName TEXT, "+
+					"cntFile INTEGER, originalFileSize INTEGER, transformedFileSize INTEGER, creationDate TEXT,modificationDate TEXT";
+			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";					
 		}  else if ("REG_ENTITYID".equals(tableName))	{
 			String fieldStr = "EntityId INTEGER PRIMARY KEY AUTOINCREMENT, tableName TEXT";
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";

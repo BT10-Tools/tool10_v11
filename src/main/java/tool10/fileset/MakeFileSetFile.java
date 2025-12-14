@@ -13,6 +13,12 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileSet;
+import tool10.fileset.nodes.NodeFileStore;
+import tool10.fileset.nodes.NodeFileSystem;
+import tool10.fileset.nodes.NodeHost;
 import tool10.util.TimeUtil;
 import tool10.util.TraverseFiles;
 
@@ -196,11 +202,11 @@ public class MakeFileSetFile {
 			
 		}
 	}
-	private static NodeFile createOneFile(NodeF10 f10, File file, Long parentFileId, Long rootFileId)	{
+	private static NodeFile createOneFile(NodeF10 f10, NodeFileSet fileSet, File file, Long parentFileId, Long rootFileId)	{
 		NodeFile newFile = null;
 		if ((file==null) || (!file.exists())) {return(null);}
 		try {
-			Long fileSetId = f10.getFileSet().getFileSetId();
+			Long fileSetId = fileSet.getFileSetId();
 			Long fileSize = file.length();  //file.length() = null;
 			String fileName = file.getName();
 			String fileNameAbsolute = file.getAbsolutePath();
@@ -241,9 +247,9 @@ public class MakeFileSetFile {
 			}
 			Long fileId = f10.getConn10().getNextId(-1); //"BSC_BASIC");
 			newFile.setFileId(fileId);
-			f10.getFileSet().getListFile().add(newFile);
-			f10.getFileSet().getMapId2File().put(newFile.getFileId(),newFile);
-			f10.getFileSet().getMapAbsoluteFileName2File().put(newFile.getFileNameAbsolute(),newFile);
+			fileSet.getListFile().add(newFile);
+			fileSet.getMapId2File().put(newFile.getFileId(),newFile);
+			fileSet.getMapAbsoluteFileName2File().put(newFile.getFileNameAbsolute(),newFile);
 		} catch(Exception e)	{
 			
 		}
@@ -294,6 +300,7 @@ public class MakeFileSetFile {
 		String nlStr = "\\";
 		char  nlChar = '\\';
 		for (NodeFile nodeFile : fileSet.getListFile())	{
+			if ((nodeFile.getDepth()!=null) || (nodeFile.getDepthFromRoot()!=null)) continue;
 			int depth = -1;
 			String fileNameRelative = nodeFile.getFileNameRelative();
 			if (fileNameRelative==null)	{ 
@@ -342,13 +349,15 @@ public class MakeFileSetFile {
 					" ,nodeFile.getListSiblingFile().size():"+nodeFile.getListSiblingFile().size());
 		}	
 	}
-	public static void createFilesForRootFile(NodeF10 f10, String rootFileName)	{
+	public static void createFilesForRootFile(NodeF10 f10, NodeFileSet fileSet, String rootFileName)	{
 		//will be written
 	}
-	public static void createFilesForRootDrive(NodeF10 f10, String rootFileName)	{
+	public static void createFilesForRootDrive(NodeF10 f10, NodeFileSet fileSet, String rootFileName)	{
 		//will be written
 	}
-	public static void createFilesForRootDirectory(NodeF10 f10, String rootFileName)	{
+	public static void createFilesForRootDirectory(NodeF10 f10, NodeFileSet fileSet,  String rootFileName)	{
+		System.out.println("MakeFileSetFile createFilesForRootDirectory file processing rootFileName:"+rootFileName );
+		
 		if (rootFileName==null) return; 
 		Path path = Paths.get(rootFileName); //"C:\\nh\\03_Downloaded"
 		
@@ -357,8 +366,8 @@ public class MakeFileSetFile {
 	    
 		Long parentFileId = null; 
 		Long rootFileId = null;
-		NodeFile nodeRoot = createOneFile(f10,rootFile, parentFileId, rootFileId);
-		f10.getFileSet().getListRoots().add(nodeRoot);
+		NodeFile nodeRoot = createOneFile(f10, fileSet, rootFile, parentFileId, rootFileId);
+		fileSet.getListRoots().add(nodeRoot);
 		if (!"true".equals(nodeRoot.getIsDirectory())) return; //if the root is  a file just return
 		
 		ArrayList<String> fileNameList = new ArrayList<String>();
@@ -366,19 +375,23 @@ public class MakeFileSetFile {
 		int maxNumberOfFiles = 256*1024;
 		int cntNumberOfFiles = TraverseFiles.traverseFiles(fileNameList, extArray,rootFile,maxNumberOfFiles);
 		if (cntNumberOfFiles > maxNumberOfFiles)	{
-			System.out.println("MakeFileSetFile createFilesForRootDirectory file number exceeded maximum cntNumberOfFiles:"+cntNumberOfFiles + ", maxNumberOfFiles:"+ maxNumberOfFiles + 
-					", fileNameList.size():"+fileNameList.size());
+			System.out.println("MakeFileSetFile createFilesForRootDirectory file number exceeded maximum cntNumberOfFiles:"+cntNumberOfFiles + 
+					", maxNumberOfFiles:"+ maxNumberOfFiles +", fileNameList.size():"+fileNameList.size());
 		}
+		System.out.println("MakeFileSetFile createFilesForRootDirector rootFileName:"+rootFileName+ " ,cntNumberOfFiles:"+cntNumberOfFiles); 
 		for (String fileName : fileNameList)	{
 			Path filePath = Paths.get(fileName);
 			if (filePath==null) continue;
 			File processFile = filePath.toFile();
 			if ((processFile==null) || (!processFile.exists())) continue;
-			NodeFile addedFile = createOneFile(f10, processFile, parentFileId, nodeRoot.getFileId());
+			NodeFile addedFile = createOneFile(f10, fileSet, processFile, parentFileId, nodeRoot.getFileId());
+			System.out.println("MakeFileSetFile createFilesForRootDirector filePath.toString():"+filePath.toString()+ " ,addedFile:"+addedFile);
 		}
-		updateParentId(f10.getFileSet());
-		updateDepths(f10.getFileSet());
-		updateSiblingLists(f10.getFileSet());
-		updateDirectoryFilesize(f10.getFileSet(), nodeRoot);
+		System.out.println("MakeFileSetFile createFilesForRootDirector fileSet.getListFile().size():"+fileSet.getListFile().size());
+		
+		updateParentId(fileSet);
+		updateDepths(fileSet);
+		updateSiblingLists(fileSet);
+		updateDirectoryFilesize(fileSet, nodeRoot);
 	}
 }

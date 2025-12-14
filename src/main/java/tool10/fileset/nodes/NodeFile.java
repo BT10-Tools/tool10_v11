@@ -1,4 +1,4 @@
-package tool10.fileset;
+package tool10.fileset.nodes;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -210,20 +210,27 @@ public class NodeFile implements Serializable {
 	}
 	// Sort NodeFile's by fileName
 	class SortByFileName implements Comparator<NodeFile> {
-	  public int compare(NodeFile a, NodeFile b) {
-	    if ((a.getFileName()==null) || (b.getFileName()==null)) return(0);
-	    int result = (a.getFileName().compareTo(b.getFileName()));
-	    if ((result==-1) || (result==1)) return(result);
-	    if (result==0)	{
-	    	if 		(a.getFileId().longValue()>b.getFileId().longValue()) return(-1);
-	    	else if (a.getFileId().longValue()>b.getFileId().longValue()) return(1);
-	    	return(0);
-	    }
-	    return(0);
-	  }
+		@Override
+		public int compare(NodeFile a, NodeFile b) {
+		    if      ((a.fileName==null) || (b.fileName==null)) return(0);
+		    else if ((a.fileName!=null) || (b.fileName==null)) return(1);
+		    else if ((a.fileName==null) || (b.fileName!=null)) return(-1);
+		    else {
+		    	int result = (a.fileName.compareTo(b.fileName));
+		    	if ((result==-1) || (result==1)) return(result);
+		    	if (result==0)	{
+		    		if 		(a.fileId.longValue()>b.fileId.longValue()) return(-1);
+		    		else if (a.fileId.longValue()>b.fileId.longValue()) return(1);
+		    		else return(0);
+		    	}	
+		    }
+		    return(0);
+		}
 	}
 	public void sortListSiblingFile()	{
-		Comparator<NodeFile> myComparator = new SortByFileName();
+		if (listSiblingFile==null) return;
+		if (listSiblingFile.size()<2) return;
+		Comparator<NodeFile> myComparator = new SortByFileName();		
 		Collections.sort(listSiblingFile, myComparator);
 	}
 	public void updateFields(Long fileSystemId, Long fileStoreId,Long fileTypeId, Long sourceId, Long languageId, Long languageId2, Long hashCode, Long hashId,

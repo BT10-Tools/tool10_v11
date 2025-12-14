@@ -1,37 +1,52 @@
-package tool10.fileset;
+package tool10.fileset.nodes;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class NodeFileGroupMember implements Serializable {
+public class NodeHost implements Serializable {
 
-	public NodeFileGroupMember(Long fileGroupMemberId, Long fileGroupId, Long fileSetId, Long fileId, Long displayOrder,
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public NodeHost(Long hostId, Long fileSetId, String hostName, String hostIP, String domainName,
 			ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
-		this.fileGroupMemberId = fileGroupMemberId;
-		this.fileGroupId = fileGroupId;
+		this.hostId=hostId;
 		this.fileSetId = fileSetId;
-		this.fileId = fileId;
-		this.displayOrder = displayOrder;
+		this.hostName=hostName;
+		this.hostIP=hostIP;
+		this.domainName=domainName;
 		this.creationDate = creationDate;
 		this.modificationDate = modificationDate;
 	}
-	private static final long serialVersionUID = 1L;
-	
-	private Long fileGroupMemberId;
-	private Long fileGroupId;
+	private Long hostId;
 	private Long fileSetId;
-	private Long fileId;
-	private Long displayOrder;
+	private String hostName=null;
+	private String hostIP=null;
+	private String domainName=null;
 	private ZonedDateTime creationDate;
 	private ZonedDateTime modificationDate;
 	
 	//GETTERS AND SETTERS
-	public Long getDisplayOrder() {
-		return displayOrder;
+	public long getHostId() {
+		return hostId;
 	}
-	public void setDisplayOrder(Long displayOrder) {
-		this.displayOrder = displayOrder;
+	public void setHostId(long hostId) {
+		this.hostId = hostId;
+	}
+	public String getHostName() {
+		return hostName;
+	}
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+	public String getHostIP() {
+		return hostIP;
+	}
+	public void setHostIP(String hostIP) {
+		this.hostIP = hostIP;
 	}
 	public ZonedDateTime getCreationDate() {
 		return creationDate;
@@ -48,17 +63,10 @@ public class NodeFileGroupMember implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public Long getFileGroupMemberId() {
-		return fileGroupMemberId;
-	}
-	public Long getFileGroupId() {
-		return fileGroupId;
+	public String getDomainName() {
+		return domainName;
 	}
 	public Long getFileSetId() {
 		return fileSetId;
 	}
-	public Long getFileId() {
-		return fileId;
-	}
-	
 }

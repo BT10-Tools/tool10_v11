@@ -10,6 +10,10 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeHash;
 import tool10.util.ByteCompression;
 import tool10.util.ByteEncryption;
 

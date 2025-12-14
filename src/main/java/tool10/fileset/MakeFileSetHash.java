@@ -6,6 +6,9 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeHash;
 import tool10.sql.Conn10;
 import tool10.util.Blake3;
 import tool10.util.UtilCRC32;

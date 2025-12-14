@@ -6,6 +6,19 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.time.ZonedDateTime;
 
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeFileBlobSmall;
+import tool10.fileset.nodes.NodeFileSet;
+import tool10.fileset.nodes.NodeFileStore;
+import tool10.fileset.nodes.NodeFileSystem;
+import tool10.fileset.nodes.NodeHash;
+import tool10.fileset.nodes.NodeProperty;
+import tool10.fileset.nodes.NodeSimilarity;
+import tool10.fileset.transform.NodeArchive;
+import tool10.fileset.transform.NodeContainer;
+import tool10.fileset.transform.NodeTransform;
+
 public class WriteFsTablesToDb {
 
 /*
@@ -381,6 +394,132 @@ public class WriteFsTablesToDb {
 		return(cntInserted);
 	}
 */	
+	public static int writeTableContainer(Connection conn,NodeFileSet fileSet)	{
+		int cntInserted = 0;
+		String query =  "INSERT INTO FS_CONTAINER(containerId, fileSetId, containerFileId, containerFileSetId, containerType,extensionType, algorithmName,\r\n" +
+						" containerRemark, cntFile, originalFileSize,creationDate,modificationDate) "+
+						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?)";
+		//public NodeContainer(Long containerId, Long fileSetId, Long containerFileId, Long containerFileSetId,
+		//String containerType, String extensionType, String algorithmName, String containerRemark, Long cntFile,
+		//Long originalFileSize, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		
+		//containerId, fileSetId, containerFileId, containerFileSetId, containerType,extensionType, algorithmName, 
+		//containerRemark, cntFile, originalFileSize
+		
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    for (NodeContainer ent : fileSet.getListContainer())	{
+			    int cnt=1;
+			    if (ent.getContainerId()!=null) {ps.setLong(cnt++, ent.getContainerId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getContainerFileId()!=null) {ps.setLong(cnt++, ent.getContainerFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getContainerFileSetId()!=null) {ps.setLong(cnt++, ent.getContainerFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getContainerType());
+			    ps.setString(cnt++, ent.getExtensionType());
+			    ps.setString(cnt++, ent.getAlgorithmName());
+			    ps.setString(cnt++, ent.getContainerRemark());
+			    if (ent.getCntFile()!=null) {ps.setLong(cnt++, ent.getCntFile());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getOriginalFileSize()!=null) {ps.setLong(cnt++, ent.getOriginalFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    cntInserted += ps.executeUpdate();
+		    }
+		    System.out.println("writeTableContainer: cntInserted = " + cntInserted);
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntInserted);
+	}
+	public static int writeTableTransform(Connection conn,NodeFileSet fileSet)	{
+		int cntInserted = 0;
+		String query =  "INSERT INTO FS_TRANSFORM(transformId, fileSetId, transformFileId, transformFileSetId, transformedFileId, transformType, extensionType, algorithmName,\r\n" +
+				 		" transformRemark, tmpFileName, cntFile, originalFileSize, transformedFileSize, creationDate, modificationDate) "+
+						" VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?)";
+		//public NodeTransform(Long transformId, Long fileSetId, Long transformFileId, Long transformFileSetId,
+		//Long transformedFileId, String transformType, String extensionType, String algorithmName,
+		//String transformRemark, tmpFileName, Long cntFile, Long originalFileSize, Long transformedFileSize,
+		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+				
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    for (NodeTransform ent : fileSet.getListTransform())	{
+			    int cnt=1;
+			    if (ent.getTransformId()!=null) {ps.setLong(cnt++, ent.getTransformId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getTransformFileId()!=null) {ps.setLong(cnt++, ent.getTransformFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getTransformFileSetId()!=null) {ps.setLong(cnt++, ent.getTransformFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getTransformedFileId()!=null) {ps.setLong(cnt++, ent.getTransformedFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getTransformType());
+			    ps.setString(cnt++, ent.getExtensionType());
+			    ps.setString(cnt++, ent.getAlgorithmName());
+			    ps.setString(cnt++, ent.getTransformRemark());
+			    ps.setString(cnt++, ent.getTmpFileName());
+			    if (ent.getCntFile()!=null) {ps.setLong(cnt++, ent.getCntFile());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getOriginalFileSize()!=null) {ps.setLong(cnt++, ent.getOriginalFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getTransformedFileSize()!=null) {ps.setLong(cnt++, ent.getTransformedFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    cntInserted += ps.executeUpdate();
+		    }
+		    System.out.println("writeTableTransform: cntInserted = " + cntInserted);
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntInserted);
+	}
+	public static int writeTableArchive(Connection conn,NodeFileSet fileSet)	{
+		int cntInserted = 0;
+		String query =  "INSERT INTO FS_ARCHIVE(archiveId, fileSetId, archiveFileId, archiveFileSetId, archiveType,extensionType, algorithmName, \r\n"
+				+ "		multipleFileArchive, archiveRemark, cntFile, cntArchive, cntDirectory, cntFileTree, cntDirectoryTree, originalFileSize,\r\n"
+				+ "		unzippedFileSize, unzipGainRatio, unzippedGainBytes, archiveCreationDate,archiveModificationDate,creationDate,modificationDate) "+
+						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,  ?, ?)";
+		//public NodeArchive(Long archiveId, Long fileSetId, Long archiveFileId, Long archiveFileSetId, String archiveType,
+		//String extensionType, String algorithmName, String multipleFileArchive, String archiveRemark, Long cntFile,
+		//Long cntArchive, Long cntDirectory, Long cntFileTree, Long cntDirectoryTree, Long originalFileSize,
+		//Long unzippedFileSize, Double unzipGainRatio, Long unzippedGainBytes, ZonedDateTime archiveCreationDate,
+		//ZonedDateTime archiveModificationDate, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		
+		//archiveId, fileSetId, archiveFileId, archiveFileSetId, archiveType,extensionType, algorithmName, 
+		//multipleFileArchive, archiveRemark, cntFile, cntArchive, cntDirectory, cntFileTree, cntDirectoryTree, originalFileSize,
+		//unzippedFileSize, unzipGainRatio, unzippedGainBytes, archiveCreationDate,archiveModificationDate
+		
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    for (NodeArchive ent : fileSet.getListArchive())	{
+			    int cnt=1;
+			    if (ent.getArchiveId()!=null) {ps.setLong(cnt++, ent.getArchiveId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getArchiveFileId()!=null) {ps.setLong(cnt++, ent.getArchiveFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getArchiveFileSetId()!=null) {ps.setLong(cnt++, ent.getArchiveFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getArchiveType());
+			    ps.setString(cnt++, ent.getExtensionType());
+			    ps.setString(cnt++, ent.getAlgorithmName());
+			    ps.setString(cnt++, ent.getMultipleFileArchive());
+			    ps.setString(cnt++, ent.getArchiveRemark());
+			    if (ent.getCntFile()!=null) {ps.setLong(cnt++, ent.getCntFile());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCntArchive()!=null) {ps.setLong(cnt++, ent.getCntArchive());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCntDirectory()!=null) {ps.setLong(cnt++, ent.getCntDirectory());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCntFileTree()!=null) {ps.setLong(cnt++, ent.getCntFileTree());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCntDirectoryTree()!=null) {ps.setLong(cnt++, ent.getCntDirectoryTree());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getOriginalFileSize()!=null) {ps.setLong(cnt++, ent.getOriginalFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getUnzippedFileSize()!=null) {ps.setLong(cnt++, ent.getUnzippedFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getUnzipGainRatio()!=null) {ps.setDouble(cnt++, ent.getUnzipGainRatio());} else {ps.setNull(cnt++,Types.DOUBLE);}
+			    if (ent.getUnzippedGainBytes()!=null) {ps.setLong(cnt++, ent.getUnzippedGainBytes());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getArchiveCreationDate()!=null) {ps.setString(cnt++, ent.getArchiveCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getArchiveModificationDate()!=null) {ps.setString(cnt++, ent.getArchiveModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    cntInserted += ps.executeUpdate();
+		    }
+		    System.out.println("writeTableArchive: cntInserted = " + cntInserted);
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntInserted);
+	}
 	public static int writeTableHash(Connection conn,NodeFileSet fileSet)	{
 		int cntInserted = 0;
 		String query =  "INSERT INTO FS_HASH(hashId,fileSetId,fileSize,crc64,crc32,adler32,blake3,md5,\r\n"
@@ -829,8 +968,6 @@ public class WriteFsTablesToDb {
 		}
 		return(cntInserted);
 	}
-	//{"TXT_CORPUS","TXT_FILE","TXT_FILEGROUP","TXT_FILETYPE","TXT_LINE","TXT_LINEGROUP","TXT_LINETEMPLATE",
-	//"TXT_PHRASE","TXT_REF","TXT_STAT","TXT_TOKEN","TXT_TOKENTYPE","TXT_DISTANCE","REG_ENTITYID"}; }
 	public static int writeFileSet(Connection conn,  NodeFileSet fileSet)	{
 		int ctInsertedCorpus = writeTableFileSet(conn,fileSet);
 		int ctInsertedFile = writeTableFile(conn,fileSet);
@@ -841,6 +978,9 @@ public class WriteFsTablesToDb {
 		int ctInsertedProperty = writeTableProperty(conn,fileSet); 
 		int ctInsertedSimilarity = writeTableSimilarity(conn,fileSet); 
 		int ctInsertedHash = writeTableHash(conn,fileSet);
+		int ctInsertedArchive = writeTableArchive(conn,fileSet);
+		int ctInsertedContainer = writeTableContainer(conn,fileSet);
+		int ctInsertedTransform = writeTableTransform(conn,fileSet);
 	/*		
 		int ctInsertedFileGroup = writeTableFileGroup(conn,corpus);
 		int ctInsertedFileType = writeTableFileType(conn,corpus);
@@ -852,9 +992,7 @@ public class WriteFsTablesToDb {
 		int ctInsertedDistance = writeTableDistance(conn, corpus);
 	*/	
 		int cntInserted = ctInsertedCorpus + ctInsertedFile + ctInsertedFileSystem + ctInsertedFileStore + ctInsertedFileBlob + ctInsertedFileBlobSmall + 
-				ctInsertedProperty + ctInsertedSimilarity + ctInsertedHash; //+ ctInsertedFileGroup + ctInsertedFileType + ctInsertedLine + 
-				//ctInsertedLineGroup + ctInsertedLineTemplate + ctInsertedPhrase + ctInsertedRef + ctInsertedStat + ctInsertedToken + 
-				//ctInsertedTokenType + ctInsertedDistance;
+				ctInsertedProperty + ctInsertedSimilarity + ctInsertedHash + ctInsertedArchive + ctInsertedContainer + ctInsertedTransform; //+ ctInsertedToken + 
 		return(cntInserted);
 	}	
 	public static int writeSimilarity(Connection conn,  NodeFileSet fileSet)	{

@@ -3,6 +3,10 @@ package tool10.fileset;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodePair;
+
 public class MakeFileSetSimilarityAlg {
 	
 	private static final double minCompValue = 0.6d; 

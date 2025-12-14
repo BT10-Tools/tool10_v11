@@ -1,5 +1,7 @@
-package tool10.fileset;
+package tool10.fileset.nodes;
 
+import tool10.fileset.CliParameter;
+import tool10.fileset.PropConfig;
 import tool10.sql.Conn10;
 
 public class NodeF10 {
@@ -12,6 +14,7 @@ public class NodeF10 {
 	private Conn10 conn10;  
 	private PropConfig propConfig; 
 	private NodeFileSet fileSet; 
+	private NodeFileSet outputFileSet;
 	
 	public void println(String str)	{
 		System.out.println(str);
@@ -45,6 +48,12 @@ public class NodeF10 {
 	}
 	public void setFileSet(NodeFileSet fileSet) {
 		this.fileSet = fileSet;
+	}
+	public NodeFileSet getOutputFileSet() {
+		return outputFileSet;
+	}
+	public void setOutputFileSet(NodeFileSet outputFileSet) {
+		this.outputFileSet = outputFileSet;
 	}
 	
 }

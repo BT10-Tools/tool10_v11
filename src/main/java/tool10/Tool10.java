@@ -24,7 +24,7 @@ import java.time.ZonedDateTime;
 
 import tool10.fileset.CliFileSetRun;
 import tool10.fileset.MainFileSet;
-import tool10.fileset.NodeF10;
+import tool10.fileset.nodes.NodeF10;
 import tool10.util.TimeUtil;
 
 /**
@@ -38,21 +38,23 @@ public class Tool10 {
 	
 	private static void printHeader(String lang)	{
 		String strTr = 
-			"-- Tool10: Dosya, Klasör, Görüntü, Doküman, Veri Analizi ve Sistem Yönetimi için araç seti.\n" +
+			"-- Tool10: Dosya, Klasör, Görüntü, Doküman, Veri Analizi, Benzerlik ve Sistem Yönetimi için araç seti.\n" +
 			"-- Bu program BT10 şirketi tarafından ve Balıkesir Üniversitesi öğrencilerinin katkıları ile geliştirilmiştir.\n"+
 			"-- Proje Liderliği, Mimari ve Baş Programcılık: Nursal Haney, [BT10.com.tr] \n"+
 			"-- Katkı Sağlayanlar: Betül Kızılkaya, Mualla Şahin, Ceyhun Emre Top, M.Utku Aksu, M.Utku İlbaş, Hiranur Akpınar, Hanife Kaptan, Buğra Yalçın, Eren Yetim, Ahmet Taner Gümüş.\n"+
 			"-- Bu program ücretsizdir ve GNU General Public License Version 3 lisansı ile sağlanmaktadır, bu lisans çerçevesinde dağıtılabilir ve değiştirilebilir.\n"+
 			"-- Programın faydalı olacağı umulmaktadır fakat her türlü sorumluluk kullanıcıya aittir.\n"+
-			"-- Ticari, profesyonel, kurumsal sürümler ve lisanslama için bt10.com.tr ile irtibat kurunuz.\n";		
+			"-- Ticari, profesyonel, kurumsal sürümler ve lisanslama için bt10.com.tr ile irtibat kurunuz.\n"+
+			"-- Mottomuz:Benzemez Kimse SANA.\n";		
 		String strEng = 
-			"-- Tool10: File, directory, Image, Document, Data Analysis and System Management Tool Set.\n" +
+			"-- Tool10: File, directory, Image, Document, Data Analysis, Similarity and System Management Tool Set.\n" +
 			"-- This program provided by BT10 and with contributions of Balikesir University students.\n"+
 			"-- Project Lead, Architect and Senior Programmer: Nursal Haney, [BT10.com.tr] \n"+
 			"-- Contributors: Betül Kızılkaya, Mualla Sahin, Ceyhun Emre Top, M.Utku Aksu, M.Utku Ilbas, Hiranur Akpınar, Hanife Kaptan, Bugra Yalcin, Eren Yetim, Ahmet Taner Gumus.\n"+
 			"-- This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License Version 3 license.\n"+
 			"-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.\n"+
-			"-- Please contact bt10.com.tr for commercial, professional, enterprise versions and licensing.\n";		
+			"-- Please contact bt10.com.tr for commercial, professional, enterprise versions and licensing.\n"+
+			"-- Our Motto: No One Compares to YOU.\n";		
 		if ("TR".equals(lang))	{
 			System.out.println(strTr);
 		} else if ("EN".equals(lang))	{

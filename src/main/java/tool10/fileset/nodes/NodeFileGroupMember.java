@@ -1,52 +1,37 @@
-package tool10.fileset;
+package tool10.fileset.nodes;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class NodeHost implements Serializable {
+public class NodeFileGroupMember implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public NodeHost(Long hostId, Long fileSetId, String hostName, String hostIP, String domainName,
+	public NodeFileGroupMember(Long fileGroupMemberId, Long fileGroupId, Long fileSetId, Long fileId, Long displayOrder,
 			ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
-		this.hostId=hostId;
+		this.fileGroupMemberId = fileGroupMemberId;
+		this.fileGroupId = fileGroupId;
 		this.fileSetId = fileSetId;
-		this.hostName=hostName;
-		this.hostIP=hostIP;
-		this.domainName=domainName;
+		this.fileId = fileId;
+		this.displayOrder = displayOrder;
 		this.creationDate = creationDate;
 		this.modificationDate = modificationDate;
 	}
-	private Long hostId;
+	private static final long serialVersionUID = 1L;
+	
+	private Long fileGroupMemberId;
+	private Long fileGroupId;
 	private Long fileSetId;
-	private String hostName=null;
-	private String hostIP=null;
-	private String domainName=null;
+	private Long fileId;
+	private Long displayOrder;
 	private ZonedDateTime creationDate;
 	private ZonedDateTime modificationDate;
 	
 	//GETTERS AND SETTERS
-	public long getHostId() {
-		return hostId;
+	public Long getDisplayOrder() {
+		return displayOrder;
 	}
-	public void setHostId(long hostId) {
-		this.hostId = hostId;
-	}
-	public String getHostName() {
-		return hostName;
-	}
-	public void setHostName(String hostName) {
-		this.hostName = hostName;
-	}
-	public String getHostIP() {
-		return hostIP;
-	}
-	public void setHostIP(String hostIP) {
-		this.hostIP = hostIP;
+	public void setDisplayOrder(Long displayOrder) {
+		this.displayOrder = displayOrder;
 	}
 	public ZonedDateTime getCreationDate() {
 		return creationDate;
@@ -63,10 +48,17 @@ public class NodeHost implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public String getDomainName() {
-		return domainName;
+	public Long getFileGroupMemberId() {
+		return fileGroupMemberId;
+	}
+	public Long getFileGroupId() {
+		return fileGroupId;
 	}
 	public Long getFileSetId() {
 		return fileSetId;
 	}
+	public Long getFileId() {
+		return fileId;
+	}
+	
 }

@@ -2,14 +2,16 @@ package tool10.fileset;
 
 import java.time.ZonedDateTime;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFileSet;
 import tool10.sql.Conn10;
 
 public class MakeFileSet {
 
-	private static NodeFileSet createOneFileSet(Conn10 conn10,String fileSetName, String fileSetURL)	{
+	public static NodeFileSet createOneFileSet(Conn10 conn10,String fileSetName, String fileSetURL,  Long sourceId)	{
 		NodeFileSet fileSet = null;
 		Long fileSetId = conn10.getNextId(-1); //"BSC_BASIC");
-		Long sourceId = null;
+		
 		String fileSetDesc = fileSetName+"_Desc";
 		String ownerName = null;
 		Long displayOrder = 1l;
@@ -79,8 +81,8 @@ public class MakeFileSet {
 		if (sizeFile>0) { rootDirectoryNameArray [j] = f10.getCliParams().getFile();}
 		
 		//String rootFileName = "C:\\nh\\03_Downloaded";
-		
-		fileSet = createOneFileSet(f10.getConn10(),fileSetName, fileSetURL);
+		Long sourceId = null;
+		fileSet = createOneFileSet(f10.getConn10(),fileSetName, fileSetURL, sourceId);
 		if (fileSet==null)	{
 			System.out.println("MakeFileSet makeFileSet fileSet is null");
 			return(null);
@@ -93,10 +95,10 @@ public class MakeFileSet {
 			System.out.println("MakeFileSet makeFileSet no file or directory to traverse");
 		} else {
 			for (String rootDirName : rootDirectoryNameArray)	{
-				MakeFileSetFile.createFilesForRootDirectory(f10, rootDirName);
+				MakeFileSetFile.createFilesForRootDirectory(f10, fileSet, rootDirName);
 			}
 			for (String rootFileName : rootFileNameArray)	{
-				MakeFileSetFile.createFilesForRootFile(f10,rootFileName);
+				MakeFileSetFile.createFilesForRootFile(f10, fileSet, rootFileName);
 			}
 			
 		}

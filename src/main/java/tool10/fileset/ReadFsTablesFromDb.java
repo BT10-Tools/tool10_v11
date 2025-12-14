@@ -6,6 +6,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 
+import tool10.fileset.nodes.NodeBinary;
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeFileBlobSmall;
+import tool10.fileset.nodes.NodeFileSet;
+import tool10.fileset.nodes.NodeFileStore;
+import tool10.fileset.nodes.NodeFileSystem;
+import tool10.fileset.nodes.NodeHash;
+import tool10.fileset.nodes.NodeHost;
+import tool10.fileset.nodes.NodeProperty;
+import tool10.fileset.nodes.NodeQuery;
+import tool10.fileset.nodes.NodeSimilarity;
+import tool10.fileset.transform.NodeArchive;
+import tool10.fileset.transform.NodeContainer;
+import tool10.fileset.transform.NodeTransform;
+
 public class ReadFsTablesFromDb {
 	
 	public static int readTableFile(Connection conn, NodeFileSet fileSet)	{ 
@@ -584,6 +600,163 @@ public class ReadFsTablesFromDb {
 		} 
 		return(cntRead); 
 	} 
+	public static int readTableArchive(Connection conn, NodeFileSet fileSet)	{ 
+		int cntRead = 0; 
+		String query = 	" SELECT "+
+			" archiveId, fileSetId, archiveFileId, archiveFileSetId, archiveType,extensionType, algorithmName, \r\n" + 
+			" multipleFileArchive, archiveRemark, cntFile, cntArchive, cntDirectory, cntFileTree, cntDirectoryTree, originalFileSize,\r\n " + 
+			" unzippedFileSize, unzipGainRatio, unzippedGainBytes, archiveCreationDate,archiveModificationDate,creationDate,modificationDate "+
+			" FROM FS_ARCHIVE WHERE fileSetId = ? ORDER BY archiveId"; 
+		//public NodeArchive(Long archiveId, Long fileSetId, Long archiveFileId, Long archiveFileSetId, String archiveType,
+		//String extensionType, String algorithmName, String multipleFileArchive, String archiveRemark, Long cntFile,
+		//Long cntArchive, Long cntDirectory, Long cntFileTree, Long cntDirectoryTree, Long originalFileSize,
+		//Long unzippedFileSize, Double unzipGainRatio, Long unzippedGainBytes, ZonedDateTime archiveCreationDate,
+		//ZonedDateTime archiveModificationDate, ZonedDateTime creationDate, ZonedDateTime modificationDate) {	
+		try	{
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setLong(1, fileSet.getFileSetId());
+			ResultSet rs = ps.executeQuery(); 
+			while (rs.next()) { 
+				Long archiveId = rs.getLong("archiveId");	if (rs.wasNull()) {archiveId = null;}
+				Long fileSetId = rs.getLong("fileSetId");	if (rs.wasNull()) {fileSetId = null;}
+				Long archiveFileId = rs.getLong("archiveFileId");	if (rs.wasNull()) {archiveFileId = null;}
+				Long archiveFileSetId = rs.getLong("archiveFileSetId");	if (rs.wasNull()) {archiveFileSetId = null;}
+				String archiveType = rs.getString("archiveType");
+				String extensionType = rs.getString("extensionType");
+				String algorithmName = rs.getString("algorithmName");
+				String multipleFileArchive = rs.getString("multipleFileArchive");
+				String archiveRemark = rs.getString("archiveRemark");
+				Long cntFile = rs.getLong("cntFile");	if (rs.wasNull()) {cntFile = null;}
+				Long cntArchive = rs.getLong("cntArchive");	if (rs.wasNull()) {cntArchive = null;}
+				Long cntDirectory = rs.getLong("cntDirectory");	if (rs.wasNull()) {cntDirectory = null;}
+				Long cntFileTree = rs.getLong("cntFileTree");	if (rs.wasNull()) {cntFileTree = null;}
+				Long cntDirectoryTree = rs.getLong("cntDirectoryTree");	if (rs.wasNull()) {cntDirectoryTree = null;}
+				Long originalFileSize = rs.getLong("originalFileSize");	if (rs.wasNull()) {originalFileSize = null;}
+				Long unzippedFileSize = rs.getLong("unzippedFileSize");	if (rs.wasNull()) {unzippedFileSize = null;}
+				Double unzipGainRatio = rs.getDouble("unzipGainRatio");	if (rs.wasNull()) {unzipGainRatio = null;}
+				Long unzippedGainBytes = rs.getLong("unzippedGainBytes");	if (rs.wasNull()) {unzippedGainBytes = null;}
+				
+				String archiveCreationDateStr = rs.getString("archiveCreationDate");
+				ZonedDateTime archiveCreationDate = ((archiveCreationDateStr!=null) ? ZonedDateTime.parse(archiveCreationDateStr) : null); 
+				String archiveModificationDateStr = rs.getString("archiveModificationDate");
+				ZonedDateTime archiveModificationDate = ((archiveModificationDateStr!=null) ? ZonedDateTime.parse(archiveModificationDateStr) : null); 
+				String creationDateStr = rs.getString("creationDate");
+				ZonedDateTime creationDate = ((creationDateStr!=null) ? ZonedDateTime.parse(creationDateStr) : null); 
+				String modificationDateStr = rs.getString("modificationDate");
+				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
+				NodeArchive newArchive = new NodeArchive(
+						archiveId, fileSetId, archiveFileId, archiveFileSetId, archiveType,extensionType, algorithmName,  
+						multipleFileArchive, archiveRemark, cntFile, cntArchive, cntDirectory, cntFileTree, cntDirectoryTree, originalFileSize, 
+						unzippedFileSize, unzipGainRatio, unzippedGainBytes, 
+						archiveCreationDate,archiveModificationDate,creationDate,modificationDate);
+				fileSet.getListArchive().add(newArchive); 
+				fileSet.getMapId2Archive().put(newArchive.getArchiveId(),newArchive); 
+				cntRead++; 
+			}
+			System.out.println("readTableArchive: cntRead = " + cntRead); 
+			rs.close(); 
+			ps.close(); 
+		} catch(SQLException e)	{ 
+			e.printStackTrace(System.err); 
+		} 
+		return(cntRead); 
+	} 
+	public static int readTableContainer(Connection conn, NodeFileSet fileSet)	{ 
+		int cntRead = 0; 
+		String query = 	" SELECT "+
+			" containerId, fileSetId, containerFileId, containerFileSetId, containerType,extensionType, algorithmName,\r\n" +
+			" containerRemark, cntFile, originalFileSize,creationDate,modificationDate "+
+			" FROM FS_CONTAINER WHERE fileSetId = ? ORDER BY containerId"; 
+		//public NodeContainer(Long containerId, Long fileSetId, Long containerFileId, Long containerFileSetId,
+		//String containerType, String extensionType, String algorithmName, String containerRemark, Long cntFile,
+		//Long originalFileSize, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		try	{
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setLong(1, fileSet.getFileSetId());
+			ResultSet rs = ps.executeQuery(); 
+			while (rs.next()) { 
+				Long containerId = rs.getLong("containerId");	if (rs.wasNull()) {containerId = null;}
+				Long fileSetId = rs.getLong("fileSetId");	if (rs.wasNull()) {fileSetId = null;}
+				Long containerFileId = rs.getLong("containerFileId");	if (rs.wasNull()) {containerFileId = null;}
+				Long containerFileSetId = rs.getLong("containerFileSetId");	if (rs.wasNull()) {containerFileSetId = null;}
+				String containerType = rs.getString("containerType");
+				String extensionType = rs.getString("extensionType");
+				String algorithmName = rs.getString("algorithmName");
+				String containerRemark = rs.getString("containerRemark");
+				Long cntFile = rs.getLong("cntFile");	if (rs.wasNull()) {cntFile = null;}
+				Long originalFileSize = rs.getLong("originalFileSize");	if (rs.wasNull()) {originalFileSize = null;}
+				
+				String creationDateStr = rs.getString("creationDate");
+				ZonedDateTime creationDate = ((creationDateStr!=null) ? ZonedDateTime.parse(creationDateStr) : null); 
+				String modificationDateStr = rs.getString("modificationDate");
+				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
+				NodeContainer newContainer = new NodeContainer(
+						containerId, fileSetId, containerFileId, containerFileSetId, containerType,extensionType, algorithmName,
+						containerRemark, cntFile, originalFileSize,creationDate,modificationDate);
+				fileSet.getListContainer().add(newContainer); 
+				fileSet.getMapId2Container().put(newContainer.getContainerId(),newContainer); 
+				cntRead++; 
+			}
+			System.out.println("readTableContainer: cntRead = " + cntRead); 
+			rs.close(); 
+			ps.close(); 
+		} catch(SQLException e)	{ 
+			e.printStackTrace(System.err); 
+		} 
+		return(cntRead); 
+	} 
+	public static int readTableTransform(Connection conn, NodeFileSet fileSet)	{ 
+		int cntRead = 0; 
+		String query = 	" SELECT "+
+			" transformId, fileSetId, transformFileId, transformFileSetId, transformedFileId, transformType, extensionType, algorithmName,,\r\n" +
+			" transformRemark, tmpFileName, cntFile, originalFileSize, transformedFileSize, creationDate,modificationDate "+
+			" FROM FS_TRANSFORM WHERE fileSetId = ? ORDER BY transformId"; 
+		//public NodeTransform(Long transformId, Long fileSetId, Long transformFileId, Long transformFileSetId,
+		//Long transformedFileId, String transformType, String extensionType, String algorithmName,
+		//String transformRemark, String tmpFileName, Long cntFile, Long originalFileSize, Long transformedFileSize,
+		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		
+		//transformId, fileSetId, transformFileId, transformFileSetId, transformedFileId, transformType, extensionType, algorithmName,
+		//transformRemark, tmpFileName, cntFile, originalFileSize, transformedFileSize, creationDate, modificationDate
+				
+		try	{
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setLong(1, fileSet.getFileSetId());
+			ResultSet rs = ps.executeQuery(); 
+			while (rs.next()) { 
+				Long transformId = rs.getLong("transformId");	if (rs.wasNull()) {transformId = null;}
+				Long fileSetId = rs.getLong("fileSetId");	if (rs.wasNull()) {fileSetId = null;}
+				Long transformFileId = rs.getLong("transformFileId");	if (rs.wasNull()) {transformFileId = null;}
+				Long transformFileSetId = rs.getLong("transformFileSetId");	if (rs.wasNull()) {transformFileSetId = null;}
+				Long transformedFileId = rs.getLong("transformedFileId");	if (rs.wasNull()) {transformedFileId = null;}
+				String transformType = rs.getString("transformType");
+				String extensionType = rs.getString("extensionType");
+				String algorithmName = rs.getString("algorithmName");
+				String transformRemark = rs.getString("transformRemark");
+				String tmpFileName =  rs.getString("tmpFileName");
+				Long cntFile = rs.getLong("cntFile");	if (rs.wasNull()) {cntFile = null;}
+				Long originalFileSize = rs.getLong("originalFileSize");	if (rs.wasNull()) {originalFileSize = null;}
+				Long transformedFileSize = rs.getLong("transformedFileSize");	if (rs.wasNull()) {transformedFileSize = null;}
+				
+				String creationDateStr = rs.getString("creationDate");
+				ZonedDateTime creationDate = ((creationDateStr!=null) ? ZonedDateTime.parse(creationDateStr) : null); 
+				String modificationDateStr = rs.getString("modificationDate");
+				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
+				NodeTransform newTransform = new NodeTransform(
+						transformId, fileSetId, transformFileId, transformFileSetId, transformedFileId, transformType, extensionType, algorithmName,
+						transformRemark, tmpFileName, cntFile, originalFileSize, transformedFileSize, creationDate, modificationDate);
+				fileSet.getListTransform().add(newTransform); 
+				fileSet.getMapId2Transform().put(newTransform.getTransformId(),newTransform); 
+				cntRead++; 
+			}
+			System.out.println("readTableTransform: cntRead = " + cntRead); 
+			rs.close(); 
+			ps.close(); 
+		} catch(SQLException e)	{ 
+			e.printStackTrace(System.err); 
+		} 
+		return(cntRead); 
+	} 
 	public static NodeFileSet readTableFileSet(Connection conn, long fileSetId)	{ 
 		int cntRead = 0; 
 		NodeFileSet newFileSet = null;
@@ -653,11 +826,15 @@ public class ReadFsTablesFromDb {
 		int cntReadFileBlobSmall = readTableFileBlobSmall(conn,fileSet);
 		int cntReadFileBlob = readTableFileBlob(conn,fileSet);
 		int cntReadFile = readTableFile(conn,fileSet);
-		
+		int cntReadArchive = readTableArchive(conn,fileSet);
+		int cntReadContainer = readTableContainer(conn,fileSet);
+		int cntReadTransform = readTableTransform(conn,fileSet);
+				
 		postProcessFileSet(fileSet);
 		
 		int cntRead = cntReadSimilarity + cntReadQuery + cntReadProperty + cntReadHost + cntReadHash + 
-				cntReadFileSystem + cntReadFileStore + cntReadFileBlobSmall + cntReadFileBlob + cntReadFile + 1;
+				cntReadFileSystem + cntReadFileStore + cntReadFileBlobSmall + cntReadFileBlob + cntReadFile + 
+				cntReadArchive + cntReadContainer + cntReadTransform + 1;
 	    System.out.println("readFileSet: total record read = " + cntRead);
 		return(fileSet);
 	}	

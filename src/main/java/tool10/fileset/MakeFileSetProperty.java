@@ -4,6 +4,9 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Properties;
 
+import tool10.fileset.nodes.NodeBinary;
+import tool10.fileset.nodes.NodeFileSet;
+import tool10.fileset.nodes.NodeProperty;
 import tool10.sql.Conn10;
 
 public class MakeFileSetProperty {

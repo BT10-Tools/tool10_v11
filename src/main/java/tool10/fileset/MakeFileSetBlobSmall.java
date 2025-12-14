@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeFileBlobSmall;
+import tool10.fileset.nodes.NodeFileSet;
+import tool10.fileset.nodes.NodeHash;
 import tool10.misc.binpacking.AbstractBinPacking;
 import tool10.misc.binpacking.BinPackingBruteforce;
 import tool10.misc.binpacking.FirstFitDecreasing;

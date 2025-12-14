@@ -1,5 +1,7 @@
 package tool10.fileset;
 
+import tool10.fileset.nodes.NodeF10;
+
 public class CliFileSetRun {
 	
 	public static String[] getArgs0()	{
@@ -12,7 +14,7 @@ public class CliFileSetRun {
 				//"-dbmem","no",
 				"-filesetname","fileSet02",
 				"-dbaction","renewdb",
-				"-blob", "y",
+				"-blob", "n",
 				"-bloboriginal", "yes",
 				"-blobcompressed", "yes",
 				"-blobencrypted", "yes",
@@ -24,7 +26,11 @@ public class CliFileSetRun {
 				"-filesystem", "yes",
 				"-filestore", "yes",
 				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
-				"-dir","C:\\tmp\\similarity\\04_Kopyalar"
+				//"-dir","C:\\tmp\\similarity\\04_Kopyalar"
+				//"-dir","C:\\nhDoc\\11_Chess\\CHESS LITERATURE 3"
+				//"-dir","C:\\tmp\\similarity\\05_Unzip",
+				//"-dir","C:\\tmp\\similarity\\06_Unembed\\01_Org",
+				"-dir","C:\\tmp\\similarity\\07_Transform\\01_Org"
 				};
 	
 		String[] args4 = new String[] {"",
@@ -36,6 +42,33 @@ public class CliFileSetRun {
 				};
 		
 		String[] args5 = new String[] {"",
+				"-unzip",
+				"-unziptype","recursive",
+				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
+				"-filesetname","fileSet02",
+				"-outputfilesetname","fileSet02_Unzip",
+				"-tempdir","C:\\tmp\\similarity\\05_Unzip"
+				};
+		
+		String[] args6 = new String[] {"",
+				"-unembed",
+				"-unembedtype","imagesFromPdf",
+				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
+				"-filesetname","fileSet02",
+				"-outputfilesetname","fileSet02_Unembed",
+				"-tempdir","C:\\tmp\\similarity\\06_Unembed"
+				};
+		
+		String[] args7 = new String[] {"",
+				"-transform",
+				"-transformtype","jpg2png",
+				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
+				"-filesetname","fileSet02",
+				"-outputfilesetname","fileSet02_Transform",
+				"-tempdir","C:\\tmp\\similarity\\07_Transform"
+				};
+		
+		String[] args8 = new String[] {"",
 				"-similarity",
 				"-similaritytype","all",
 				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
@@ -43,7 +76,7 @@ public class CliFileSetRun {
 				};
 		
 	
-		return(args5);
+		return(args7);
 	}
 	public static CliParameter processFileSetCli(NodeF10 f10, String[] args0)	{
 		

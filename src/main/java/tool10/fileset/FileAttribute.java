@@ -3,6 +3,8 @@ package tool10.fileset;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+import tool10.fileset.nodes.NodeFile;
+
 public class FileAttribute implements Serializable {
 
 	public FileAttribute(NodeFile nodeFile, int idx, String attrGroup, String attrName, String attrValue,

@@ -1,8 +1,8 @@
-package tool10.fileset;
+package tool10.fileset.nodes;
 
 public class NodePair {
 
-	NodePair(NodeFile nodeFile1, NodeFile nodeFile2, String algName, double score) 	{
+	public NodePair(NodeFile nodeFile1, NodeFile nodeFile2, String algName, double score) 	{
 		this.nodeFile1 = nodeFile1;
 		this.nodeFile2 = nodeFile2;
 		this.algName = algName;

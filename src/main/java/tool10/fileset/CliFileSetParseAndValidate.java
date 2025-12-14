@@ -379,10 +379,172 @@ public class CliFileSetParseAndValidate {
 	    if (!"ok".equals(postResult)) return(postResult);
 	    return("extract");
 	}
+	public static String checkCliParametersUnzip(CliParameter p, CommandLine cmd) {	
+	    //*****
+	    if (cmd.hasOption("unzip")) 	{	String str = cmd.getOptionValue("unzip"); p.setExtract(str);	p.setAction("unzip");	}
+	    else {
+	    	return (null);
+	    }
+	    if (cmd.hasOption("unziptype")) 	{	
+	    	String str = cmd.getOptionValue("unziptype").trim().toLowerCase();  //recursive, directory, file
+	    	if (str==null) return(null); 
+	    	if ((!"recursive".equals(str)) && (!"directory".equals(str)) && (!"file".equals(str)))	{
+	    		System.out.println("The unzip type is not as expected :"+str);
+	    		//return(null);
+	    	}
+	    	p.setUnzipType(str);
+    	}
+	    if (cmd.hasOption("dbname")) 	{	
+			String str = cmd.getOptionValue("dbname"); 
+			if ((str==null) || (str.isEmpty())) {
+				System.out.println("Database name is not as expected: database name"+str);
+				return(null);
+			} 
+			p.setDbName(str);
+		}
+	    if (cmd.hasOption("filesetname")) 	{	
+  			String str = cmd.getOptionValue("filesetname"); 
+  			if ((str==null) || (str.isEmpty())) {
+  				System.out.println("filesetname is not as expected: filesetname "+str);
+  				return(null);
+  			} 
+  			p.setFileSetName(str);
+  		}
+	    if (cmd.hasOption("outputfilesetname")) 	{	
+  			String str = cmd.getOptionValue("outputfilesetname"); 
+  			if ((str==null) || (str.isEmpty())) {
+  				System.out.println("outputfilesetname is not as expected: outputfilesetname "+str);
+  				return(null);
+  			} 
+  			p.setOutputFileSetName(str);
+  		}
+	    if (cmd.hasOption("tempdir")) 	{	
+			String str = cmd.getOptionValue("tempdir"); 
+		/*	if (FileUtil.checkDirectoryExists(str))	{
+				System.out.println("A directory with the given name exist, directory name:"+str);
+				return(null);
+			}*/
+			p.setTempDir(str);
+		}
+	    String postResult = postProcessingUnzip(p,cmd);
+	    if (!"ok".equals(postResult)) return(postResult);
+	    return("unzip");
+	}
+	public static String checkCliParametersUnembed(CliParameter p, CommandLine cmd) {	
+	    //*****
+	    if (cmd.hasOption("unembed")) 	{	String str = cmd.getOptionValue("unembed"); p.setExtract(str);	p.setAction("unembed");	}
+	    else {
+	    	return (null);
+	    }
+	    if (cmd.hasOption("unembedtype")) 	{	
+	    	String str = cmd.getOptionValue("unembedtype").trim().toLowerCase();  //imagesFromPdf, pdfPagesAsImages
+	    	if (str==null) return(null); 
+	    	if ((!"imagesfrompdf".equals(str)) && (!"pdfpagesasimages".equals(str)) )	{
+	    		System.out.println("The unembed type is not as expected :"+str);
+	    		//return(null);
+	    	}
+	    	p.setUnzipType(str);
+    	}
+	    if (cmd.hasOption("dbname")) 	{	
+			String str = cmd.getOptionValue("dbname"); 
+			if ((str==null) || (str.isEmpty())) {
+				System.out.println("Database name is not as expected: database name"+str);
+				return(null);
+			} 
+			p.setDbName(str);
+		}
+	    if (cmd.hasOption("filesetname")) 	{	
+  			String str = cmd.getOptionValue("filesetname"); 
+  			if ((str==null) || (str.isEmpty())) {
+  				System.out.println("filesetname is not as expected: filesetname "+str);
+  				return(null);
+  			} 
+  			p.setFileSetName(str);
+  		}
+	    if (cmd.hasOption("outputfilesetname")) 	{	
+  			String str = cmd.getOptionValue("outputfilesetname"); 
+  			if ((str==null) || (str.isEmpty())) {
+  				System.out.println("outputfilesetname is not as expected: outputfilesetname "+str);
+  				return(null);
+  			} 
+  			p.setOutputFileSetName(str);
+  		}
+	    if (cmd.hasOption("tempdir")) 	{	
+			String str = cmd.getOptionValue("tempdir"); 
+		/*	if (FileUtil.checkDirectoryExists(str))	{
+				System.out.println("A directory with the given name exist, directory name:"+str);
+				return(null);
+			}*/
+			p.setTempDir(str);
+		}
+	    String postResult = postProcessingUnembed(p,cmd);
+	    if (!"ok".equals(postResult)) return(postResult);
+	    return("unembed");
+	}
+	public static String checkCliParametersTransform(CliParameter p, CommandLine cmd) {	
+	    //*****
+	    if (cmd.hasOption("transform")) 	{	String str = cmd.getOptionValue("transform"); p.setExtract(str);	p.setAction("transform");	}
+	    else {
+	    	return (null);
+	    }
+	    if (cmd.hasOption("transformtype")) 	{	
+	    	String str = cmd.getOptionValue("transformtype").trim().toLowerCase();  //jpg2png, png2jpg
+	    	if (str==null) return(null); 
+	    	if ((!"jpg2png".equals(str)) && (!"png2jpg".equals(str)) )	{
+	    		System.out.println("The transform type is not as expected :"+str);
+	    		//return(null);
+	    	}
+	    	p.setUnzipType(str);
+    	}
+	    if (cmd.hasOption("dbname")) 	{	
+			String str = cmd.getOptionValue("dbname"); 
+			if ((str==null) || (str.isEmpty())) {
+				System.out.println("Database name is not as expected: database name"+str);
+				return(null);
+			} 
+			p.setDbName(str);
+		}
+	    if (cmd.hasOption("filesetname")) 	{	
+  			String str = cmd.getOptionValue("filesetname"); 
+  			if ((str==null) || (str.isEmpty())) {
+  				System.out.println("filesetname is not as expected: filesetname "+str);
+  				return(null);
+  			} 
+  			p.setFileSetName(str);
+  		}
+	    if (cmd.hasOption("outputfilesetname")) 	{	
+  			String str = cmd.getOptionValue("outputfilesetname"); 
+  			if ((str==null) || (str.isEmpty())) {
+  				System.out.println("outputfilesetname is not as expected: outputfilesetname "+str);
+  				return(null);
+  			} 
+  			p.setOutputFileSetName(str);
+  		}
+	    if (cmd.hasOption("tempdir")) 	{	
+			String str = cmd.getOptionValue("tempdir"); 
+		/*	if (FileUtil.checkDirectoryExists(str))	{
+				System.out.println("A directory with the given name exist, directory name:"+str);
+				return(null);
+			}*/
+			p.setTempDir(str);
+		}
+	    String postResult = postProcessingUnembed(p,cmd);
+	    if (!"ok".equals(postResult)) return(postResult);
+	    return("transform");
+	}
 	private static String postProcessingExtract(CliParameter p, CommandLine cmd) {
 		return("ok");
 	}
 	private static String postProcessingExport(CliParameter p, CommandLine cmd) {
+		return("ok");
+	}
+	private static String postProcessingUnzip(CliParameter p, CommandLine cmd) {
+		return("ok");
+	}
+	private static String postProcessingUnembed(CliParameter p, CommandLine cmd) {
+		return("ok");
+	}
+	private static String postProcessingTransform(CliParameter p, CommandLine cmd) {
 		return("ok");
 	}
 	public static String checkCliParametersSimilarity(CliParameter p, CommandLine cmd) {	
@@ -429,6 +591,12 @@ public class CliFileSetParseAndValidate {
 		if ("load".equals(action)) return("ok"); 
 		action = checkCliParametersExtract(p,cmd);
 		if ("extract".equals(action)) return("ok"); 
+		action = checkCliParametersUnzip(p,cmd);
+		if ("unzip".equals(action)) return("ok"); 
+		action = checkCliParametersUnembed(p,cmd);
+		if ("unembed".equals(action)) return("ok"); 
+		action = checkCliParametersTransform(p,cmd);
+		if ("transform".equals(action)) return("ok"); 
 		action = checkCliParametersSimilarity(p,cmd);
 		if ("similarity".equals(action)) return("ok"); 
 		return("error");

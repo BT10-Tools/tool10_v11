@@ -1,4 +1,4 @@
-package tool10.fileset;
+package tool10.fileset.nodes;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;

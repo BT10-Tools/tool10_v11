@@ -94,6 +94,17 @@ public class CliParameter implements Serializable {
 	private String exportType;
 	private String exportDir;
 	
+	private String unzip;
+	private String unzipType;
+	private String tempDir;
+	private String outputFileSetName;
+	
+	private String unembed;
+	private String unembedType;
+	
+	private String transform;
+	private String transformType;
+	
 	private String similarity;
 	private String similarityType;
 	private String similarityAlg;
@@ -541,6 +552,54 @@ public class CliParameter implements Serializable {
 	}
 	public void setExtractType(String extractType) {
 		this.extractType = extractType;
+	}
+	public String getUnzip() {
+		return unzip;
+	}
+	public void setUnzip(String unzip) {
+		this.unzip = unzip;
+	}
+	public String getUnzipType() {
+		return unzipType;
+	}
+	public void setUnzipType(String unzipType) {
+		this.unzipType = unzipType;
+	}
+	public String getTempDir() {
+		return tempDir;
+	}
+	public void setTempDir(String tempDir) {
+		this.tempDir = tempDir;
+	}
+	public String getOutputFileSetName() {
+		return outputFileSetName;
+	}
+	public void setOutputFileSetName(String outputFileSetName) {
+		this.outputFileSetName = outputFileSetName;
+	}
+	public String getUnembed() {
+		return unembed;
+	}
+	public void setUnembed(String unembed) {
+		this.unembed = unembed;
+	}
+	public String getUnembedType() {
+		return unembedType;
+	}
+	public void setUnembedType(String unembedType) {
+		this.unembedType = unembedType;
+	}
+	public String getTransform() {
+		return transform;
+	}
+	public void setTransform(String transform) {
+		this.transform = transform;
+	}
+	public String getTransformType() {
+		return transformType;
+	}
+	public void setTransformType(String transformType) {
+		this.transformType = transformType;
 	}
 	
 }

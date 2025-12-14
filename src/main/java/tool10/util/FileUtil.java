@@ -15,6 +15,10 @@ import java.nio.file.attribute.FileTime;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class FileUtil {
 
@@ -32,15 +36,119 @@ public class FileUtil {
 	        return(false);
 	    }
 	}    
+	public static boolean deleteDirectoryRecursively(String dirName)	{
+		if (!checkDirectoryExists(dirName)) return(false);
+	    try {
+		    File directoryToBeDeleted = new File(dirName);
+	    	File[] allContents = directoryToBeDeleted.listFiles();
+	        if (allContents != null) {
+	            for (File file : allContents) {
+	            	deleteDirectoryRecursively(file.getAbsolutePath());
+	            }
+	        }
+	        return directoryToBeDeleted.delete();
+	    }
+	    catch (Exception e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	        return(false);
+	    }
+	}    
 	public static boolean checkDirectoryExists(String dirName)	{
 		try {
 			File checkedDirectory = new File(dirName);
+			if (!checkedDirectory.exists()) return(false); //no such file/directory/path exists  
 			if (!checkedDirectory.isDirectory()) return(false); //not a directory 
 			boolean exists = checkedDirectory.exists();
 			return(exists);
 		} catch (Exception e)	{
 			return(false);
 		}
+	}
+	public static boolean checkDirectoryExistsAndEmpty(String dirName)	{
+		try {
+			if (!checkDirectoryExists(dirName)) return(false);
+			File checkedDirectory = new File(dirName);
+			Stream<Path> entries = Files.list(checkedDirectory.toPath()); 
+			boolean isEmpty = !entries.findFirst().isPresent();   
+			entries.close();
+			return(isEmpty);
+		} catch (Exception e)	{
+			return(false);
+		}
+	}
+/*	public static long getCountFilesRecursivelyInDirectory(String dirName)	{
+		try {
+			File currentFile = new File(dirName);
+			//if (currentFile==null) return (-1);
+			if (!currentFile.exists()) return (-1);
+			
+			long currentFileNumber = getCountFilesRecursivelyInDirectory(currentFile);
+			return(currentFileNumber);
+		} catch (Exception e)	{
+			return(-1);
+		}
+	}	
+	public static long getCountFilesRecursivelyInDirectory(File currentFile)	{
+		if (!currentFile.exists()) return (-1);
+		try {		
+			File[] filesOrNull = currentFile.listFiles();
+			// Is this a file already?
+			long currentFileNumber = currentFile.isFile() ? 1 : 0;
+			if (filesOrNull == null) { // no sub directories found
+			    return currentFileNumber; // stop condition #1
+			}
+			return currentFileNumber + 
+				Arrays.stream(filesOrNull)
+			  		.mapToLong(currentFile::filesInside) // <-- recursion call here
+			  		.sum();
+		} catch (Exception e)	{
+			return(-1l);
+		}
+	}		
+	private static long filesInside(File it) {
+	    if (it.isFile()) {
+	        return 1; // stop condition #2
+	    } else if (it.isDirectory()) {
+	        return getCountFilesRecursivelyInDirectory(it.getAbsolutePath()); // <-- recursion to caller
+	    } else {
+	        return 0; // stop condition #3
+	    }
+	}
+*/	
+	public static long getCountFilesRecursivelyInDirectory(String path)	{
+		Path dir = Path.of(path);
+		try (Stream<Path> stream = Files.walk(dir)) {
+		    return stream.parallel()
+		      .map(getFileOrEmpty())
+		      .flatMap(Optional::stream)
+		      .filter(it -> !it.isDirectory())
+		      .count();
+		} catch (IOException e) {
+		    throw new RuntimeException(e);
+		}
+	}
+	public static long getCountDirectoriesRecursivelyInDirectory(String path)	{
+		Path dir = Path.of(path);
+		try (Stream<Path> stream = Files.walk(dir)) {
+		    return stream.parallel()
+		      .map(getFileOrEmpty())
+		      .flatMap(Optional::stream)
+		      .filter(it -> !it.isFile())
+		      .count();
+		} catch (IOException e) {
+		    throw new RuntimeException(e);
+		}
+	}
+	private static Function<Path, Optional<File>> getFileOrEmpty() {
+	    return it -> {
+	        try {
+	            return Optional.of(it.toFile());
+	        } catch (UnsupportedOperationException e) {
+	            // You may print or log the exception here;
+	            return Optional.empty();
+	        }
+	    };
 	}
 	public static boolean checkFileExists(String dirName)	{
 		try {
@@ -97,9 +205,9 @@ public class FileUtil {
 	    	fileSize = file.length();
 	    	return fileSize;
 	    } catch (Exception ex) {
+	    	return(-1);
 		    // handle exception
 		}
-	    return fileSize;
 	}    
 	public static byte[] getBytes(String filename)	{
 	    File myFile = new File(filename);

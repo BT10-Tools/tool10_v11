@@ -80,6 +80,39 @@ public class CliFileSetInitialize {
 		    
 		return(options.getOptions().size() - cntOptions);
 	}
+	private static int getOptionsUnzip(Options options) {
+		int cntOptions = options.getOptions().size();
+	    options.addOption("unzip", false, "unzipping directories and files from a fileset");
+	    options.addOption("unziptype", true, "unzip type recursive, file, directory");
+	    options.addOption("dbname", true, "The name of the database/filename");
+	    options.addOption("filesetname", true, "The name of the file set");
+	    options.addOption("outputfilesetname", true, "The name of the output file set");
+		options.addOption("tempdir", true, "The temporary directory name for unzipping, default is default temporary directory");
+		    
+		return(options.getOptions().size() - cntOptions);
+	}
+	private static int getOptionsUnembed(Options options) {
+		int cntOptions = options.getOptions().size();
+	    options.addOption("unembed", false, "unembed files from a fileset");
+	    options.addOption("unembedtype", true, "unembed type imagesFromPdf, pdfPagesAsImages");
+	    options.addOption("dbname", true, "The name of the database/filename");
+	    options.addOption("filesetname", true, "The name of the file set");
+	    options.addOption("outputfilesetname", true, "The name of the output file set");
+		options.addOption("tempdir", true, "The temporary directory name for unembed, default is default temporary directory");
+		    
+		return(options.getOptions().size() - cntOptions);
+	}
+	private static int getOptionsTransform(Options options) {
+		int cntOptions = options.getOptions().size();
+	    options.addOption("transform", false, "transform files from one form to another in a fileset");
+	    options.addOption("transformtype", true, "transfrom type jpg2png, png2jpg");
+	    options.addOption("dbname", true, "The name of the database/filename");
+	    options.addOption("filesetname", true, "The name of the file set");
+	    options.addOption("outputfilesetname", true, "The name of the output file set");
+		options.addOption("tempdir", true, "The temporary directory name for unembed, default is default temporary directory");
+		    
+		return(options.getOptions().size() - cntOptions);
+	}
 	private static int getOptionsSimilarity(Options options) {
 		int cntOptions = options.getOptions().size();
 		//dbname, filesetname
@@ -97,6 +130,9 @@ public class CliFileSetInitialize {
 		getOptionsLoad(options);
 		getOptionsExtract(options);
 		getOptionsExport(options);
+		getOptionsUnzip(options);
+		getOptionsUnembed(options);
+		getOptionsTransform(options);
 		getOptionsSimilarity(options);
 		
 		System.out.println("CliFileSetParser processParameters options.getOptions().size():"+options.getOptions().size());

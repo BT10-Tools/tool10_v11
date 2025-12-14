@@ -2,6 +2,9 @@ package tool10.fileset;
 
 import java.io.File;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFile;
+
 public class MakeFileSetFileFilter {
 
 	public static String checkFileSize(NodeF10 f10, File file, Long fileSize)	{

@@ -2,6 +2,11 @@ package tool10.fileset;
 
 import java.io.File;
 
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeFileBlobSmall;
+import tool10.fileset.nodes.NodeFileSet;
+import tool10.fileset.nodes.NodeHash;
 import tool10.util.Blake3;
 import tool10.util.ByteCompression;
 import tool10.util.ByteEncryption;

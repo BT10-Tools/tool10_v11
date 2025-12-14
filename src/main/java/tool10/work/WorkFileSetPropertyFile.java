@@ -26,7 +26,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import tool10.fileset.FileAttribute;
-import tool10.fileset.NodeFile;
+import tool10.fileset.nodes.NodeFile;
 import tool10.sql.Conn10;
 import tool10.util.TraverseFiles;
 

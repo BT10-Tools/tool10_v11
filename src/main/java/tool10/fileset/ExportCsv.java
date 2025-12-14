@@ -7,6 +7,18 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 
+import tool10.fileset.nodes.NodeF10;
+import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeFileBlobSmall;
+import tool10.fileset.nodes.NodeFileSet;
+import tool10.fileset.nodes.NodeFileStore;
+import tool10.fileset.nodes.NodeFileSystem;
+import tool10.fileset.nodes.NodeHash;
+import tool10.fileset.nodes.NodeHost;
+import tool10.fileset.nodes.NodeProperty;
+import tool10.fileset.nodes.NodeQuery;
+import tool10.fileset.nodes.NodeSimilarity;
 import tool10.util.FileUtil;
 
 public class ExportCsv {

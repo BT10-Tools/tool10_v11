@@ -10,19 +10,19 @@ import tool10.util.StrUtil;
 public class AutoGenExtractor {
 	
    	private static List<Field> getAllFields(String strClassName)	{
-	   List<Field> allFields = Arrays.asList(tool10.fileset.NodeSimilarity.class.getDeclaredFields());
-	   if 		("NodeFileSet".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.NodeFileSet.class.getDeclaredFields());}
-	   else if  ("NodeFile".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.NodeFile.class.getDeclaredFields());}
-	   else if  ("NodeFileBlob".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.NodeFileBlob.class.getDeclaredFields());}
-	   else if  ("NodeFileBlobSmall".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.NodeFileBlobSmall.class.getDeclaredFields());}
-	   else if  ("NodeFileStore".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.NodeFileStore.class.getDeclaredFields());}
-	   else if  ("NodeFileSystem".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.NodeFileSystem.class.getDeclaredFields());}
-	   else if  ("NodeHash".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.NodeHash.class.getDeclaredFields());}
-	   else if  ("NodeFileBlob".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.NodeFileBlob.class.getDeclaredFields());}
-	   else if  ("NodeHost".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.NodeHost.class.getDeclaredFields());}
-	   else if  ("NodeProperty".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.NodeProperty.class.getDeclaredFields());}
-	   else if  ("NodeQuery".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.NodeQuery.class.getDeclaredFields());}
-	   else if  ("NodeSimilarity".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.NodeSimilarity.class.getDeclaredFields());}
+	   List<Field> allFields = Arrays.asList(tool10.fileset.nodes.NodeSimilarity.class.getDeclaredFields());
+	   if 		("NodeFileSet".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileSet.class.getDeclaredFields());}
+	   else if  ("NodeFile".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeFile.class.getDeclaredFields());}
+	   else if  ("NodeFileBlob".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileBlob.class.getDeclaredFields());}
+	   else if  ("NodeFileBlobSmall".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileBlobSmall.class.getDeclaredFields());}
+	   else if  ("NodeFileStore".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileStore.class.getDeclaredFields());}
+	   else if  ("NodeFileSystem".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileSystem.class.getDeclaredFields());}
+	   else if  ("NodeHash".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeHash.class.getDeclaredFields());}
+	   else if  ("NodeFileBlob".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileBlob.class.getDeclaredFields());}
+	   else if  ("NodeHost".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeHost.class.getDeclaredFields());}
+	   else if  ("NodeProperty".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeProperty.class.getDeclaredFields());}
+	   else if  ("NodeQuery".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeQuery.class.getDeclaredFields());}
+	   else if  ("NodeSimilarity".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeSimilarity.class.getDeclaredFields());}
   		
 	   return(allFields);
    	}
