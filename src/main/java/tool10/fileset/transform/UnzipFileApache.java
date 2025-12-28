@@ -18,7 +18,7 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.io.IOUtils;
 
-import tool10.fileset.nodes.NodeF10;
+import tool10.f10.NodeF10;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileSet;
 

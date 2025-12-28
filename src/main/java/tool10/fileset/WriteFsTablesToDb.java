@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 
+import tool10.fileset.nodes.NodeBlob;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeFileBlobOld;
 import tool10.fileset.nodes.NodeFileBlobSmall;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.fileset.nodes.NodeFileStore;
@@ -680,14 +683,14 @@ public class WriteFsTablesToDb {
 			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
 			    cntInserted += ps.executeUpdate();
 		    }
-		    System.out.println("writeTableProperty: cntInserted = " + cntInserted);
+		    //System.out.println("writeTableProperty: cntInserted = " + cntInserted);
 		    ps.close();
 		} catch(SQLException e)	{
 		      e.printStackTrace(System.err);
 		}
 		return(cntInserted);
 	}
-	public static int writeTableFileBlobSmall(Connection conn,NodeFileSet fileSet)	{
+	public static int writeTableFileBlobSmallXXX(Connection conn, ArrayList<NodeFileBlobSmall> listFileBlobSmall)	{
 		int cntInserted = 0;
 		String query =  "INSERT INTO FS_FILEBLOBSMALL (fileBlobSmallId,fileBlobId,fileId,fileSetId,byteIndexStart,byteIndexEnd,hashId,creationDate,modificationDate) "+
 						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?)";
@@ -695,7 +698,7 @@ public class WriteFsTablesToDb {
 		//Long byteIndexEnd, Long hashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
 		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeFileBlobSmall ent : fileSet.getListFileBlobSmall())	{
+		    for (NodeFileBlobSmall ent : listFileBlobSmall)	{
 			    int cnt=1;
 			    if (ent.getFileBlobSmallId()!=null) {ps.setLong(cnt++, ent.getFileBlobSmallId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getFileBlobId()!=null) {ps.setLong(cnt++, ent.getFileBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
@@ -709,39 +712,83 @@ public class WriteFsTablesToDb {
 			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
 			    cntInserted += ps.executeUpdate();
 		    }
-		    System.out.println("writeTableFileBlobSmall: cntInserted = " + cntInserted);
+		    //System.out.println("writeTableFileBlobSmall: cntInserted = " + cntInserted);
 		    ps.close();
 		} catch(SQLException e)	{
 		      e.printStackTrace(System.err);
 		}
 		return(cntInserted);
 	}
-	public static int writeTableFileBlob(Connection conn,NodeFileSet fileSet)	{
+	public static int writeTableFileBlob(Connection conn, ArrayList<NodeFileBlob> listFileBlob)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO FS_FILEBLOB (fileBlobId,fileId,fileSetId,partNumber,cntPart,blobType,blobSize,fileSize,compressionType,compressedFileSize,\r\n"+
-						"compressionGainRatio,compressionGainBytes,compressedByteHashId, \r\n" +
-				 		"sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType,encryptedFileSize,encrytedByteHashId,fileBytes,compressedBytes,encryptedBytes, \r\n"+
-				 		"hashId,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?)";
-		//public NodeFileBlob(Long fileBlobId, Long fileId, Long fileSetId, Long partNumber, Long cntPart, String blobType,
-		//		Long blobSize, Long fileSize, String compressionType, Long compressedFileSize, Double compressionGainRatio,
-		//		Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
-		//		Long encryptedFileSize, Long encrytedByteHashId,byte[] fileBytes, byte[] compressedBytes, byte[] encryptedBytes, 
-		//		Long hashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		String query =  "INSERT INTO FS_FILEBLOB (fileBlobId,fileId,blobId,fileSetId, blobType, blobSize, \r\n"+
+						"fileSize, hashId, blobDbName, blobDbAttachmentName, blobTableName, \r\n" +
+				 		"bigPartNumber, bigCntPart, smallByteIndexStart, smallByteIndexEnd, \r\n"+
+				 		"creationDate,modificationDate) "+
+						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?)";
+		//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobId, Long fileSetId, String blobType, Long blobSize,
+		//Long fileSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
+		//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
+		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
 		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeFileBlob ent : fileSet.getListFileBlob())	{
+		    for (NodeFileBlob ent : listFileBlob)	{
 			    int cnt=1;
 			    if (ent.getFileBlobId()!=null) {ps.setLong(cnt++, ent.getFileBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getFileId()!=null) {ps.setLong(cnt++, ent.getFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getBlobId()!=null) {ps.setLong(cnt++, ent.getBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getBlobType());
+			    if (ent.getBlobSize()!=null) {ps.setLong(cnt++, ent.getBlobSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileSize()!=null) {ps.setLong(cnt++, ent.getFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getHashId()!=null) {ps.setLong(cnt++, ent.getHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getBlobDbName());
+			    ps.setString(cnt++, ent.getBlobDbAttachmentName());
+			    ps.setString(cnt++, ent.getBlobTableName());
+			    
+			    if (ent.getBigPartNumber()!=null) {ps.setLong(cnt++, ent.getBigPartNumber());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getBigCntPart()!=null) {ps.setDouble(cnt++, ent.getBigCntPart());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getSmallByteIndexStart()!=null) {ps.setLong(cnt++, ent.getSmallByteIndexStart());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getSmallByteIndexEnd()!=null) {ps.setLong(cnt++, ent.getSmallByteIndexEnd());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    
+			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    cntInserted += ps.executeUpdate();
+		    }
+		    //System.out.println("writeTableFileBlob: cntInserted = " + cntInserted);
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntInserted);
+	}
+	public static int writeTableBlob(Connection conn, String blobTableName, String blobDbAttachmentName, ArrayList<NodeBlob> listBlob)	{
+		int cntInserted = 0;
+		String query =  "INSERT INTO FS_BLOB (blobId,sourceId,fileSetId,firstPartBlobId,partNumber,cntPart,blobType,"+
+						"blobSize,compressionType,compressedSize,compressionGainRatio,\r\n"+
+						"compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType, "+
+						"encryptedSize,encrytedByteHashId,blobBytes,compressedBytes,encryptedBytes, \r\n"+
+				 		"blobHashId,creationDate,modificationDate) "+
+						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?)";
+		//public NodeBlob(Long blobId, Long sourceId, Long fileSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+		//Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
+		//Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
+		//Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
+		//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    for (NodeBlob ent : listBlob)	{
+			    int cnt=1;
+			    if (ent.getBlobId()!=null) {ps.setLong(cnt++, ent.getBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getSourceId()!=null) {ps.setLong(cnt++, ent.getSourceId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFirstPartBlobId()!=null) {ps.setLong(cnt++, ent.getFirstPartBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getPartNumber()!=null) {ps.setLong(cnt++, ent.getPartNumber());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getCntPart()!=null) {ps.setLong(cnt++, ent.getCntPart());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getBlobType());
 			    if (ent.getBlobSize()!=null) {ps.setLong(cnt++, ent.getBlobSize());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileSize()!=null) {ps.setLong(cnt++, ent.getFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getCompressionType());
-			    if (ent.getCompressedFileSize()!=null) {ps.setLong(cnt++, ent.getCompressedFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCompressedSize()!=null) {ps.setLong(cnt++, ent.getCompressedSize());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getCompressionGainRatio()!=null) {ps.setDouble(cnt++, ent.getCompressionGainRatio());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getCompressionGainBytes()!=null) {ps.setLong(cnt++, ent.getCompressionGainBytes());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getCompressedByteHashId()!=null) {ps.setLong(cnt++, ent.getCompressedByteHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
@@ -750,22 +797,22 @@ public class WriteFsTablesToDb {
 			    if (ent.getSandByteLengthTail()!=null) {ps.setLong(cnt++, ent.getSandByteLengthTail()); } 	else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getEncryptionBlobKey());
 			    ps.setString(cnt++, ent.getEncryptionType());
-			    if (ent.getEncryptedFileSize()!=null) {ps.setLong(cnt++, ent.getEncryptedFileSize()); } 	else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getEncryptedSize()!=null) {ps.setLong(cnt++, ent.getEncryptedSize()); } 	else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getEncrytedByteHashId()!=null) {ps.setLong(cnt++, ent.getEncrytedByteHashId()); } 	else {ps.setNull(cnt++,Types.INTEGER);}
 			    
-			    if (ent.getFileBytes()!=null) 		{ps.setBytes(cnt++, ent.getFileBytes());} else {ps.setNull(cnt++,Types.BLOB);}
+			    if (ent.getBlobBytes()!=null) 		{ps.setBytes(cnt++, ent.getBlobBytes());} else {ps.setNull(cnt++,Types.BLOB);}
 			    if (ent.getCompressedBytes()!=null) {ps.setBytes(cnt++, ent.getCompressedBytes());} else {ps.setNull(cnt++,Types.BLOB);}
 			    if (ent.getEncryptedBytes()!=null) 	{ps.setBytes(cnt++, ent.getEncryptedBytes());} else {ps.setNull(cnt++,Types.BLOB);}
 			    
 			    //compressedBytes,encyptedBytes
 			    
-			    if (ent.getHashId()!=null) {ps.setLong(cnt++, ent.getHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getBlobHashId()!=null) {ps.setLong(cnt++, ent.getBlobHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    
 			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
 			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
 			    cntInserted += ps.executeUpdate();
 		    }
-		    System.out.println("writeTableFileBlob: cntInserted = " + cntInserted);
+		    //System.out.println("writeTableBlob: cntInserted = " + cntInserted);
 		    ps.close();
 		} catch(SQLException e)	{
 		      e.printStackTrace(System.err);
@@ -973,8 +1020,8 @@ public class WriteFsTablesToDb {
 		int ctInsertedFile = writeTableFile(conn,fileSet);
 		int ctInsertedFileSystem = writeTableFileSystem(conn,fileSet);
 		int ctInsertedFileStore = writeTableFileStore(conn,fileSet);
-		int ctInsertedFileBlob = writeTableFileBlob(conn,fileSet); 
-		int ctInsertedFileBlobSmall = writeTableFileBlobSmall(conn,fileSet); 
+		int ctInsertedFileBlob = writeTableFileBlob(conn,fileSet.getListFileBlob()); 
+		int ctInsertedBlob = writeTableBlob(conn,"","",fileSet.getListBlob()); 
 		int ctInsertedProperty = writeTableProperty(conn,fileSet); 
 		int ctInsertedSimilarity = writeTableSimilarity(conn,fileSet); 
 		int ctInsertedHash = writeTableHash(conn,fileSet);
@@ -991,10 +1038,16 @@ public class WriteFsTablesToDb {
 		int ctInsertedTokenType = writeTableTokenType(conn, corpus);
 		int ctInsertedDistance = writeTableDistance(conn, corpus);
 	*/	
-		int cntInserted = ctInsertedCorpus + ctInsertedFile + ctInsertedFileSystem + ctInsertedFileStore + ctInsertedFileBlob + ctInsertedFileBlobSmall + 
+		int cntInserted = ctInsertedCorpus + ctInsertedFile + ctInsertedFileSystem + ctInsertedFileStore + ctInsertedFileBlob + ctInsertedBlob + 
 				ctInsertedProperty + ctInsertedSimilarity + ctInsertedHash + ctInsertedArchive + ctInsertedContainer + ctInsertedTransform; //+ ctInsertedToken + 
 		return(cntInserted);
 	}	
+	public static int writeBlob(Connection conn,  NodeFileSet fileSet)	{
+		int ctInsertedFileBlob = writeTableFileBlob(conn,fileSet.getListFileBlob()); 
+		int ctInsertedBlob = writeTableBlob(conn,"","",fileSet.getListBlob()); 
+		int cntInserted = ctInsertedFileBlob + ctInsertedBlob ;
+		return(cntInserted);
+	}
 	public static int writeSimilarity(Connection conn,  NodeFileSet fileSet)	{
 		int ctInsertedSimilarity = writeTableSimilarity(conn,fileSet); 
 		int cntInserted = ctInsertedSimilarity;

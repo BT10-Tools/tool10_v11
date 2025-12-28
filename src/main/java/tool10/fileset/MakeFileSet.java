@@ -2,7 +2,7 @@ package tool10.fileset;
 
 import java.time.ZonedDateTime;
 
-import tool10.fileset.nodes.NodeF10;
+import tool10.f10.NodeF10;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.sql.Conn10;
 
@@ -25,7 +25,7 @@ public class MakeFileSet {
 	public static void printAllListsAndMaps(NodeFileSet fileSet)	{
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFile().size() = " + fileSet.getListFile().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFileBlob().size() = " + fileSet.getListFileBlob().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFileBlobSmall().size() = " + fileSet.getListFileBlobSmall().size());
+		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListBlob().size() = " + fileSet.getListBlob().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFileSystem().size() = " + fileSet.getListFileSystem().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFileStore().size() = " + fileSet.getListFileStore().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListHash().size() = " + fileSet.getListHash().size());
@@ -36,7 +36,7 @@ public class MakeFileSet {
 							
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2File().size() = " + fileSet.getMapId2File().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2FileBlob().size() = " + fileSet.getMapId2FileBlob().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2FileBlobSmall().size() = " + fileSet.getMapId2FileBlobSmall().size());
+		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Blob().size() = " + fileSet.getMapId2Blob().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2FileSystem().size() = " + fileSet.getMapId2FileSystem().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2FileStore().size() = " + fileSet.getMapId2FileStore().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Hash().size() = " + fileSet.getMapId2Hash().size());

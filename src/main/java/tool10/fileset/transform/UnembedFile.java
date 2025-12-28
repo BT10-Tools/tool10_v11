@@ -1,7 +1,7 @@
 package tool10.fileset.transform;
 
+import tool10.f10.NodeF10;
 import tool10.fileset.MakeFileSetFile;
-import tool10.fileset.nodes.NodeF10;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.util.FileUtil;

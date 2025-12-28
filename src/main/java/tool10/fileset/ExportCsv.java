@@ -7,9 +7,10 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 
-import tool10.fileset.nodes.NodeF10;
+import tool10.f10.NodeF10;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeFileBlobOld;
 import tool10.fileset.nodes.NodeFileBlobSmall;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.fileset.nodes.NodeFileStore;
@@ -83,13 +84,8 @@ public class ExportCsv {
 			} 
 		} else if ("NodeFileBlob".equals(tableName))	{ 
 			for (NodeFileBlob ent : fileSet.getListFileBlob()) { 
-				csvPrinter.printRecord(ent.getFileBlobId(),ent.getFileId(),ent.getFileSetId(),ent.getPartNumber(),ent.getCntPart(),ent.getBlobType(),ent.getBlobSize(),ent.getFileSize(),ent.getCompressionType(),ent.getCompressedFileSize(),ent.getCompressionGainRatio(),
-					ent.getCompressionGainBytes(),ent.getCompressedByteHashId(),ent.getSandByteLengthHead(),ent.getSandByteLengthTail(),ent.getEncryptionBlobKey(),ent.getEncryptionType(),
-					ent.getEncryptedFileSize(),ent.getEncrytedByteHashId(),ent.getFileBytes(),ent.getHashId(),ent.getCreationDate(),ent.getModificationDate()); 
-			} 
-		} else if ("NodeFileBlobSmall".equals(tableName))	{ 
-			for (NodeFileBlobSmall ent : fileSet.getListFileBlobSmall()) { 
-				csvPrinter.printRecord(ent.getFileBlobSmallId(),ent.getFileBlobId(),ent.getFileId(),ent.getFileSetId(),ent.getByteIndexStart(),ent.getByteIndexEnd(),ent.getHashId(),ent.getCreationDate(),ent.getModificationDate()); 
+				csvPrinter.printRecord(ent.getFileBlobId(),ent.getFileId(),ent.getBlobId(),ent.getFileSetId(),ent.getBlobType(),ent.getBlobSize(),ent.getFileSize(),ent.getHashId(),ent.getBlobDbName(),ent.getBlobDbAttachmentName(),ent.getBlobTableName(),
+					ent.getBigPartNumber(),ent.getBigCntPart(),ent.getSmallByteIndexStart(),ent.getSmallByteIndexEnd(),ent.getCreationDate(),ent.getModificationDate()); 
 			} 
 		} else if ("NodeFileStore".equals(tableName))	{ 
 			for (NodeFileStore ent : fileSet.getListFileStore()) { 

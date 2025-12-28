@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -221,6 +223,20 @@ public class FileUtil {
 		    // handle exception
 		}
 	    return(byteArray);
+	}    
+	public static List<String> getLines(String filename,Charset charset)	{
+	    File myFile = new File(filename);
+	    if (!myFile.exists()) return(null);
+	    //Charset charset = Charset.forName("ISO-8859-1");
+	    if (charset==null) {charset = Charset.defaultCharset();} //UTF-8 .forName("ISO-8859-1");
+	    try	{
+	    	// Step 2: Call Files.readAllLines() to read the file content
+	    	List<String> lines = Files.readAllLines(myFile.toPath());
+	    	return(lines);
+	    } catch (IOException ex) {
+		    // handle exception
+	    	return(null);
+		}
 	}    
 	public static String[] getLineArrayFromFile(String filename) {
 		String[] lineArray = null;

@@ -1,10 +1,10 @@
 package test10.fileset;
 
-import tool10.fileset.CliFileSetInitialize;
-import tool10.fileset.CliFileSetParseAndValidate;
-import tool10.fileset.CliParameter;
+import tool10.f10.CliInitialize;
+import tool10.f10.CliParseAndValidate;
+import tool10.f10.CliParameter;
+import tool10.f10.NodeF10;
 import tool10.fileset.MainFileSet;
-import tool10.fileset.nodes.NodeF10;
 
 public class CliFileSetTest {
 	
@@ -61,17 +61,12 @@ public class CliFileSetTest {
 	public static CliParameter processFileSetCli(NodeF10 f10, String[] args0)	{
 		
 		//String[] args0 = args3;
-		CliParameter cliParam = CliFileSetInitialize.initializeParameters(args0);
-		String parseAndValidateStatus = CliFileSetParseAndValidate.parseAndValidateCommandLineArguments(cliParam);  //args
+		CliParameter cliParam = CliInitialize.initializeParameters(args0);
+		String parseAndValidateStatus = CliParseAndValidate.parseAndValidateCommandLineArguments(cliParam);  //args
 		//CliFileSetParser.showCommandLine(cliParam);
 		
 		f10.setCliParams(cliParam);
 		return(cliParam);
 	}
-	public static void main( String[] args ) {
-		NodeF10 f10 = new NodeF10();
-       
-		String[] args0 = getArgs0();
-        MainFileSet.runF10(f10, args0);
-	}
+	
 }

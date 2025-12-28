@@ -49,6 +49,11 @@ public class JLite {
 		System.out.println("After  Vacuum, database file size: "+FileUtil.getFileSize(dbFileName));
 		return(msg);
 	}
+	public static int createAttachment(Connection connection, String attachmentName, String dbFileName)	{
+		String sqlStr = "ATTACH DATABASE '"+dbFileName+"' AS "+attachmentName;
+		int cntExecuted = executeUpdate(connection,sqlStr);
+		return(cntExecuted);
+	}
 	public static String getDatabaseSizeStr(Connection connection)	{
 		int cntRead = 0;
 		//the SQL is wrong, it must be corrected

@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.time.ZonedDateTime;
 
 import tool10.fileset.nodes.NodeBinary;
+import tool10.fileset.nodes.NodeBlob;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
+import tool10.fileset.nodes.NodeFileBlobOld;
 import tool10.fileset.nodes.NodeFileBlobSmall;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.fileset.nodes.NodeFileStore;
@@ -149,16 +151,14 @@ public class ReadFsTablesFromDb {
 	} 
 	public static int readTableFileBlob(Connection conn, NodeFileSet fileSet)	{ 
 		int cntRead = 0; 
-		String query = 	" SELECT "+
-				"fileBlobId,fileId,fileSetId,partNumber,cntPart,blobType,blobSize,fileSize,compressionType,compressedFileSize,compressionGainRatio,"+
-				" compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType,"+
-				" encryptedFileSize,encrytedByteHashId,fileBytes,compressedBytes,encryptedBytes,hashId,creationDate,modificationDate"+
+		String query = 	" SELECT fileBlobId,fileId,blobId,fileSetId, blobType, blobSize, \r\n" + 
+				" fileSize, hashId, blobDbName, blobDbAttachmentName, blobTableName, \r\n" + 
+				" bigPartNumber, bigCntPart, smallByteIndexStart, smallByteIndexEnd, creationDate,modificationDate"+
 				" FROM FS_FILEBLOB WHERE fileSetId = ? ORDER BY fileBlobId"; 
-		//public NodeFileBlob(Long fileBlobId, Long fileId, Long fileSetId, Long partNumber, Long cntPart, String blobType,
-		//		Long blobSize, Long fileSize, String compressionType, Long compressedFileSize, Double compressionGainRatio,
-		//		Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
-		//		Long encryptedFileSize, Long encrytedByteHashId,byte[] fileBytes, byte[] compressedBytes, byte[] encryptedBytes, 
-		//		Long hashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobId, Long fileSetId, String blobType, Long blobSize,
+		//Long fileSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
+		//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
+		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setLong(1, fileSet.getFileSetId());
@@ -166,37 +166,29 @@ public class ReadFsTablesFromDb {
 			while (rs.next()) { 
 				Long fileBlobId = rs.getLong("fileBlobId");	if (rs.wasNull()) {fileBlobId = null;}
 				Long fileId = rs.getLong("fileId");	if (rs.wasNull()) {fileId = null;}
+				Long blobId = rs.getLong("blobId");	if (rs.wasNull()) {blobId = null;}
 				Long fileSetId = rs.getLong("fileSetId");	if (rs.wasNull()) {fileSetId = null;}
-				Long partNumber = rs.getLong("partNumber");	if (rs.wasNull()) {partNumber = null;}
-				Long cntPart = rs.getLong("cntPart");	if (rs.wasNull()) {cntPart = null;}
 				String blobType = rs.getString("blobType");
 				Long blobSize = rs.getLong("blobSize");	if (rs.wasNull()) {blobSize = null;}
 				Long fileSize = rs.getLong("fileSize");	if (rs.wasNull()) {fileSize = null;}
-				String compressionType = rs.getString("compressionType");
-				Long compressedFileSize = rs.getLong("compressedFileSize");	if (rs.wasNull()) {compressedFileSize = null;}
-				Double compressionGainRatio = rs.getDouble("compressionGainRatio");	if (rs.wasNull()) {compressionGainRatio = null;}
-				Long compressionGainBytes = rs.getLong("compressionGainBytes");	if (rs.wasNull()) {compressionGainBytes = null;}
-				Long compressedByteHashId = rs.getLong("compressedByteHashId");	if (rs.wasNull()) {compressedByteHashId = null;}
-				Long sandByteLengthHead = rs.getLong("sandByteLengthHead");	if (rs.wasNull()) {sandByteLengthHead = null;}
-				Long sandByteLengthTail = rs.getLong("sandByteLengthTail");	if (rs.wasNull()) {sandByteLengthTail = null;}
-				String encryptionBlobKey = rs.getString("encryptionBlobKey");
-				String encryptionType = rs.getString("encryptionType");
-				Long encryptedFileSize = rs.getLong("encryptedFileSize");	if (rs.wasNull()) {encryptedFileSize = null;}
-				Long encrytedByteHashId = rs.getLong("encrytedByteHashId");	if (rs.wasNull()) {encrytedByteHashId = null;}
-				byte[] fileBytes = rs.getBytes("fileBytes");  	if (rs.wasNull()) {fileBytes = null;}
-				byte[] compressedBytes = rs.getBytes("compressedBytes");  	if (rs.wasNull()) {fileBytes = null;}
-				byte[] encryptedBytes = rs.getBytes("encryptedBytes");  	if (rs.wasNull()) {fileBytes = null;}
 				Long hashId = rs.getLong("hashId");	if (rs.wasNull()) {hashId = null;}
+				String blobDbName = rs.getString("blobDbName");
+				String blobDbAttachmentName = rs.getString("blobDbAttachmentName");
+				String blobTableName = rs.getString("blobTableName");
+				Long bigPartNumber = rs.getLong("bigPartNumber");	if (rs.wasNull()) {bigPartNumber = null;}
+				Long bigCntPart = rs.getLong("bigCntPart");	if (rs.wasNull()) {bigCntPart = null;}
+				Long smallByteIndexStart = rs.getLong("smallByteIndexStart");	if (rs.wasNull()) {smallByteIndexStart = null;}
+				Long smallByteIndexEnd = rs.getLong("smallByteIndexEnd");	if (rs.wasNull()) {smallByteIndexEnd = null;}
 				String creationDateStr = rs.getString("creationDate");
 				ZonedDateTime creationDate = ((creationDateStr!=null) ? ZonedDateTime.parse(creationDateStr) : null); 
 				String modificationDateStr = rs.getString("modificationDate");
 				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
 				NodeFileBlob newFileBlob = new NodeFileBlob(
-						fileBlobId,fileId,fileSetId,partNumber,cntPart,blobType,blobSize,fileSize,compressionType,compressedFileSize,compressionGainRatio,
-						compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType,
-						encryptedFileSize,encrytedByteHashId,fileBytes,compressedBytes,encryptedBytes,hashId,creationDate,modificationDate);
+						fileBlobId,fileId,blobId,fileSetId,blobType,blobSize,fileSize, hashId,blobDbName,blobDbAttachmentName,blobTableName,
+						bigPartNumber,bigCntPart,smallByteIndexStart,smallByteIndexEnd,creationDate,modificationDate);
+				
 				fileSet.getListFileBlob().add(newFileBlob); 
-				fileSet.getMapId2FileBlob().put(newFileBlob.getFileBlobId(),newFileBlob); 
+				fileSet.getMapId2FileBlob().put(newFileBlob.getFileBlobId(),newFileBlob);
 				cntRead++; 
 			}
 			System.out.println("readTableFileBlob: cntRead = " + cntRead); 
@@ -206,38 +198,62 @@ public class ReadFsTablesFromDb {
 			e.printStackTrace(System.err); 
 		} 
 		return(cntRead); 
-	} 
-	public static int readTableFileBlobSmall(Connection conn, NodeFileSet fileSet)	{ 
+	}
+	public static int readTableBlob(Connection conn, NodeFileSet fileSet)	{ 
 		int cntRead = 0; 
-		String query = 	" SELECT "+
-				"fileBlobSmallId,fileBlobId,fileId,fileSetId,byteIndexStart,byteIndexEnd,hashId,creationDate,modificationDate"+
-			 " FROM FS_FILEBLOBSMALL WHERE fileSetId = ? ORDER BY fileBlobSmallId"; 
-		//public NodeFileBlobSmall(Long fileBlobSmallId,Long fileBlobId,Long fileId,Long fileSetId,Long byteIndexStart,Long byteIndexEnd,Long hashId,
-		//ZonedDateTime creationDate,ZonedDateTime modificationDate)
-
+		String query = 	" SELECT blobId,sourceId,fileSetId,firstPartBlobId,partNumber,cntPart,blobType, "+
+				" blobSize,compressionType,compressedSize,compressionGainRatio,"+
+				" compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType,"+
+				" encryptedSize,encrytedByteHashId,blobBytes,compressedBytes,encryptedBytes,blobHashId,creationDate,modificationDate "+
+				" FROM FS_BLOB WHERE fileSetId = ? ORDER BY blobId"; 
+		//public NodeBlob(Long blobId, Long sourceId, Long fileSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+		//Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
+		//Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
+		//Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
+		//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		 		
 		try	{
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setLong(1, fileSet.getFileSetId());
 			ResultSet rs = ps.executeQuery(); 
 			while (rs.next()) { 
-				Long fileBlobSmallId = rs.getLong("fileBlobSmallId");	if (rs.wasNull()) {fileBlobSmallId = null;}
-				Long fileBlobId = rs.getLong("fileBlobId");	if (rs.wasNull()) {fileBlobId = null;}
-				Long fileId = rs.getLong("fileId");	if (rs.wasNull()) {fileId = null;}
+				Long blobId = rs.getLong("blobId");	if (rs.wasNull()) {blobId = null;}
+				Long sourceId = rs.getLong("sourceId");	if (rs.wasNull()) {sourceId = null;}
 				Long fileSetId = rs.getLong("fileSetId");	if (rs.wasNull()) {fileSetId = null;}
-				Long byteIndexStart = rs.getLong("byteIndexStart");	if (rs.wasNull()) {byteIndexStart = null;}
-				Long byteIndexEnd = rs.getLong("byteIndexEnd");	if (rs.wasNull()) {byteIndexEnd = null;}
-				Long hashId = rs.getLong("hashId");	if (rs.wasNull()) {hashId = null;}
+				Long firstPartBlobId = rs.getLong("firstPartBlobId");	if (rs.wasNull()) {firstPartBlobId = null;}
+				Long partNumber = rs.getLong("partNumber");	if (rs.wasNull()) {partNumber = null;}
+				Long cntPart = rs.getLong("cntPart");	if (rs.wasNull()) {cntPart = null;}
+				String blobType = rs.getString("blobType");
+				Long blobSize = rs.getLong("blobSize");	if (rs.wasNull()) {blobSize = null;}
+				String compressionType = rs.getString("compressionType");
+				Long compressedSize = rs.getLong("compressedSize");	if (rs.wasNull()) {compressedSize = null;}
+				Double compressionGainRatio = rs.getDouble("compressionGainRatio");	if (rs.wasNull()) {compressionGainRatio = null;}
+				Long compressionGainBytes = rs.getLong("compressionGainBytes");	if (rs.wasNull()) {compressionGainBytes = null;}
+				Long compressedByteHashId = rs.getLong("compressedByteHashId");	if (rs.wasNull()) {compressedByteHashId = null;}
+				Long sandByteLengthHead = rs.getLong("sandByteLengthHead");	if (rs.wasNull()) {sandByteLengthHead = null;}
+				Long sandByteLengthTail = rs.getLong("sandByteLengthTail");	if (rs.wasNull()) {sandByteLengthTail = null;}
+				String encryptionBlobKey = rs.getString("encryptionBlobKey");
+				String encryptionType = rs.getString("encryptionType");
+				Long encryptedSize = rs.getLong("encryptedSize");	if (rs.wasNull()) {encryptedSize = null;}
+				Long encrytedByteHashId = rs.getLong("encrytedByteHashId");	if (rs.wasNull()) {encrytedByteHashId = null;}
+				byte[] blobBytes = rs.getBytes("blobBytes");  	if (rs.wasNull()) {blobBytes = null;}
+				byte[] compressedBytes = rs.getBytes("compressedBytes");  	if (rs.wasNull()) {compressedBytes = null;}
+				byte[] encryptedBytes = rs.getBytes("encryptedBytes");  	if (rs.wasNull()) {encryptedBytes = null;}
+				Long blobHashId = rs.getLong("blobHashId");	if (rs.wasNull()) {blobHashId = null;}
 				String creationDateStr = rs.getString("creationDate");
 				ZonedDateTime creationDate = ((creationDateStr!=null) ? ZonedDateTime.parse(creationDateStr) : null); 
 				String modificationDateStr = rs.getString("modificationDate");
 				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
-				NodeFileBlobSmall newFileBlobSmall = new NodeFileBlobSmall(
-						fileBlobSmallId,fileBlobId,fileId,fileSetId,byteIndexStart,byteIndexEnd,hashId,creationDate,modificationDate);
-				fileSet.getListFileBlobSmall().add(newFileBlobSmall); 
-				fileSet.getMapId2FileBlobSmall().put(newFileBlobSmall.getFileBlobSmallId(),newFileBlobSmall); 
+				NodeBlob newBlob = new NodeBlob(
+						blobId,sourceId,fileSetId,firstPartBlobId,partNumber,cntPart,blobType,
+						blobSize,compressionType,compressedSize,compressionGainRatio,
+						compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType,
+						encryptedSize,encrytedByteHashId,blobBytes,compressedBytes,encryptedBytes,blobHashId,creationDate,modificationDate);
+				fileSet.getListBlob().add(newBlob); 
+				fileSet.getMapId2Blob().put(newBlob.getBlobId(),newBlob); 
 				cntRead++; 
 			}
-			System.out.println("readTableFileBlobSmall: cntRead = " + cntRead); 
+			System.out.println("readTableBlob: cntRead = " + cntRead); 
 			rs.close(); 
 			ps.close(); 
 		} catch(SQLException e)	{ 
@@ -708,7 +724,7 @@ public class ReadFsTablesFromDb {
 	public static int readTableTransform(Connection conn, NodeFileSet fileSet)	{ 
 		int cntRead = 0; 
 		String query = 	" SELECT "+
-			" transformId, fileSetId, transformFileId, transformFileSetId, transformedFileId, transformType, extensionType, algorithmName,,\r\n" +
+			" transformId, fileSetId, transformFileId, transformFileSetId, transformedFileId, transformType, extensionType, algorithmName,\r\n" +
 			" transformRemark, tmpFileName, cntFile, originalFileSize, transformedFileSize, creationDate,modificationDate "+
 			" FROM FS_TRANSFORM WHERE fileSetId = ? ORDER BY transformId"; 
 		//public NodeTransform(Long transformId, Long fileSetId, Long transformFileId, Long transformFileSetId,
@@ -823,8 +839,8 @@ public class ReadFsTablesFromDb {
 		int cntReadHash = readTableHash(conn,fileSet);
 		int cntReadFileSystem = readTableFileSystem(conn,fileSet);
 		int cntReadFileStore = readTableFileStore(conn,fileSet);
-		int cntReadFileBlobSmall = readTableFileBlobSmall(conn,fileSet);
 		int cntReadFileBlob = readTableFileBlob(conn,fileSet);
+		int cntReadBlob = readTableBlob(conn,fileSet);
 		int cntReadFile = readTableFile(conn,fileSet);
 		int cntReadArchive = readTableArchive(conn,fileSet);
 		int cntReadContainer = readTableContainer(conn,fileSet);
@@ -833,42 +849,13 @@ public class ReadFsTablesFromDb {
 		postProcessFileSet(fileSet);
 		
 		int cntRead = cntReadSimilarity + cntReadQuery + cntReadProperty + cntReadHost + cntReadHash + 
-				cntReadFileSystem + cntReadFileStore + cntReadFileBlobSmall + cntReadFileBlob + cntReadFile + 
+				cntReadFileSystem + cntReadFileStore + cntReadFileBlob + cntReadBlob + cntReadFile + 
 				cntReadArchive + cntReadContainer + cntReadTransform + 1;
 	    System.out.println("readFileSet: total record read = " + cntRead);
 		return(fileSet);
 	}	
 	private static void postProcessFileSet(NodeFileSet fileSet)	{
-		for (NodeFileBlob fileBlob : fileSet.getListFileBlob())	{
-			if (fileBlob.getFileId()!=null)	{
-				NodeFile nodeFile = fileSet.getMapId2File().get(fileBlob.getFileId());
-				if (nodeFile!=null)	{ 
-					if ("bigfile".equals(fileBlob.getBlobType())) 			nodeFile.getListFileBlobBig().add(fileBlob);
-					else if ("regularfile".equals(fileBlob.getBlobType())) 	nodeFile.getListFileBlobRegular().add(fileBlob);
-				}
-			}
-		}
-		for (NodeFileBlobSmall fileBlobSmall : fileSet.getListFileBlobSmall())	{
-			if (fileBlobSmall.getFileId()!=null)	{
-				NodeFile nodeFile = fileSet.getMapId2File().get(fileBlobSmall.getFileId());
-				if (nodeFile!=null)	{ nodeFile.getListFileBlobSmall().add(fileBlobSmall);}
-			}
-		}
-		for (NodeSimilarity sim : fileSet.getListSimilarity())	{
-			if (sim.getSimilarityKey()!=null)	{
-				fileSet.getMapKey2Similarity().put(sim.getSimilarityKey(),sim);
-			}
-		}
-	/*	int cntAddedField=0;
-		for (NodeField statField: ai.getListField())	{
-			if (statField.getFieldTypeId()==null) continue;
-			NodeFieldType fieldType = ai.getMapId2FieldType().get(statField.getFieldTypeId());
-			if (fieldType==null) continue;
-			fieldType.getListField().add(statField);
-			cntAddedField++;
-		}
-		System.out.println("postProcessAi: total records added to fieldType.getListField()  cntAddedField = " + cntAddedField);
-	*/	
+		GetByMapFileSet.updateAllMapsFileSet(fileSet);
 	}
 	public static NodeFileSet readFileSetTables(Connection conn, long fileSetId)	{ 
 

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
+import tool10.f10.NodeF10;
 import tool10.fileset.MakeFileSet;
-import tool10.fileset.nodes.NodeF10;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileSet;
 

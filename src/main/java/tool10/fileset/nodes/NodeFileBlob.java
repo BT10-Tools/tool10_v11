@@ -5,50 +5,39 @@ import java.time.ZonedDateTime;
 
 public class NodeFileBlob implements Serializable  {
 
-	public NodeFileBlob(Long fileBlobId, Long fileId, Long fileSetId, Long partNumber, Long cntPart, String blobType,
-			Long blobSize, Long fileSize, String compressionType, Long compressedFileSize, Double compressionGainRatio,
-			Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
-			Long encryptedFileSize, Long encrytedByteHashId,byte[] fileBytes, byte[] compressedBytes, byte[] encryptedBytes, 
-			Long hashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+	public NodeFileBlob(Long fileBlobId, Long fileId, Long blobId, Long fileSetId, String blobType, Long blobSize,
+			Long fileSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
+			Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
+			ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
 		this.fileBlobId = fileBlobId;
 		this.fileId = fileId;
+		this.blobId = blobId;
 		this.fileSetId = fileSetId;
-		this.partNumber = partNumber;
-		this.cntPart = cntPart;
 		this.blobType = blobType;
 		this.blobSize = blobSize;
 		this.fileSize = fileSize;
-		this.compressionType = compressionType;
-		this.compressedFileSize = compressedFileSize;
-		this.compressionGainRatio = compressionGainRatio; 
-		this.compressionGainBytes = compressionGainBytes;
-		this.compressedByteHashId = compressedByteHashId;
-		this.encryptionBlobKey = encryptionBlobKey;
-		this.sandByteLengthHead = sandByteLengthHead;
-		this.sandByteLengthTail = sandByteLengthTail;
-		this.encryptionType = encryptionType;
-		this.encryptedFileSize = encryptedFileSize;
-		this.encrytedByteHashId = encrytedByteHashId;
-		this.fileBytes = fileBytes;
-		this.compressedBytes = compressedBytes;
-		this.encryptedBytes = encryptedBytes;
 		this.hashId = hashId;
+		this.blobDbName = blobDbName;
+		this.blobDbAttachmentName = blobDbAttachmentName;
+		this.blobTableName = blobTableName;
+		this.bigPartNumber = bigPartNumber;
+		this.bigCntPart = bigCntPart;
+		this.smallByteIndexStart = smallByteIndexStart;
+		this.smallByteIndexEnd = smallByteIndexEnd;
 		this.creationDate = creationDate;
 		this.modificationDate = modificationDate;
-	}	
-	public NodeFileBlob(Long fileBlobId, Long fileId, Long fileSetId, Long partNumber, Long cntPart, String blobType,
-			Long blobSize, Long fileSize, byte[] fileBytes, Long hashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+	}
+	public NodeFileBlob(Long fileBlobId, Long fileId, Long fileSetId, String blobType,
+			Long blobSize, Long fileSize, byte[] fileBytes, Long hashId, 
+			ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
 		this.fileBlobId = fileBlobId;
 		this.fileId = fileId;
 		this.fileSetId = fileSetId;
-		this.partNumber = partNumber;
-		this.cntPart = cntPart;
 		this.blobType = blobType;
 		this.blobSize = blobSize;
 		this.fileSize = fileSize;
-		this.fileBytes = fileBytes;
 		this.hashId = hashId;
 		this.creationDate = creationDate;
 		this.modificationDate = modificationDate;
@@ -60,49 +49,42 @@ public class NodeFileBlob implements Serializable  {
 	
 	private Long fileBlobId;
 	private Long fileId;
+	private Long blobId;
 	private Long fileSetId;
-	private Long partNumber;
-	private Long cntPart;
-	private String blobType;
+	private String blobType;  //regular, big, small
 	private Long blobSize;
 	private Long fileSize;
-	private String compressionType;
-	private Long compressedFileSize;
-	private Double compressionGainRatio; 
-	private Long compressionGainBytes; 
-	private Long compressedByteHashId;
-	private Long sandByteLengthHead;
-	private Long sandByteLengthTail;
-	private String encryptionBlobKey;
-	private String encryptionType;
-	private Long encryptedFileSize;
-	private Long encrytedByteHashId;
-	private byte[] fileBytes;
-	private byte[] compressedBytes;
-	private byte[] encryptedBytes;
 	private Long hashId;	
+	
+	private String blobDbName;
+	private String blobDbAttachmentName;
+	private String blobTableName;
+	
+	private Long bigPartNumber;
+	private Long bigCntPart;
+	private Long smallByteIndexStart;
+	private Long smallByteIndexEnd;
+	
 	private ZonedDateTime creationDate;
 	private ZonedDateTime modificationDate;
-	
-	public void setCompressionFields(String compressionType, Long compressedFileSize, Double compressionGainRatio,
-			Long compressionGainBytes, Long compressedByteHashId, byte[] compressedBytes) {
-		this.compressionType = compressionType;
-		this.compressedFileSize = compressedFileSize;
-		this.compressionGainRatio = compressionGainRatio; 
-		this.compressionGainBytes = compressionGainBytes;
-		this.compressedByteHashId = compressedByteHashId;
-		this.compressedBytes = compressedBytes;
+		
+	public void setFieldsBig(Long blobId,String blobDbName, String blobDbAttachmentName, String blobTableName,
+			Long bigPartNumber, Long bigCntPart) {	
+		this.blobDbName = blobDbName;
+		this.blobDbAttachmentName = blobDbAttachmentName;
+		this.blobTableName = blobTableName; 
+		this.bigPartNumber = bigPartNumber; 
+		this.bigCntPart = bigCntPart;
 	}	
-	public void setEncryptionFields(Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
-			Long encryptedFileSize, Long encrytedByteHashId, byte[] encryptedBytes) {
-		this.encryptionBlobKey = encryptionBlobKey;
-		this.sandByteLengthHead = sandByteLengthHead;
-		this.sandByteLengthTail = sandByteLengthTail;
-		this.encryptionType = encryptionType;
-		this.encryptedFileSize = encryptedFileSize;
-		this.encrytedByteHashId = encrytedByteHashId;
-		this.encryptedBytes = encryptedBytes;
-	}	
+	public void setFieldsSmall(Long blobId,String blobDbName, String blobDbAttachmentName, String blobTableName,		
+			Long smallByteIndexStart, Long smallByteIndexEnd) {	
+		this.blobId = blobId;
+		this.blobDbName = blobDbName;
+		this.blobDbAttachmentName = blobDbAttachmentName;
+		this.blobTableName = blobTableName; 
+		this.smallByteIndexStart = smallByteIndexStart; 
+		this.smallByteIndexEnd = smallByteIndexEnd;
+	}
 	//GETTERS AND SETTERS
 	
 	public static long getSerialversionuid() {
@@ -114,20 +96,11 @@ public class NodeFileBlob implements Serializable  {
 	public Long getFileId() {
 		return fileId;
 	}
-	public Long getPartNumber() {
-		return partNumber;
-	}
-	public Long getCntPart() {
-		return cntPart;
-	}
 	public String getBlobType() {
 		return blobType;
 	}
 	public Long getBlobSize() {
 		return blobSize;
-	}
-	public byte[] getFileBytes() {
-		return fileBytes;
 	}
 	public Long getHashId() {
 		return hashId;
@@ -150,54 +123,40 @@ public class NodeFileBlob implements Serializable  {
 	public void setModificationDate(ZonedDateTime modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-	public String getCompressionType() {
-		return compressionType;
+	public Long getBlobId() {
+		return blobId;
 	}
-	public Long getCompressedFileSize() {
-		return compressedFileSize;
+	public String getBlobDbName() {
+		return blobDbName;
 	}
-	public Long getCompressedByteHashId() {
-		return compressedByteHashId;
+	public String getBlobDbAttachmentName() {
+		return blobDbAttachmentName;
 	}
-	public String getEncryptionBlobKey() {
-		return encryptionBlobKey;
+	public String getBlobTableName() {
+		return blobTableName;
 	}
-	public String getEncryptionType() {
-		return encryptionType;
+	public Long getBigPartNumber() {
+		return bigPartNumber;
 	}
-	public Long getEncryptedFileSize() {
-		return encryptedFileSize;
+	public Long getBigCntPart() {
+		return bigCntPart;
 	}
-	public Long getEncrytedByteHashId() {
-		return encrytedByteHashId;
+	public Long getSmallByteIndexStart() {
+		return smallByteIndexStart;
 	}
-	public Long getSandByteLengthHead() {
-		return sandByteLengthHead;
+	public Long getSmallByteIndexEnd() {
+		return smallByteIndexEnd;
 	}
-	public Long getSandByteLengthTail() {
-		return sandByteLengthTail;
+	public void setSmallByteIndexStart(Long smallByteIndexStart) {
+		this.smallByteIndexStart = smallByteIndexStart;
 	}
-	public Double getCompressionGainRatio() {
-		return compressionGainRatio;
+	public void setSmallByteIndexEnd(Long smallByteIndexEnd) {
+		this.smallByteIndexEnd = smallByteIndexEnd;
 	}
-	public Long getCompressionGainBytes() {
-		return compressionGainBytes;
+	public void setBlobId(Long blobId) {
+		this.blobId = blobId;
 	}
-	public byte[] getCompressedBytes() {
-		return compressedBytes;
-	}
-	public void setCompressedBytes(byte[] compressedBytes) {
-		this.compressedBytes = compressedBytes;
-	}
-	public byte[] getEncryptedBytes() {
-		return encryptedBytes;
-	}
-	public void setEncryptedBytes(byte[] encryptedBytes) {
-		this.encryptedBytes = encryptedBytes;
-	}
-	public void setFileBytes(byte[] fileBytes) {
-		this.fileBytes = fileBytes;
-	}
+	
 	
 	
 	

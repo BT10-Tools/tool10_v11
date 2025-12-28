@@ -1,6 +1,6 @@
 package tool10.fileset;
 
-import tool10.fileset.nodes.NodeF10;
+import tool10.f10.NodeF10;
 
 public class ExportFileSet {
 	

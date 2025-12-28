@@ -1,6 +1,6 @@
 package test10.util;
 
-import tool10.util.ByteCompression;
+import tool10.fileset.blob.ByteCompression;
 
 public class ByteCompressionTest {
 

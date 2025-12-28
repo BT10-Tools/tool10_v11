@@ -35,7 +35,7 @@ public class NodeFileSet implements Serializable {
 	private void initializeListsAndMaps()	{ 
 		this.listFile = new ArrayList<NodeFile>(); 
 		this.listFileBlob = new ArrayList<NodeFileBlob>();
-		this.listFileBlobSmall = new ArrayList<NodeFileBlobSmall>();
+		this.listBlob = new ArrayList<NodeBlob>();
 		this.listFileSystem = new ArrayList<NodeFileSystem>(); 
 		this.listFileStore = new ArrayList<NodeFileStore>(); 
 		this.listHash = new ArrayList<NodeHash>();
@@ -50,7 +50,7 @@ public class NodeFileSet implements Serializable {
 		
 		this.mapId2File = new HashMap<Long, NodeFile>(); 
 		this.mapId2FileBlob = new HashMap<Long, NodeFileBlob>();
-		this.mapId2FileBlobSmall = new HashMap<Long, NodeFileBlobSmall>();
+		this.mapId2Blob = new HashMap<Long, NodeBlob>();
 		this.mapId2FileSystem = new HashMap<Long, NodeFileSystem>();
 		this.mapId2FileStore = new HashMap<Long, NodeFileStore>();
 		this.mapId2Hash = new HashMap<Long, NodeHash>();
@@ -69,11 +69,13 @@ public class NodeFileSet implements Serializable {
 		this.mapRawFileStore2FileStore = new HashMap<FileStore,NodeFileStore>(); 
 		this.mapCrc2NodeHash = new HashMap<Long,NodeHash>();
 		this.mapKey2Similarity = new HashMap<String,NodeSimilarity>();
+		this.mapFileId2FileBlob = new HashMap<Long, NodeFileBlob>();
+		
 	}
 	public void flushAllListsAndMaps()	{
 		this.listFile.clear(); 
 		this.listFileBlob.clear();
-		this.listFileBlobSmall.clear();
+		this.listBlob.clear();
 		this.listFileSystem.clear(); 
 		this.listFileStore.clear(); 
 		this.listHash.clear();
@@ -88,7 +90,7 @@ public class NodeFileSet implements Serializable {
 		
 		this.mapId2File.clear(); 
 		this.mapId2FileBlob.clear();
-		this.mapId2FileBlobSmall.clear();
+		this.mapId2Blob.clear();
 		this.mapId2FileSystem.clear(); 
 		this.mapId2FileStore.clear(); 
 		this.mapId2Hash.clear();
@@ -107,6 +109,7 @@ public class NodeFileSet implements Serializable {
 		this.mapRawFileStore2FileStore.clear(); 
 		this.mapCrc2NodeHash.clear();
 		this.mapKey2Similarity.clear();
+		this.mapFileId2FileBlob.clear();
 	}
 	private Long fileSetId;
 	private Long sourceId;  //reference to file set etc 
@@ -120,7 +123,7 @@ public class NodeFileSet implements Serializable {
 	
 	private ArrayList<NodeFile> listFile;
 	private ArrayList<NodeFileBlob> listFileBlob; 
-	private ArrayList<NodeFileBlobSmall> listFileBlobSmall;
+	private ArrayList<NodeBlob> listBlob;
 	private ArrayList<NodeFileSystem> listFileSystem;
 	private ArrayList<NodeFileStore> listFileStore;
 	private ArrayList<NodeHash> listHash;
@@ -135,7 +138,7 @@ public class NodeFileSet implements Serializable {
 
 	private HashMap<Long,NodeFile> mapId2File;
 	private HashMap<Long,NodeFileBlob> mapId2FileBlob;
-	private HashMap<Long,NodeFileBlobSmall> mapId2FileBlobSmall;
+	private HashMap<Long,NodeBlob> mapId2Blob;
 	private HashMap<Long,NodeFileSystem> mapId2FileSystem;
 	private HashMap<Long,NodeFileStore> mapId2FileStore;
 	private HashMap<Long,NodeHash> mapId2Hash;
@@ -154,6 +157,7 @@ public class NodeFileSet implements Serializable {
 	private HashMap<FileStore,NodeFileStore> mapRawFileStore2FileStore;
 	private HashMap<Long,NodeHash> mapCrc2NodeHash;
 	private HashMap<String,NodeSimilarity> mapKey2Similarity;
+	private HashMap<Long,NodeFileBlob> mapFileId2FileBlob;
 	
 	//GETTERS AND SETTERS
 	public ZonedDateTime getModificationDate() {
@@ -231,11 +235,11 @@ public class NodeFileSet implements Serializable {
 	public HashMap<Long, NodeStat> getMapId2Stat() {
 		return mapId2Stat;
 	}
-	public ArrayList<NodeFileBlobSmall> getListFileBlobSmall() {
-		return listFileBlobSmall;
+	public ArrayList<NodeBlob> getListBlob() {
+		return listBlob;
 	}
-	public HashMap<Long, NodeFileBlobSmall> getMapId2FileBlobSmall() {
-		return mapId2FileBlobSmall;
+	public HashMap<Long, NodeBlob> getMapId2Blob() {
+		return mapId2Blob;
 	}
 	public HashMap<Long, NodeFileSystem> getMapId2FileSystem() {
 		return mapId2FileSystem;
@@ -293,6 +297,9 @@ public class NodeFileSet implements Serializable {
 	}
 	public void setListTransform(ArrayList<NodeTransform> listTransform) {
 		this.listTransform = listTransform;
+	}
+	public HashMap<Long, NodeFileBlob> getMapFileId2FileBlob() {
+		return mapFileId2FileBlob;
 	}
 	
 	

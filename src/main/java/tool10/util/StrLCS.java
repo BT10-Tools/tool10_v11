@@ -1,5 +1,7 @@
 package tool10.util;
 
+import tool10.preview.LongByteSequences;
+
 public class StrLCS {
 
 	// Function to find the length of the longest common substring

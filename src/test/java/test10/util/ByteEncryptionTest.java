@@ -2,7 +2,7 @@ package test10.util;
 
 import java.nio.charset.Charset;
 
-import tool10.util.ByteEncryption;
+import tool10.fileset.blob.ByteEncryption;
 
 public class ByteEncryptionTest {
 

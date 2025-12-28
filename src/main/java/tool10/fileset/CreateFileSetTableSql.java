@@ -41,7 +41,30 @@ public class CreateFileSetTableSql {
 					"compressionGainBytes INTEGER, encoding TEXT, charsetStr TEXT, "+
 					"lastModified INTEGER, fileCreationDate TEXT, fileModificationDate TEXT, fileLastAccessTime TEXT, fileRemark TEXT, creationDate TEXT,modificationDate TEXT";
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
+		} else if ("FS_BLOB".equals(tableName))	{
+			//public NodeBlob(Long blobId, Long sourceId, Long fileSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+			//Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
+			//Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
+			//Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
+			//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+			
+			String fieldStr = 	"blobId INTEGER PRIMARY KEY, sourceId INTEGER, fileSetId INTEGER, firstPartBlobId INTEGER, partNumber INTEGER, cntPart INTEGER, blobType TEXT,"+
+								"blobSize INTEGER, compressionType TEXT, compressedSize INTEGER, compressionGainRatio REAL, "+
+								"compressionGainBytes INTEGER, compressedByteHashId INTEGER, sandByteLengthHead INTEGER, "+ 
+								"sandByteLengthTail INTEGER, encryptionBlobKey TEXT, encryptionType TEXT, encryptedSize INTEGER, encrytedByteHashId INTEGER, "+
+								"blobBytes BLOB, compressedBytes BLOB, encryptedBytes BLOB, blobHashId INTEGER, creationDate TEXT,modificationDate TEXT";
+			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
 		} else if ("FS_FILEBLOB".equals(tableName))	{
+			//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobId, Long fileSetId, String blobType, Long blobSize,
+			//Long fileSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
+			//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
+			//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+			String fieldStr = 	"fileBlobId INTEGER PRIMARY KEY, fileId INTEGER, blobId INTEGER, fileSetId INTEGER, blobType TEXT, blobSize INTEGER, "+
+								"fileSize INTEGER, hashId INTEGER, blobDbName TEXT, blobDbAttachmentName TEXT, blobTableName TEXT, "+
+								"bigPartNumber INTEGER, bigCntPart INTEGER, smallByteIndexStart INTEGER,smallByteIndexEnd INTEGER, "+
+								"creationDate TEXT, modificationDate TEXT";
+			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
+		} else if ("FS_FILEBLOBOLD".equals(tableName))	{
 			//public NodeFileBlob(Long fileBlobId, Long fileId, Long fileSetId, Long partNumber, Long cntPart, String blobType,
 			//		Long blobSize, Long fileSize, String compressionType, Long compressedFileSize, Double compressionGainRatio,
 			//		Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
@@ -53,7 +76,7 @@ public class CreateFileSetTableSql {
 								"sandByteLengthTail INTEGER, encryptionBlobKey TEXT, encryptionType TEXT, encryptedFileSize INTEGER, encrytedByteHashId INTEGER, "+
 								"fileBytes BLOB, compressedBytes BLOB, encryptedBytes BLOB, hashId INTEGER, creationDate TEXT,modificationDate TEXT";
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
-		} else if ("FS_FILEBLOBSMALL".equals(tableName))	{
+		} else if ("FS_FILEBLOBSMALLold".equals(tableName))	{
 			//public NodeFileBlobSmall(Long fileBlobSmallId, Long fileBlobId, Long fileId, Long fileSetId, Long byteIndexStart,
 			//Long byteIndexEnd, Long hashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 			String fieldStr = 	"fileBlobSmallId INTEGER PRIMARY KEY,fileBlobId INTEGER,fileId INTEGER,fileSetId INTEGER,byteIndexStart INTEGER, "+
