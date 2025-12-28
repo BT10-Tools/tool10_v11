@@ -1,10 +1,10 @@
-##What is File10?
+## What is File10?
 File10 is a file analysis, processing, similarity and management software.
 File10 is being developed by Nursal Haney and BT10 company, in collaboration with students from the Computer Science Department at Balıkesir University.
 File10 is available free of charge and with Open Source Code for personal use.
 A commercial version with a central server, high performance, multifunctionality, and robust integration features designed to address corporate needs will be available in the future.
 
-##What can you do with File10?
+## What can you do with File10?
 * You can analyze the structure, names, properties, contents, duplicates, and similarities of the folders and files on your computer in detail.
 * You can archive and back up your files, and track changes to them.
 * You can catalog and analyze in detail what's on your hard drives, removable drives, and internet drives, and manage your personal files.
@@ -13,16 +13,16 @@ A commercial version with a central server, high performance, multifunctionality
 * You can rename, modify properties, format, perform file operations, and change folder structures on your folders and files.
 * You can perform operations such as deleting, copying, synchronizing, compressing, and encrypting.
 
-##With File10, company employees and IT specialists can:
+## With File10, company employees and IT specialists can:
 * Perform specified tasks for files on their computers in SMEs and large companies.
 * Perform specified tasks on larger scales for servers and networked computers in their companies.
 
-##With File10,
+## With File10,
 * Learn more about your files and learn what you have. Your data is your most important asset.
 * Easily find what you're looking for. Your time is important; don't drown in data.
 * Manage your data easily, intelligently, and easily transform. Powerful tools make things easier.
  
-##How does File10 do these?
+## How does File10 do these?
 * File10 scans the folders and files on your computer and creates a detailed data repository for folder structure, file names, sizes, file types, properties, access rights, file labels, and many other operating system-managed features.
 * File10 creates a single-file, unmanaged SQLite database on your computer, indexing and saving your data.
 * File10 can also save file contents to this database and compress and encrypt them before saving. It does this by splitting large files into smaller ones and combining smaller ones.
