@@ -7,6 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import tool10.blobset.NodeBlob;
 import tool10.fileset.transform.NodeArchive;
 import tool10.fileset.transform.NodeContainer;
 import tool10.fileset.transform.NodeTransform;
@@ -42,7 +43,6 @@ public class NodeFileSet implements Serializable {
 		this.listHost = new ArrayList<NodeHost>();
 		this.listProperty = new ArrayList<NodeProperty>();
 		this.listQuery = new ArrayList<NodeQuery>();
-		this.listSimilarity = new ArrayList<NodeSimilarity>();
 		this.listStat = new ArrayList<NodeStat>();
 		this.listArchive = new ArrayList<NodeArchive>();
 		this.listContainer = new ArrayList<NodeContainer>();
@@ -57,7 +57,6 @@ public class NodeFileSet implements Serializable {
 		this.mapId2Host = new HashMap<Long, NodeHost>(); 
 		this.mapId2Property = new HashMap<Long, NodeProperty>(); 
 		this.mapId2Query = new HashMap<Long, NodeQuery>();
-		this.mapId2Similarity = new HashMap<Long, NodeSimilarity>();
 		this.mapId2Stat = new HashMap<Long, NodeStat>();
 		this.mapId2Archive = new HashMap<Long, NodeArchive>();
 		this.mapId2Container = new HashMap<Long, NodeContainer>();
@@ -68,7 +67,6 @@ public class NodeFileSet implements Serializable {
 		this.mapRawFileSystem2FileSystem = new HashMap<FileSystem,NodeFileSystem>(); 
 		this.mapRawFileStore2FileStore = new HashMap<FileStore,NodeFileStore>(); 
 		this.mapCrc2NodeHash = new HashMap<Long,NodeHash>();
-		this.mapKey2Similarity = new HashMap<String,NodeSimilarity>();
 		this.mapFileId2FileBlob = new HashMap<Long, NodeFileBlob>();
 		
 	}
@@ -82,7 +80,6 @@ public class NodeFileSet implements Serializable {
 		this.listHost.clear(); 
 		this.listProperty.clear(); 
 		this.listQuery.clear();
-		this.listSimilarity.clear();
 		this.listStat.clear();
 		this.listArchive.clear();
 		this.listContainer.clear();
@@ -97,7 +94,6 @@ public class NodeFileSet implements Serializable {
 		this.mapId2Host.clear(); 
 		this.mapId2Property.clear(); 
 		this.mapId2Query.clear();
-		this.mapId2Similarity.clear();
 		this.mapId2Stat.clear();
 		this.mapId2Archive.clear();
 		this.mapId2Container.clear();
@@ -108,7 +104,6 @@ public class NodeFileSet implements Serializable {
 		this.mapRawFileSystem2FileSystem.clear(); 
 		this.mapRawFileStore2FileStore.clear(); 
 		this.mapCrc2NodeHash.clear();
-		this.mapKey2Similarity.clear();
 		this.mapFileId2FileBlob.clear();
 	}
 	private Long fileSetId;
@@ -130,7 +125,6 @@ public class NodeFileSet implements Serializable {
 	private ArrayList<NodeHost> listHost;
 	private ArrayList<NodeProperty> listProperty;
 	private ArrayList<NodeQuery> listQuery;
-	private ArrayList<NodeSimilarity> listSimilarity;
 	private ArrayList<NodeStat> listStat;
 	private ArrayList<NodeArchive> listArchive;
 	private ArrayList<NodeContainer> listContainer;
@@ -145,7 +139,6 @@ public class NodeFileSet implements Serializable {
 	private HashMap<Long,NodeHost> mapId2Host;
 	private HashMap<Long,NodeProperty> mapId2Property;
 	private HashMap<Long,NodeQuery> mapId2Query;
-	private HashMap<Long,NodeSimilarity> mapId2Similarity;
 	private HashMap<Long,NodeStat> mapId2Stat;
 	private HashMap<Long,NodeArchive> mapId2Archive;
 	private HashMap<Long,NodeContainer> mapId2Container;
@@ -156,7 +149,6 @@ public class NodeFileSet implements Serializable {
 	private HashMap<FileSystem,NodeFileSystem> mapRawFileSystem2FileSystem;
 	private HashMap<FileStore,NodeFileStore> mapRawFileStore2FileStore;
 	private HashMap<Long,NodeHash> mapCrc2NodeHash;
-	private HashMap<String,NodeSimilarity> mapKey2Similarity;
 	private HashMap<Long,NodeFileBlob> mapFileId2FileBlob;
 	
 	//GETTERS AND SETTERS
@@ -259,12 +251,6 @@ public class NodeFileSet implements Serializable {
 	public HashMap<FileStore, NodeFileStore> getMapRawFileStore2FileStore() {
 		return mapRawFileStore2FileStore;
 	}
-	public ArrayList<NodeSimilarity> getListSimilarity() {
-		return listSimilarity;
-	}
-	public HashMap<Long, NodeSimilarity> getMapId2Similarity() {
-		return mapId2Similarity;
-	}
 	public HashMap<Long, NodeHash> getMapCrc2NodeHash() {
 		return mapCrc2NodeHash;
 	}
@@ -273,9 +259,6 @@ public class NodeFileSet implements Serializable {
 	}
 	public HashMap<String, NodeFile> getMapAbsoluteFileName2File() {
 		return mapAbsoluteFileName2File;
-	}
-	public HashMap<String, NodeSimilarity> getMapKey2Similarity() {
-		return mapKey2Similarity;
 	}
 	public ArrayList<NodeArchive> getListArchive() {
 		return listArchive;

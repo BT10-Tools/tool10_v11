@@ -79,6 +79,15 @@ public class CliInitialize {
 		 		
 		return(options.getOptions().size() - cntOptions);
 	}
+	private static int getOptionsRead(Options options) {
+		int cntOptions = options.getOptions().size();
+	    options.addOption("read", false, "read the set from database from sqlite database");
+	    options.addOption("readtype", true, "extract type all, dir, flattenedfiles");
+	    options.addOption("dbname", true, "The name of the database/filename");
+	    options.addOption("filesetname", true, "The name of the file set");
+		    
+		return(options.getOptions().size() - cntOptions);
+	}
 	private static int getOptionsExtract(Options options) {
 		int cntOptions = options.getOptions().size();
 	    options.addOption("extract", false, "extracting directories and files from sqlite database");
@@ -145,15 +154,15 @@ public class CliInitialize {
 	    
 		return(options.getOptions().size() - cntOptions);
 	}
-	private static int getOptionsImage(Options options) {
+	private static int getOptionsMedia(Options options) {
 		int cntOptions = options.getOptions().size();
-	    options.addOption("image", false, "create images of files in a fileset");
+	    options.addOption("media", false, "create media of files in a fileset");
 	    options.addOption("dbname", true, "The name of the database/filename");
 	    options.addOption("filesetname", true, "The name of the file set");
-	    options.addOption("imagesetname", true, "The name of the image file set");
-		options.addOption("tempdir", true, "The temporary directory name for images, default is default temporary directory");
-		options.addOption("imagedbname", true, "The name of the image database");
-		options.addOption("imagedbaction", true, "The action for the image database, newdb, renewdb, newfileset, appendfile, usedb, default is newdb");
+	    options.addOption("mediasetname", true, "The name of the media file set");
+		options.addOption("tempdir", true, "The temporary directory name for media, default is default temporary directory");
+		options.addOption("mediadbname", true, "The name of the media database");
+		options.addOption("mediadbaction", true, "The action for the media database, newdb, renewdb, newfileset, appendfile, usedb, default is newdb");
 	    
 		return(options.getOptions().size() - cntOptions);
 	}
@@ -176,7 +185,13 @@ public class CliInitialize {
 		options.addOption("similarity", false, "Do similarity analysis of files and directories");
 		options.addOption("similaritytype", false, "The similarity type all, default all");
 		//options.addOption("similarityalg", true, "similarity algorithms, all, duplicates, duplicatefile, duplicatedir, filename. default is all");
-		    
+		options.addOption("dbname", true, "The name of the database/filename");
+	    options.addOption("setname", true, "The name of the file set");
+	    options.addOption("simsetname", true, "The name of the book file set");
+		options.addOption("tempdir", true, "The temporary directory name for books, default is default temporary directory");
+		options.addOption("simdbname", true, "The name of the book database");
+		options.addOption("simdbaction", true, "The action for the book database, newdb, renewdb, newfileset, appendfile, usedb, default is newdb");
+	        
 		return(options.getOptions().size() - cntOptions);
 	}
 	public static CliParameter initializeParameters(String[] args0) {
@@ -185,13 +200,14 @@ public class CliInitialize {
 		getOptionsGeneral(options);
 		getOptionsLoad(options);
 		getOptionsLoadBlob(options);
+		getOptionsRead(options);
 		getOptionsExtract(options);
 		getOptionsExport(options);
 		getOptionsUnzip(options);
 		getOptionsUnembed(options);
 		getOptionsTransform(options);
 		getOptionsTag(options);
-		getOptionsImage(options);
+		getOptionsMedia(options);
 		getOptionsBook(options);
 		getOptionsSimilarity(options);
 		

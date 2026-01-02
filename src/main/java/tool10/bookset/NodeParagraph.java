@@ -7,12 +7,13 @@ import java.util.ArrayList;
 public class NodeParagraph implements Serializable {
 
 
-	public NodeParagraph(Long paragraphId, Long chapterId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
+	public NodeParagraph(Long paragraphId, Long sectionId, Long bookId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
 			String paragraphDesc, String paragraphStr, String authorName, String sourceName, Long displayOrder, Long pageNumber,
 			Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
 		this.paragraphId = paragraphId;
-		this.chapterId = chapterId;
+		this.sectionId = sectionId;
+		this.bookId = bookId;
 		this.languageId = languageId;
 		this.sameParagraphId = sameParagraphId;
 		this.paragraphName = paragraphName;
@@ -35,7 +36,8 @@ public class NodeParagraph implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Long paragraphId;
-	private Long chapterId;
+	private Long sectionId;
+	private Long bookId;
 	private Long languageId;
 	private Long sameParagraphId;
 	private String paragraphName;
@@ -59,14 +61,6 @@ public class NodeParagraph implements Serializable {
 
 	public void setParagraphId(Long paragraphId) {
 		this.paragraphId = paragraphId;
-	}
-
-	public Long getChapterId() {
-		return chapterId;
-	}
-
-	public void setChapterId(Long chapterId) {
-		this.chapterId = chapterId;
 	}
 
 	public Long getLanguageId() {
@@ -191,6 +185,14 @@ public class NodeParagraph implements Serializable {
 
 	public void setModificationDate(ZonedDateTime modificationDate) {
 		this.modificationDate = modificationDate;
+	}
+
+	public Long getSectionId() {
+		return sectionId;
+	}
+
+	public Long getBookId() {
+		return bookId;
 	}
 
 }

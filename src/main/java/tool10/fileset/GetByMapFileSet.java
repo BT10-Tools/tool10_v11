@@ -3,7 +3,6 @@ package tool10.fileset;
 import tool10.f10.NodeF10;
 import tool10.fileset.nodes.NodeFileBlob;
 import tool10.fileset.nodes.NodeFileSet;
-import tool10.fileset.nodes.NodeSimilarity;
 
 public class GetByMapFileSet {
 
@@ -24,11 +23,6 @@ public class GetByMapFileSet {
 			}
 		}
 	*/	
-		for (NodeSimilarity sim : fileSet.getListSimilarity())	{
-			if (sim.getSimilarityKey()!=null)	{
-				fileSet.getMapKey2Similarity().put(sim.getSimilarityKey(),sim);
-			}
-		}
 		for (NodeFileBlob fileBlob : fileSet.getListFileBlob())	{
 			if (fileBlob.getFileId()!=null)	{
 				fileSet.getMapFileId2FileBlob().put(fileBlob.getFileId(),fileBlob);

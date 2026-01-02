@@ -26,6 +26,7 @@ public class NodeBookSet implements Serializable {
 		this.listLanguage = new ArrayList<NodeLanguage>();
 		this.listBook = new ArrayList<NodeBook>();
 		this.listChapter = new ArrayList<NodeChapter>();
+		this.listSection = new ArrayList<NodeSection>();
 		this.listParagraph = new ArrayList<NodeParagraph>();
 		this.listSentence = new ArrayList<NodeSentence>();
 		this.listToken = new ArrayList<NodeToken>();
@@ -36,10 +37,12 @@ public class NodeBookSet implements Serializable {
 		this.mapId2Language = new HashMap<Long, NodeLanguage>();
 		this.mapId2Book = new HashMap<Long, NodeBook>();
 		this.mapId2Chapter = new HashMap<Long, NodeChapter>();
+		this.mapId2Section = new HashMap<Long, NodeSection>();
 		this.mapId2Paragraph = new HashMap<Long, NodeParagraph>();
 		this.mapId2Sentence = new HashMap<Long, NodeSentence>();
 		this.mapId2Token = new HashMap<Long, NodeToken>();
 		
+		this.mapStr2Section = new HashMap<String,NodeSection>();
 		this.mapStr2Paragraph = new HashMap<String,NodeParagraph>();
 		this.mapStr2Sentence = new HashMap<String,NodeSentence>();
 		this.mapStr2Token = new HashMap<String,NodeToken>();
@@ -62,6 +65,7 @@ public class NodeBookSet implements Serializable {
 	private ArrayList<NodeLanguage> listLanguage;
 	private ArrayList<NodeBook> listBook;
 	private ArrayList<NodeChapter> listChapter;
+	private ArrayList<NodeSection> listSection;
 	private ArrayList<NodeParagraph> listParagraph;
 	private ArrayList<NodeSentence> listSentence;
 	private ArrayList<NodeToken> listToken;
@@ -72,10 +76,12 @@ public class NodeBookSet implements Serializable {
 	private HashMap<Long,NodeLanguage> mapId2Language;
 	private HashMap<Long,NodeBook> mapId2Book;
 	private HashMap<Long,NodeChapter> mapId2Chapter;
+	private HashMap<Long,NodeSection> mapId2Section;
 	private HashMap<Long,NodeParagraph> mapId2Paragraph;
 	private HashMap<Long,NodeSentence> mapId2Sentence;
 	private HashMap<Long,NodeToken> mapId2Token;
 	
+	private HashMap<String,NodeSection> mapStr2Section;
 	private HashMap<String,NodeParagraph> mapStr2Paragraph;
 	private HashMap<String,NodeSentence> mapStr2Sentence;
 	private HashMap<String,NodeToken> mapStr2Token;
@@ -226,6 +232,15 @@ public class NodeBookSet implements Serializable {
 	}
 	public HashMap<Long, NodeBookImage> getMapId2BookImage() {
 		return mapId2BookImage;
+	}
+	public ArrayList<NodeSection> getListSection() {
+		return listSection;
+	}
+	public HashMap<Long, NodeSection> getMapId2Section() {
+		return mapId2Section;
+	}
+	public HashMap<String, NodeSection> getMapStr2Section() {
+		return mapStr2Section;
 	}
 	
 	

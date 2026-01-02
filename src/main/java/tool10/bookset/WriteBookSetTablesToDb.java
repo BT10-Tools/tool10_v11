@@ -145,6 +145,7 @@ public class WriteBookSetTablesToDb {
 			    int cnt=1;
 			    if (ent.getSentenceId()!=null) {ps.setLong(cnt++, ent.getSentenceId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getParagraphId()!=null) {ps.setLong(cnt++, ent.getParagraphId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getBookId()!=null) {ps.setLong(cnt++, ent.getBookId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getLanguageId()!=null) {ps.setLong(cnt++, ent.getLanguageId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getSameSentenceId()!=null) {ps.setLong(cnt++, ent.getSameSentenceId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getSentenceName());
@@ -171,9 +172,9 @@ public class WriteBookSetTablesToDb {
 	}		
 	public static int writeTableParagraph(Connection conn,NodeBookSet bookSet)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO BOOK_PARAGRAPH(paragraphId,chapterId,languageId,sameParagraphId,paragraphName,paragraphType,paragraphDesc,paragraphStr,authorName,sourceName,"+ 
-						"displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate) VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,  ?)";
-		//public NodeParagraph(Long paragraphId, Long chapterId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
+		String query =  "INSERT INTO BOOK_PARAGRAPH(paragraphId,sectionId,bookId,languageId,sameParagraphId,paragraphName,paragraphType,paragraphDesc,paragraphStr,authorName,sourceName,"+ 
+						"displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate) VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?)";
+		//public NodeParagraph(Long paragraphId, Long sectionId, Long bookId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
 		//String paragraphDesc, String paragraphStr, String authorName, String sourceName, Long displayOrder, Long pageNumber,
 		//Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -181,7 +182,8 @@ public class WriteBookSetTablesToDb {
 		    for (NodeParagraph ent : bookSet.getListParagraph())	{
 			    int cnt=1;
 			    if (ent.getParagraphId()!=null) {ps.setLong(cnt++, ent.getParagraphId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getChapterId()!=null) {ps.setLong(cnt++, ent.getChapterId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getSectionId()!=null) {ps.setLong(cnt++, ent.getSectionId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getBookId()!=null) {ps.setLong(cnt++, ent.getBookId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getLanguageId()!=null) {ps.setLong(cnt++, ent.getLanguageId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getSameParagraphId()!=null) {ps.setLong(cnt++, ent.getSameParagraphId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getParagraphName());
@@ -199,6 +201,43 @@ public class WriteBookSetTablesToDb {
 				cntInserted += ps.executeUpdate();
 		    }
 		    System.out.println("writeTableParagraph: cntInserted = " + cntInserted);
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntInserted);
+	}	
+	public static int writeTableSection(Connection conn,NodeBookSet bookSet)	{
+		int cntInserted = 0;
+		String query =  "INSERT INTO BOOK_SECTION(sectionId,chapterId,bookId,languageId,sameSectionId,sectionName,sectionType,sectionDesc,sectionStr,authorName,sourceName,"+ 
+						"displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate) VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?)";
+		//public NodeSection(Long sectionId, Long chapterId, Long bookId, Long languageId, Long sameSectionId, String sectionName, String sectionType,
+		//String sectionDesc, String sectionStr, String authorName, String sourceName, Long displayOrder, Long pageNumber,
+		//Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    for (NodeSection ent : bookSet.getListSection())	{
+			    int cnt=1;
+			    if (ent.getSectionId()!=null) {ps.setLong(cnt++, ent.getSectionId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getChapterId()!=null) {ps.setLong(cnt++, ent.getChapterId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getBookId()!=null) {ps.setLong(cnt++, ent.getBookId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getLanguageId()!=null) {ps.setLong(cnt++, ent.getLanguageId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getSameSectionId()!=null) {ps.setLong(cnt++, ent.getSameSectionId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getSectionName());
+			    ps.setString(cnt++, ent.getSectionType());
+			    ps.setString(cnt++, ent.getSectionDesc());
+			    ps.setString(cnt++, ent.getSectionStr());
+			    ps.setString(cnt++, ent.getAuthorName());
+			    ps.setString(cnt++, ent.getSourceName());
+			    if (ent.getDisplayOrder()!=null) {ps.setLong(cnt++, ent.getDisplayOrder());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getPageNumber()!=null) {ps.setLong(cnt++, ent.getPageNumber());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getLineNumber()!=null) {ps.setLong(cnt++, ent.getLineNumber());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getWordNumber()!=null) {ps.setLong(cnt++, ent.getWordNumber());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+				cntInserted += ps.executeUpdate();
+		    }
+		    System.out.println("writeTableSection: cntInserted = " + cntInserted);
 		    ps.close();
 		} catch(SQLException e)	{
 		      e.printStackTrace(System.err);
@@ -325,6 +364,7 @@ public class WriteBookSetTablesToDb {
 		int cntInsertedLanguage = writeTableLanguage(conn,bookSet);
 		int cntInsertedBook = writeTableBook(conn,bookSet);
 		int cntInsertedChapter = writeTableChapter(conn,bookSet);
+		int cntInsertedSection = writeTableSection(conn,bookSet);
 		int cntInsertedParagraph = writeTableParagraph(conn,bookSet);
 		int cntInsertedSentence = writeTableSentence(conn,bookSet);
 		int cntInsertedToken = writeTableToken(conn,bookSet);
@@ -332,8 +372,8 @@ public class WriteBookSetTablesToDb {
 		int cntInsertedBookImage = writeTableBookImage(conn,bookSet);
 		int cntInsertedBookBlob = writeTableBookBlob(conn,bookSet);
 		
-		int cntInserted = cntInsertedBookSet + cntInsertedLanguage + cntInsertedBook + cntInsertedChapter + cntInsertedParagraph + cntInsertedSentence + 
-				cntInsertedToken + cntInsertedBookFile + cntInsertedBookImage + cntInsertedBookBlob;
+		int cntInserted = cntInsertedBookSet + cntInsertedLanguage + cntInsertedBook + cntInsertedChapter + cntInsertedSection + cntInsertedParagraph + 
+				cntInsertedSentence + cntInsertedToken + cntInsertedBookFile + cntInsertedBookImage + cntInsertedBookBlob;
 		return(cntInserted);
 	}	
 	public static void writeBookSetTables(Connection conn, NodeBookSet bookSet)	{

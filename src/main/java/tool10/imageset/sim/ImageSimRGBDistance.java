@@ -4,13 +4,13 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import tool10.imageset.ImageEngineJava;
-import tool10.imageset.NodeImageFile;
-import tool10.imageset.NodeImageSet;
+import tool10.mediaset.ImageEngineJava;
+import tool10.mediaset.NodeMediaFile;
+import tool10.mediaset.NodeMediaSet;
 
 public class ImageSimRGBDistance {
 	
-    private static void printAllDifferences(NodeImageSet imageSet)	{
+    private static void printAllDifferences(NodeMediaSet imageSet)	{
 		for (int i=0; i<imageSet.getListImageFile().size(); i++)	{
 			String fileStr1 = imageSet.getListImageFile().get(i).getSourceAbsolutePath();
 			//System.out.println("printAllDifferences "+fileStr1);
@@ -24,7 +24,7 @@ public class ImageSimRGBDistance {
 			}		
 		}
 	}
-    private static ArrayList<String> printAllDifferencesWithMap(NodeImageSet imageSet, HashMap<String,ArrayList<String>> wh2FilenameArray)	{
+    private static ArrayList<String> printAllDifferencesWithMap(NodeMediaSet imageSet, HashMap<String,ArrayList<String>> wh2FilenameArray)	{
     	int maximumLinksPerNode = 5;
     	int maximumLinks = 1*500;
     	int maximumCntPerWhrLinks = 350;
@@ -73,8 +73,8 @@ public class ImageSimRGBDistance {
 	 				}	
 	 				if ((diff>0) && (diff < 0.1) && (cntLink[i]<maximumLinksPerNode) && (cntLink[j]<maximumLinksPerNode))	{
 	 					System.out.println("		\""+fileStr1+"\"  , \""+fileStr2+"\" ,"+diff+"  size:,"+pairStringList.size());
-	 					NodeImageFile if1 = imageSet.getMapPath2ImageFile().get(fileStr1);
-	 					NodeImageFile if2 = imageSet.getMapPath2ImageFile().get(fileStr2);
+	 					NodeMediaFile if1 = imageSet.getMapPath2ImageFile().get(fileStr1);
+	 					NodeMediaFile if2 = imageSet.getMapPath2ImageFile().get(fileStr2);
 	 					if ((if1!=null) && (if2!=null) && (if1.getImageId()!=null) && (if2.getImageId()!=null))	{
 	 						pairStringList.add(if1.getImageId()+","+if2.getImageId()+","+diff+"\n");
 	 						cntLink[i]++;
@@ -91,7 +91,7 @@ public class ImageSimRGBDistance {
  		}
  		return(pairStringList);
  	}
-    private static void getAllWidthHeight(NodeImageSet imageSet, HashMap<String,String> mapFilename2Wh)	{
+    private static void getAllWidthHeight(NodeMediaSet imageSet, HashMap<String,String> mapFilename2Wh)	{
     	int cnt=0;
 		for (int i=0; i<imageSet.getListImageFile().size(); i++)	{
 			String fileStr1 = imageSet.getListImageFile().get(i).getSourceAbsolutePath();
@@ -115,7 +115,7 @@ public class ImageSimRGBDistance {
 		}
 		System.out.println("\ngetWh2FilenameArray wh2FilenameArray.size():"+wh2FilenameArray.size());
     }
-	public static ArrayList<String> rgbDistancePairs(NodeImageSet readImageSet) {
+	public static ArrayList<String> rgbDistancePairs(NodeMediaSet readImageSet) {
 		
 		ArrayList<String> pairStringList = null;
 		

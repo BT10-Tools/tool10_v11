@@ -6,7 +6,7 @@ package tool10.imageset.sim;
 //Importing required classes
 import java.awt.image.BufferedImage;
 
-import tool10.imageset.ImageEngineJava;
+import tool10.mediaset.ImageEngineJava;
 
 //Main class
 //ImageComparison

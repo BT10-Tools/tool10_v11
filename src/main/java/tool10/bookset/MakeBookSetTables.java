@@ -20,34 +20,48 @@ public class MakeBookSetTables {
 	    f10.getBookSet().getMapStr2Token().put(tokenStr,token); //mapStr2Token
 	    return(token);
 	}	
-	public static NodeSentence createOneSentence(NodeF10 f10, Long paragraphId, Long displayOrder, 
+	public static NodeSentence createOneSentence(NodeF10 f10, Long paragraphId, Long bookId, Long displayOrder, 
 			String sentenceName, String sentenceType, String sentenceDesc, String sentenceStr)	{
 		Long sentenceId = f10.getConnBook().getNextId(-1); //"BOOK_SENTENCE"
 		
         ZonedDateTime creationDate = ZonedDateTime.now();	
-		//public NodeSentence(Long sentenceId, Long paragraphId, Long languageId, Long sameSentenceId, String sentenceName, String sentenceType,
+		//public NodeSentence(Long sentenceId, Long paragraphId, Long bookId, Long languageId, Long sameSentenceId, String sentenceName, String sentenceType,
 		//String sentenceDesc,  String sentenceStr, String sentenceHolder, String authorName, String sourceName, Long displayOrder,
 		//Long pageNumber, Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-        NodeSentence sentence = new NodeSentence(sentenceId,paragraphId, null, null, sentenceName, sentenceType, sentenceDesc, sentenceStr, null, null, null, 
+        NodeSentence sentence = new NodeSentence(sentenceId,paragraphId, bookId, null, null, sentenceName, sentenceType, sentenceDesc, sentenceStr, null, null, null, 
         		displayOrder, null, null, null, creationDate, null);  		
   		f10.getBookSet().getListSentence().add(sentence);
 	    f10.getBookSet().getMapId2Sentence().put(sentence.getSentenceId(),sentence);
 	    return(sentence);
 	}	
-	public static NodeParagraph createOneParagraph(NodeF10 f10, Long chapterId, Long displayOrder, 
+	public static NodeParagraph createOneParagraph(NodeF10 f10, Long sectionId, Long bookId, Long displayOrder, 
 			String paragraphName, String paragraphType, String paragraphDesc)	{
 		Long paragraphId = f10.getConnBook().getNextId(-1); //"BOOK_PARAGRAPH"
 		
         ZonedDateTime creationDate = ZonedDateTime.now();	
-		//public NodeParagraph(Long paragraphId, Long chapterId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
+		//public NodeParagraph(Long paragraphId, Long chapterId, Long bookId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
 		//String paragraphDesc, String paragraphStr, String authorName, String sourceName, Long displayOrder, Long pageNumber,
 		//Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-        NodeParagraph paragraph = new NodeParagraph(paragraphId,chapterId, null, null, paragraphName, paragraphType, paragraphDesc, null, null, null, 
+        NodeParagraph paragraph = new NodeParagraph(paragraphId,sectionId, bookId, null, null, paragraphName, paragraphType, paragraphDesc, null, null, null, 
         		displayOrder, null, null, null, creationDate, null);  		
   		f10.getBookSet().getListParagraph().add(paragraph);
 	    f10.getBookSet().getMapId2Paragraph().put(paragraph.getParagraphId(),paragraph);
 	    return(paragraph);
-	}	
+	}
+	public static NodeSection createOneSection(NodeF10 f10, Long chapterId, Long bookId, Long displayOrder, 
+			String sectionName, String sectionType, String sectionDesc)	{
+		Long sectionId = f10.getConnBook().getNextId(-1); //"BOOK_SECTION"
+		
+        ZonedDateTime creationDate = ZonedDateTime.now();	
+        //public NodeSection(Long sectionId, Long chapterId, Long bookId, Long languageId, Long sameSectionId, String sectionName,
+		//String sectionType, String sectionDesc, String sectionStr, String authorName, String sourceName, Long displayOrder, 
+		//Long pageNumber, Long lineNumber, Long wordNumber, ZonedDateTime creationDate,ZonedDateTime modificationDate) {
+        NodeSection section = new NodeSection(sectionId,chapterId, bookId, null, null, sectionName, sectionType, sectionDesc, null, null, null, 
+        		displayOrder, null, null, null, creationDate, null);  		
+  		f10.getBookSet().getListSection().add(section);
+	    f10.getBookSet().getMapId2Section().put(section.getSectionId(),section);
+	    return(section);
+	}
 	public static NodeChapter createOneChapter(NodeF10 f10, Long bookId, Long displayOrder, 
 			String chapterName, String chapterType, String chapterDesc)	{
 		Long chapterId = f10.getConnBook().getNextId(-1); //"BOOK_CHAPTER"

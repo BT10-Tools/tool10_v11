@@ -6,12 +6,13 @@ import java.util.ArrayList;
 
 public class NodeSentence implements Serializable {
 
-	public NodeSentence(Long sentenceId, Long paragraphId, Long languageId, Long sameSentenceId, String sentenceName, String sentenceType,
+	public NodeSentence(Long sentenceId, Long paragraphId, Long bookId, Long languageId, Long sameSentenceId, String sentenceName, String sentenceType,
 			String sentenceDesc,  String sentenceStr, String sentenceHolder, String authorName, String sourceName, Long displayOrder,
 			Long pageNumber, Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
 		this.sentenceId = sentenceId;
 		this.paragraphId = paragraphId;
+		this.bookId = bookId;
 		this.languageId = languageId;
 		this.sameSentenceId = sameSentenceId;
 		this.sentenceName = sentenceName;
@@ -36,6 +37,7 @@ public class NodeSentence implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long sentenceId;
 	private Long paragraphId;
+	private Long bookId;
 	private Long languageId;
 	private Long sameSentenceId;
 	private String sentenceName;
@@ -200,6 +202,10 @@ public class NodeSentence implements Serializable {
 
 	public void setModificationDate(ZonedDateTime modificationDate) {
 		this.modificationDate = modificationDate;
+	}
+
+	public Long getBookId() {
+		return bookId;
 	}
 	
 	}

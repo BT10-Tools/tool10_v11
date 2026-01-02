@@ -31,7 +31,6 @@ public class MakeFileSet {
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListHash().size() = " + fileSet.getListHash().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListHost().size() = " + fileSet.getListHost().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListProperty().size() = " + fileSet.getListProperty().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListSimilarity().size() = " + fileSet.getListSimilarity().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListStat().size() = " + fileSet.getListStat().size());
 							
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2File().size() = " + fileSet.getMapId2File().size());
@@ -43,7 +42,6 @@ public class MakeFileSet {
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Host().size() = " + fileSet.getMapId2Host().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Property().size() = " + fileSet.getMapId2Property().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Query().size() = " + fileSet.getMapId2Query().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Similarity().size() = " + fileSet.getMapId2Similarity().size());
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Stat().size() = " + fileSet.getMapId2Stat().size());
 									
 		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListRoots().size() = " + fileSet.getListRoots().size());

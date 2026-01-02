@@ -2,8 +2,8 @@ package tool10.imageset.sim;
 
 import java.sql.Connection;
 
-import tool10.imageset.NodeImageSet;
-import tool10.imageset.ReadImageTablesFromDb;
+import tool10.mediaset.NodeMediaSet;
+import tool10.mediaset.ReadMediaSetTablesFromDb;
 import tool10.sql.JLite;
 
 public class MainImageSim {
@@ -22,7 +22,7 @@ public class MainImageSim {
         Connection conn = getImageSetConn();
 	
 		long imageSetId = 1; //imageSet.getImageSetId();
-		NodeImageSet readImageSet = ReadImageTablesFromDb.readImageSetTables(conn, imageSetId);
+		NodeMediaSet readImageSet = ReadMediaSetTablesFromDb.readImageSetTables(conn, imageSetId);
 		
 		ImageSimRGBDistance.rgbDistancePairs(readImageSet);
 		

@@ -59,19 +59,27 @@ public class CreateBookSetTables {
 								"chapterType TEXT,chapterDesc TEXT,authorName TEXT,sourceName TEXT,"+
 								"displayOrder INTEGER,pageNumber INTEGER,lineNumber INTEGER,wordNumber INTEGER,creationDate TEXT, modificationDate TEXT";
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
+		} else if ("BOOK_SECTION".equals(tableName))	{
+			//public NodeSection(Long sectionId, Long chapterId, Long bookId, Long languageId, Long sameSectionId, String sectionName,
+			//String sectionType, String sectionDesc, String sectionStr, String authorName, String sourceName, Long displayOrder, 
+			//Long pageNumber, Long lineNumber, Long wordNumber, ZonedDateTime creationDate,ZonedDateTime modificationDate) {
+			String fieldStr = 	"sectionId INTEGER,chapterId INTEGER,bookId INTEGER,languageId INTEGER,sameSectionId INTEGER,sectionName TEXT,"+
+								"sectionType TEXT,sectionDesc TEXT,sectionStr TEXT,authorName TEXT,sourceName TEXT,displayOrder INTEGER,"+
+								"pageNumber INTEGER,lineNumber INTEGER,wordNumber INTEGER,creationDate TEXT, modificationDate TEXT";
+			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
 		} else if ("BOOK_PARAGRAPH".equals(tableName))	{
-			//public NodeParagraph(Long paragraphId, Long chapterId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
+			//public NodeParagraph(Long paragraphId, Long sectionId, Long bookId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
 			//String paragraphDesc, String paragraphStr, String authorName, String sourceName, Long displayOrder, Long pageNumber,
 			//Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-			String fieldStr = 	"paragraphId INTEGER,chapterId INTEGER,languageId INTEGER,sameParagraphId INTEGER,paragraphName TEXT,"+
+			String fieldStr = 	"paragraphId INTEGER,sectionId INTEGER,bookId INTEGER,languageId INTEGER,sameParagraphId INTEGER,paragraphName TEXT,"+
 								"paragraphType TEXT,paragraphDesc TEXT,paragraphStr TEXT,authorName TEXT,sourceName TEXT,"+
 								"displayOrder INTEGER,pageNumber INTEGER,lineNumber INTEGER,wordNumber INTEGER,creationDate TEXT, modificationDate TEXT";
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
 		} else if ("BOOK_SENTENCE".equals(tableName))	{
-			//public NodeSentence(Long sentenceId, Long paragraphId, Long languageId, Long sameSentenceId, String sentenceName, String sentenceType,
+			//public NodeSentence(Long sentenceId, Long paragraphId, Long bookId, Long languageId, Long sameSentenceId, String sentenceName, String sentenceType,
 			//String sentenceDescription,  String sentenceStr, String sentenceHolder, String authorName, String sourceName, Long displayOrder,
 			//Long pageNumber, Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-			String fieldStr = 	"sentenceId INTEGER,paragraphId INTEGER,languageId INTEGER,sameSentenceId INTEGER,sentenceName TEXT,sentenceType TEXT,"+
+			String fieldStr = 	"sentenceId INTEGER,paragraphId INTEGER,bookId INTEGER,languageId INTEGER,sameSentenceId INTEGER,sentenceName TEXT,sentenceType TEXT,"+
 								"sentenceDesc TEXT,sentenceStr TEXT, sentenceHolder TEXT,authorName TEXT,sourceName TEXT,displayOrder INTEGER,"+
 								"pageNumber INTEGER,lineNumber INTEGER,wordNumber INTEGER,creationDate TEXT, modificationDate TEXT";
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";

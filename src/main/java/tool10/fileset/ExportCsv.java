@@ -10,8 +10,6 @@ import org.apache.commons.csv.QuoteMode;
 import tool10.f10.NodeF10;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
-import tool10.fileset.nodes.NodeFileBlobOld;
-import tool10.fileset.nodes.NodeFileBlobSmall;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.fileset.nodes.NodeFileStore;
 import tool10.fileset.nodes.NodeFileSystem;
@@ -19,7 +17,6 @@ import tool10.fileset.nodes.NodeHash;
 import tool10.fileset.nodes.NodeHost;
 import tool10.fileset.nodes.NodeProperty;
 import tool10.fileset.nodes.NodeQuery;
-import tool10.fileset.nodes.NodeSimilarity;
 import tool10.util.FileUtil;
 
 public class ExportCsv {
@@ -38,8 +35,6 @@ public class ExportCsv {
 			headers = new String[] {"fileBlobId","fileId","fileSetId","partNumber","cntPart","blobType","blobSize","fileSize","compressionType","compressedFileSize","compressionGainRatio",
 			"compressionGainBytes","compressedByteHashId","sandByteLengthHead","sandByteLengthTail","encryptionBlobKey","encryptionType",
 			"encryptedFileSize","encrytedByteHashId","fileBytes","hashId","creationDate","modificationDate"}; 
-		} else if ("NodeFileBlobSmall".equals(tableName))	{ 
-			headers = new String[] {"fileBlobSmallId","fileBlobId","fileId","fileSetId","byteIndexStart","byteIndexEnd","hashId","creationDate","modificationDate"}; 
 		} else if ("NodeFileStore".equals(tableName))	{ 
 			headers = new String[] {"fileStoreId","fileSetId","fileSystemId","rootFileId","displayOrder","blockSize","totalSpace","unallocatedSpace","usableSpace","usedSpace",
 			"hashCode","rootDirectoryName","isReadOnly","nameStr","toString","typeStr","creationDate","modificationDate","fileStore","listFile"	}; 
@@ -56,16 +51,12 @@ public class ExportCsv {
 			"valueBinary","valueZDT","creationDate","modificationDate"}; 
 		} else if ("NodeQuery".equals(tableName))	{ 
 			headers = new String[] {"queryId","fileSetId","entityId","cntExecution","sqlString","firstExecutionDate","lastExecutionDate","creationDate","modificationDate"}; 
-		} else if ("NodeSimilarity".equals(tableName))	{ 
-			headers = new String[] {"similarityId","fileSetId","entityId1","entityId2","similarityType","sim00","sim01","sim02","sim03","sim04","sim05","sim06","sim07","sim08","sim09",
-			"sim10","sim11","sim12","sim13","sim14","sim15","sim16","sim17","sim18","sim19","alg00","alg01","alg02","alg03","alg04","alg05","alg06","alg07","alg08","alg09","alg10",
-			"alg11","alg12","alg13","alg14","alg15","alg16","alg17","alg18","alg19","creationDate","modificationDate"}; 
 		} else if ("NodeFileSet".equals(tableName))	{ 
 			headers = new String[] {"fileSetId","sourceId","fileSetName","fileSetDesc","fileSetURL","ownerName","displayOrder","creationDate","modificationDate","listAcl",
 			"listAclEntry","listDirectory","listFile","listFileBlob","listFileBlobSmall","listFileSystem","listFileStore","listHash","listHost",
-			"listProperty","listPathGroup","listPathGroupMember","listQuery","listSimilarity","listStat","mapId2Acl","mapId2AclEntry","mapId2Directory",
+			"listProperty","listPathGroup","listPathGroupMember","listQuery","listStat","mapId2Acl","mapId2AclEntry","mapId2Directory",
 			"mapId2File","mapId2FileBlob","mapId2FileBlobSmall","mapId2FileSystem","mapId2FileStore","mapId2Hash","mapId2Host","mapId2Property",
-			"mapId2PathGroup","mapId2PathGroupMember","mapId2Query","mapId2Similarity","mapId2Stat","listRoots","mapAbsoluteFileName2File",
+			"mapId2PathGroup","mapId2PathGroupMember","mapId2Query","mapId2Stat","listRoots","mapAbsoluteFileName2File",
 			"mapRawFileSystem2FileSystem","mapRawFileStore2FileStore","mapCrc2NodeHash"}; 
 		}
 		return(headers);
@@ -118,12 +109,6 @@ public class ExportCsv {
 				csvPrinter.printRecord(ent.getQueryId(),ent.getFileSetId(),ent.getEntityId(),ent.getCntExecution(),ent.getSqlString(),ent.getFirstExecutionDate(),ent.getLastExecutionDate(),ent.getCreationDate(),ent.getModificationDate()
 					); 
 			} 
-		} else if ("NodeSimilarity".equals(tableName))	{ 
-			for (NodeSimilarity ent : fileSet.getListSimilarity()) { 
-				csvPrinter.printRecord(ent.getSimilarityId(),ent.getFileSetId(),ent.getEntityId1(),ent.getEntityId2(),ent.getSimilarityType(),ent.getSim00(),ent.getSim01(),ent.getSim02(),ent.getSim03(),ent.getSim04(),ent.getSim05(),ent.getSim06(),ent.getSim07(),ent.getSim08(),ent.getSim09(),
-					ent.getSim10(),ent.getSim11(),ent.getSim12(),ent.getSim13(),ent.getSim14(),ent.getSim15(),ent.getSim16(),ent.getSim17(),ent.getSim18(),ent.getSim19(),ent.getAlg00(),ent.getAlg01(),ent.getAlg02(),ent.getAlg03(),ent.getAlg04(),ent.getAlg05(),ent.getAlg06(),ent.getAlg07(),ent.getAlg08(),ent.getAlg09(),ent.getAlg10(),
-					ent.getAlg11(),ent.getAlg12(),ent.getAlg13(),ent.getAlg14(),ent.getAlg15(),ent.getAlg16(),ent.getAlg17(),ent.getAlg18(),ent.getAlg19(),ent.getCreationDate(),ent.getModificationDate()); 
-			} 
 		} else if ("NodeFileSet".equals(tableName))	{ 
 			NodeFileSet ent = fileSet; 
 				csvPrinter.printRecord(ent.getFileSetId(),ent.getSourceId(),ent.getFileSetName(),ent.getFileSetDesc(),ent.getFileSetURL(),ent.getOwnerName(),ent.getDisplayOrder(),ent.getCreationDate(),ent.getModificationDate()); 
@@ -154,8 +139,8 @@ public class ExportCsv {
 	     }		 
 	 }	 
 	 private static void exportAllCSVTable(NodeFileSet fileSet, String dirName) {
-		String[] classList = new String[] {"NodeFile","NodeFileBlob","NodeFileBlobSmall","NodeFileStore","NodeFileSystem","NodeHash","NodeHost",
-		"NodeProperty","NodeQuery","NodeSimilarity","NodeFileSet"};  
+		String[] classList = new String[] {"NodeFile","NodeFileBlob","NodeFileStore","NodeFileSystem","NodeHash","NodeHost",
+		"NodeProperty","NodeQuery","NodeFileSet"};  
 		for (String className : classList)	{
 			String txt = exportOneCSVTable(fileSet,className); 
 			String fileName = dirName + "\\" + className + ".csv"; 

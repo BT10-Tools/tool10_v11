@@ -10,11 +10,11 @@ import tool10.util.StrUtil;
 public class AutoGenExtractor {
 	
    	private static List<Field> getAllFields(String strClassName)	{
-	   List<Field> allFields = Arrays.asList(tool10.fileset.nodes.NodeSimilarity.class.getDeclaredFields());
+	   List<Field> allFields = null; //Arrays.asList(tool10.fileset.nodes.NodeSimilarity.class.getDeclaredFields());
 	   if 		("NodeFileSet".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileSet.class.getDeclaredFields());}
 	   else if  ("NodeFile".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeFile.class.getDeclaredFields());}
 	   else if  ("NodeFileBlob".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileBlob.class.getDeclaredFields());}
-	   else if  ("NodeBlob".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeBlob.class.getDeclaredFields());}
+	   else if  ("NodeBlob".equals(strClassName))		{allFields = Arrays.asList(tool10.blobset.NodeBlob.class.getDeclaredFields());}
 	   else if  ("NodeFileStore".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileStore.class.getDeclaredFields());}
 	   else if  ("NodeFileSystem".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileSystem.class.getDeclaredFields());}
 	   else if  ("NodeHash".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeHash.class.getDeclaredFields());}
@@ -22,7 +22,6 @@ public class AutoGenExtractor {
 	   else if  ("NodeHost".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeHost.class.getDeclaredFields());}
 	   else if  ("NodeProperty".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeProperty.class.getDeclaredFields());}
 	   else if  ("NodeQuery".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeQuery.class.getDeclaredFields());}
-	   else if  ("NodeSimilarity".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeSimilarity.class.getDeclaredFields());}
 	   
 	   else if  ("NodeArchive".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.transform.NodeArchive.class.getDeclaredFields());}
 	   else if  ("NodeContainer".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.transform.NodeContainer.class.getDeclaredFields());}
@@ -227,14 +226,12 @@ public class AutoGenExtractor {
    		String strClassName = "NodeSimilarity";
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeFile","file","File","FS_FILE"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeFileBlob","fileBlob","FileBlob","FS_FILEBLOB"));
-   		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeFileBlobSmall","fileBlobSmall","FileBlobSmall","FS_FILEBLOBSMALL"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeFileStore","fileStore","FileStore","FS_FILESTORE"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeFileSystem","fileSystem","FileSystem","FS_FILESYSTEM"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeHash","hash","Hash","FS_HASH"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeHost","host","Host","FS_HOST"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeProperty","property","Property","FS_PROPERTY"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeQuery","query","Query","FS_QUERY"));
-   		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeSimilarity","similarity","Similarity","FS_SIMILARITY"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeFileSet","fileSet","FileSet","FS_FILESET"));
    		
    		System.out.println(getReadTablesBody("NodeFileSet","fileSet","NodeFileSet","fileSet","FileSet","FS_FILESET"));
@@ -277,14 +274,12 @@ public class AutoGenExtractor {
 		String headerFieldStr = 
 		 	getHeaderFieldStr("NodeFile","if")+
 	   		getHeaderFieldStr("NodeFileBlob","} else if")+
-	   		getHeaderFieldStr("NodeFileBlobSmall","} else if")+
 	   		getHeaderFieldStr("NodeFileStore","} else if")+
 	   		getHeaderFieldStr("NodeFileSystem","} else if")+
 	   		getHeaderFieldStr("NodeHash","} else if")+
 	   		getHeaderFieldStr("NodeHost","} else if")+
 	   		getHeaderFieldStr("NodeProperty","} else if")+
 	   		getHeaderFieldStr("NodeQuery","} else if")+
-	   		getHeaderFieldStr("NodeSimilarity","} else if")+
 	   		getHeaderFieldStr("NodeFileSet","} else if") + 
 	   		tab2+"}\n";
 	   	 
@@ -333,14 +328,12 @@ public class AutoGenExtractor {
 		String ifElseFieldStr = 
 			getPrintRecordStr("NodeFile","File","if")+
 			getPrintRecordStr("NodeFileBlob","FileBlob","} else if")+
-			getPrintRecordStr("NodeFileBlobSmall","FileBlobSmall","} else if")+
 			getPrintRecordStr("NodeFileStore","FileStore","} else if")+
 			getPrintRecordStr("NodeFileSystem","FileSystem","} else if")+
 			getPrintRecordStr("NodeHash","Hash","} else if")+
 			getPrintRecordStr("NodeHost","Host","} else if")+
 			getPrintRecordStr("NodeProperty","Property","} else if")+
 			getPrintRecordStr("NodeQuery","Query","} else if")+
-			getPrintRecordStr("NodeSimilarity","Similarity","} else if")+
 			getPrintRecordStr("NodeFileSet","FileSet","} else if") + 
 	   		tab2+"}\n";
 	   	 
@@ -361,14 +354,12 @@ public class AutoGenExtractor {
 		String ifElseFieldStr = 
 			getPrintRecordStr("NodeFile","File","if")+
 			getPrintRecordStr("NodeFileBlob","FileBlob","} else if")+
-			getPrintRecordStr("NodeFileBlobSmall","FileBlobSmall","} else if")+
 			getPrintRecordStr("NodeFileStore","FileStore","} else if")+
 			getPrintRecordStr("NodeFileSystem","FileSystem","} else if")+
 			getPrintRecordStr("NodeHash","Hash","} else if")+
 			getPrintRecordStr("NodeHost","Host","} else if")+
 			getPrintRecordStr("NodeProperty","Property","} else if")+
 			getPrintRecordStr("NodeQuery","Query","} else if")+
-			getPrintRecordStr("NodeSimilarity","Similarity","} else if")+
 			getPrintRecordStr("NodeFileSet","FileSet","} else if") + 
 	   		tab2+"}\n";
 	   	 

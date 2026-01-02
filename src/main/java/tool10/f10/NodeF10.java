@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import tool10.bookset.NodeBookSet;
 import tool10.fileset.PropConfig;
 import tool10.fileset.nodes.NodeFileSet;
-import tool10.imageset.NodeImageSet;
+import tool10.mediaset.NodeMediaSet;
+import tool10.simset.NodeSimSet;
 import tool10.sql.Conn10;
 import tool10.tagset.NodeTagSet;
 
@@ -21,14 +22,16 @@ public class NodeF10 {
 	private Conn10 connBlob; //current blob database name, the first db assigned as default 
 	private ArrayList<Conn10> listConnBlob;	
 	private Conn10 connTag; //current tag database name, the first db assigned as default 
-	private Conn10 connImage; //current image database name, the first db assigned as default 
+	private Conn10 connMedia; //current media database name, the first db assigned as default 
 	private Conn10 connBook; //current book database name, the first db assigned as default 
+	private Conn10 connSim; //current sim database name, the first db assigned as default 
 	private PropConfig propConfig; 
 	private NodeFileSet fileSet; 
 	private NodeFileSet outputFileSet;
 	private NodeTagSet tagSet; 
-	private NodeImageSet imageSet; 
+	private NodeMediaSet mediaSet; 
 	private NodeBookSet bookSet; 
+	private NodeSimSet simSet; 
 	
 	public void println(String str)	{
 		System.out.println(str);
@@ -93,17 +96,17 @@ public class NodeF10 {
 	public void setConnTag(Conn10 connTag) {
 		this.connTag = connTag;
 	}
-	public NodeImageSet getImageSet() {
-		return imageSet;
+	public NodeMediaSet getMediaSet() {
+		return mediaSet;
 	}
-	public void setImageSet(NodeImageSet imageSet) {
-		this.imageSet = imageSet;
+	public void setMediaSet(NodeMediaSet mediaSet) {
+		this.mediaSet = mediaSet;
 	}
-	public Conn10 getConnImage() {
-		return connImage;
+	public Conn10 getConnMedia() {
+		return connMedia;
 	}
-	public void setConnImage(Conn10 connImage) {
-		this.connImage = connImage;
+	public void setConnMedia(Conn10 connMedia) {
+		this.connMedia = connMedia;
 	}
 	public Conn10 getConnBook() {
 		return connBook;
@@ -116,6 +119,18 @@ public class NodeF10 {
 	}
 	public void setBookSet(NodeBookSet bookSet) {
 		this.bookSet = bookSet;
+	}
+	public NodeSimSet getSimSet() {
+		return simSet;
+	}
+	public void setSimSet(NodeSimSet simSet) {
+		this.simSet = simSet;
+	}
+	public Conn10 getConnSim() {
+		return connSim;
+	}
+	public void setConnSim(Conn10 connSim) {
+		this.connSim = connSim;
 	}
 	
 }

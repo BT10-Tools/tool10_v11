@@ -29,18 +29,18 @@ public class DbManager {
 		System.out.println("RunBook createBookDatabase f10.getConn10():"+f10.getConn10());
 		return(connBook);
 	}
-	public static void createImageDatabase(NodeF10 f10)	{
-		String dbFileName = f10.getCliParams().getImageDbName();
-		String connectionName = "imageDb";
-		String dbType = f10.getCliParams().getImageDbType();
-		Conn10 connImage = null; 
+	public static void createMediaDatabase(NodeF10 f10)	{
+		String dbFileName = f10.getCliParams().getMediaDbName();
+		String connectionName = "mediaDb";
+		String dbType = f10.getCliParams().getMediaDbType();
+		Conn10 connMedia = null; 
 		if ((dbFileName==null) || (f10.getConn10().getDbFileName().equals(dbFileName)))	{
-			connImage = new Conn10(connectionName, f10.getConn10().getDbType(), f10.getConn10().getDbFileName());;
+			connMedia = new Conn10(connectionName, f10.getConn10().getDbType(), f10.getConn10().getDbFileName());;
 		} else {
-			connImage = new Conn10(connectionName, dbType, dbFileName);
+			connMedia = new Conn10(connectionName, dbType, dbFileName);
 		}
-		f10.setConnImage(connImage);	
-		CreateFileSetTables.createFileSetTables(connImage);
+		f10.setConnMedia(connMedia);	
+		CreateFileSetTables.createFileSetTables(connMedia);
 	}
 	
 	public static void createTagDatabase(NodeF10 f10)	{

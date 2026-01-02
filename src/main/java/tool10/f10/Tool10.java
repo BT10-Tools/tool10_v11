@@ -64,6 +64,15 @@ public class Tool10 {
 			System.out.println(strEng);	
 		} 
 	}
+	public static NodeF10 getF10()	{
+		BasicConfigurator.configure();
+		NodeF10 f10 = new NodeF10();
+		
+		String[] args0 = CliRun.getArgs0("read");  //read must be selected
+	    RunF10.runF10(f10,args0);
+	    
+		return(f10);
+	}
 	private static void runFileSet(String[] args)	{
 		
 		BasicConfigurator.configure();
@@ -77,7 +86,7 @@ public class Tool10 {
 
 		NodeF10 f10 = new NodeF10();
 	    
-	    String[] args0 = CliRun.getArgs0();
+	    String[] args0 = CliRun.getArgs0(null);
 	    RunF10.runF10(f10,args0);
 	    ZonedDateTime finishZdt = ZonedDateTime.now();
 	    long runTimeInMillis = TimeUtil.diffInMillisZDT(startZdt, finishZdt);

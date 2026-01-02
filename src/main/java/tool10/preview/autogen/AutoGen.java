@@ -1,13 +1,9 @@
 package tool10.preview.autogen;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import tool10.fileset.MakeFileSet;
-import tool10.fileset.nodes.NodeFileSet;
 import tool10.sql.TableManager;
 
 public class AutoGen {
@@ -19,7 +15,7 @@ public class AutoGen {
       this.c = c;
    	}
    	private static List<Field> getAllFields(String strClassName)	{
-	   List<Field> allFields = Arrays.asList(tool10.fileset.nodes.NodeSimilarity.class.getDeclaredFields());
+	   List<Field> allFields = null; //Arrays.asList(tool10.fileset.nodes.NodeSimilarity.class.getDeclaredFields());
 	   if 		("NodeFileSet".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileSet.class.getDeclaredFields());}
 	   else if  ("NodeFile".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeFile.class.getDeclaredFields());}
 	   else if  ("NodeFileBlob".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeFileBlobOld.class.getDeclaredFields());}
@@ -31,8 +27,7 @@ public class AutoGen {
 	   else if  ("NodeHost".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeHost.class.getDeclaredFields());}
 	   else if  ("NodeProperty".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeProperty.class.getDeclaredFields());}
 	   else if  ("NodeQuery".equals(strClassName))		{allFields = Arrays.asList(tool10.fileset.nodes.NodeQuery.class.getDeclaredFields());}
-	   else if  ("NodeSimilarity".equals(strClassName))	{allFields = Arrays.asList(tool10.fileset.nodes.NodeSimilarity.class.getDeclaredFields());}
-  		
+	   
 	   return(allFields);
    	}
    	private static String getAllFieldStr(List<Field> allFields)	{
@@ -242,7 +237,6 @@ public class AutoGen {
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeHost","host","Host","FS_HOST"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeProperty","property","Property","FS_PROPERTY"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeQuery","query","Query","FS_QUERY"));
-   		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeSimilarity","similarity","Similarity","FS_SIMILARITY"));
    		System.out.println(getReadTablesMethod("NodeFileSet","fileSet","NodeFileSet","fileSet","FileSet","FS_FILESET"));
    		
    		System.out.println(getReadTablesBody("NodeFileSet","fileSet","NodeFileSet","fileSet","FileSet","FS_FILESET"));

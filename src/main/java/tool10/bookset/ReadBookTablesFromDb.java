@@ -173,12 +173,11 @@ public class ReadBookTablesFromDb {
 	}
 	public static int readBookSetTableSentence(Connection conn, NodeBookSet bookSet)	{
 		int cntRead = 0;
-		String query = 	" SELECT sentenceId,paragraphId,languageId,sameSentenceId,sentenceName,sentenceType,sentenceDesc,sentenceStr,sentenceHolder, "+
+		String query = 	" SELECT sentenceId,paragraphId,bookId,languageId,sameSentenceId,sentenceName,sentenceType,sentenceDesc,sentenceStr,sentenceHolder, "+
 				 		" 	authorName,sourceName,displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate "+
-						" FROM BOOK_SENTENCE WHERE paragraphId in (SELECT paragraphId FROM BOOK_PARAGRAPH "+
-				 		"										 WHERE chapterId in (select chapterId FROM BOOK_CHAPTER WHERE bookId in (select bookId from BOOK_BOOK WHERE bookSetId = ? ))) "+
+						" FROM BOOK_SENTENCE WHERE bookId in (select bookId from BOOK_BOOK WHERE bookSetId = ? ) "+
 				 		" ORDER BY paragraphId,sentenceId";
-		//public NodeSentence(Long sentenceId, Long paragraphId, Long languageId, Long sameSentenceId, String sentenceName, String sentenceType,
+		//public NodeSentence(Long sentenceId, Long paragraphId, Long bookId, Long languageId, Long sameSentenceId, String sentenceName, String sentenceType,
 		//String sentenceDescription,  String sentenceStr, String sentenceHolder, String authorName, String sourceName, Long displayOrder,
 		//Long pageNumber, Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -188,6 +187,7 @@ public class ReadBookTablesFromDb {
 		    while (rs.next()) {
 		    	Long sentenceId = rs.getLong("sentenceId");
 		    	Long paragraphId = rs.getLong("paragraphId");  	if (rs.wasNull()) {paragraphId = null;}
+		    	Long bookId = rs.getLong("bookId");  	if (rs.wasNull()) {bookId = null;}
 		    	Long languageId = rs.getLong("languageId");  	if (rs.wasNull()) {languageId = null;}
 		    	Long sameSentenceId = rs.getLong("sameSentenceId");  	if (rs.wasNull()) {sameSentenceId = null;}
 		    	String sentenceName = rs.getString("sentenceName");  
@@ -206,7 +206,7 @@ public class ReadBookTablesFromDb {
 		        ZonedDateTime creationDate = ((creationdateStr!=null) ? ZonedDateTime.parse(creationdateStr) : null);
 		        ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null);	
 			    
-		        NodeSentence sentence = new NodeSentence(sentenceId,paragraphId,languageId,sameSentenceId,sentenceName,sentenceType,sentenceDesc,sentenceStr,sentenceHolder,  
+		        NodeSentence sentence = new NodeSentence(sentenceId,paragraphId,bookId,languageId,sameSentenceId,sentenceName,sentenceType,sentenceDesc,sentenceStr,sentenceHolder,  
 		        		authorName,sourceName,displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate);
 		        //System.out.println("readRegistryTableEntry: regEntry = " + regEntry);
 		        bookSet.getListSentence().add(sentence);
@@ -223,11 +223,11 @@ public class ReadBookTablesFromDb {
 	}
 	public static int readBookSetTableParagraph(Connection conn, NodeBookSet bookSet)	{
 		int cntRead = 0;
-		String query = 	"SELECT paragraphId,chapterId,languageId,sameParagraphId,paragraphName,paragraphType,paragraphDesc,paragraphStr, "+
+		String query = 	"SELECT paragraphId,sectionId,bookId,languageId,sameParagraphId,paragraphName,paragraphType,paragraphDesc,paragraphStr, "+
 				 		" authorName,sourceName,displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate "+
-						"FROM BOOK_PARAGRAPH WHERE chapterId in (select chapterId FROM BOOK_CHAPTER WHERE bookId in (select bookId from BOOK_BOOK WHERE bookSetId = ? )) "+
-				 		"ORDER BY chapterId,paragraphId";
-		//public NodeParagraph(Long paragraphId, Long chapterId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
+						"FROM BOOK_PARAGRAPH WHERE bookId in (select bookId from BOOK_BOOK WHERE bookSetId = ? ) "+
+				 		"ORDER BY sectionId,paragraphId";
+		//public NodeParagraph(Long paragraphId, Long sectionId, Long bookId, Long languageId, Long sameParagraphId, String paragraphName, String paragraphType,
 		//String paragraphDesc, String paragraphStr, String authorName, String sourceName, Long displayOrder, Long pageNumber,
 		//Long lineNumber, Long wordNumber, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -236,7 +236,8 @@ public class ReadBookTablesFromDb {
 		    ResultSet rs = ps.executeQuery();
 		    while (rs.next()) {
 		    	Long paragraphId = rs.getLong("paragraphId");
-		    	Long chapterId = rs.getLong("chapterId");  	if (rs.wasNull()) {chapterId = null;}
+		    	Long sectionId = rs.getLong("sectionId");  	if (rs.wasNull()) {sectionId = null;}
+		    	Long bookId = rs.getLong("bookId");  	if (rs.wasNull()) {bookId = null;}
 		    	Long languageId = rs.getLong("languageId");  	if (rs.wasNull()) {languageId = null;}
 		    	Long sameParagraphId = rs.getLong("sameParagraphId");  	if (rs.wasNull()) {sameParagraphId = null;}
 		    	String paragraphName = rs.getString("paragraphName");  
@@ -254,7 +255,7 @@ public class ReadBookTablesFromDb {
 		        ZonedDateTime creationDate = ((creationdateStr!=null) ? ZonedDateTime.parse(creationdateStr) : null);
 		        ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null);	
 			    
-		        NodeParagraph paragraph = new NodeParagraph(paragraphId,chapterId,languageId,sameParagraphId,paragraphName,paragraphType,paragraphDesc,paragraphStr,  
+		        NodeParagraph paragraph = new NodeParagraph(paragraphId,sectionId,bookId,languageId,sameParagraphId,paragraphName,paragraphType,paragraphDesc,paragraphStr,  
 		        		authorName,sourceName,displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate);
 		        //System.out.println("readRegistryTableEntry: regEntry = " + regEntry);
 		        bookSet.getListParagraph().add(paragraph);
@@ -262,6 +263,55 @@ public class ReadBookTablesFromDb {
 		        cntRead++;
 		    }
 		    System.out.println("readBookSetTableParagraph: cntRead = " + cntRead);
+		    rs.close();
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntRead);
+	}
+	public static int readBookSetTableSection(Connection conn, NodeBookSet bookSet)	{
+		int cntRead = 0;
+		String query = 	"SELECT sectionId,chapterId,bookId,languageId,sameSectionId,sectionName,sectionType,sectionDesc,sectionStr, "+
+				 		" authorName,sourceName,displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate "+
+						"FROM BOOK_SECTION WHERE bookId in (select bookId from BOOK_BOOK WHERE bookSetId = ? ) "+
+				 		"ORDER BY chapterId,sectionId";
+		//public NodeSection(Long sectionId, Long chapterId, Long bookId, Long languageId, Long sameSectionId, String sectionName,
+		//String sectionType, String sectionDesc, String sectionStr, String authorName, String sourceName, Long displayOrder, 
+		//Long pageNumber, Long lineNumber, Long wordNumber, ZonedDateTime creationDate,ZonedDateTime modificationDate) {
+		try	{  
+			PreparedStatement ps = conn.prepareStatement(query);
+		    ps.setLong(1, bookSet.getBookSetId()); 
+		    ResultSet rs = ps.executeQuery();
+		    while (rs.next()) {
+		    	Long sectionId = rs.getLong("sectionId");
+		    	Long chapterId = rs.getLong("chapterId");  	if (rs.wasNull()) {chapterId = null;}
+		    	Long bookId = rs.getLong("bookId");  	if (rs.wasNull()) {bookId = null;}
+		    	Long languageId = rs.getLong("languageId");  	if (rs.wasNull()) {languageId = null;}
+		    	Long sameSectionId = rs.getLong("sameSectionId");  	if (rs.wasNull()) {sameSectionId = null;}
+		    	String sectionName = rs.getString("sectionName");  
+		    	String sectionType = rs.getString("sectionType");  
+		    	String sectionDesc = rs.getString("sectionDesc");  
+		    	String sectionStr = rs.getString("sectionStr");  
+		    	String authorName = rs.getString("authorName");  
+		    	String sourceName = rs.getString("sourceName");  
+		    	Long displayOrder = rs.getLong("displayOrder");  	if (rs.wasNull()) {displayOrder = null;}
+		        Long pageNumber = rs.getLong("pageNumber");  	if (rs.wasNull()) {pageNumber = null;}
+		        Long lineNumber = rs.getLong("lineNumber");  	if (rs.wasNull()) {lineNumber = null;}
+		        Long wordNumber = rs.getLong("wordNumber");  	if (rs.wasNull()) {wordNumber = null;}
+		        String creationdateStr = rs.getString("creationDate");  
+		        String modificationDateStr = rs.getString("modificationDate");  
+		        ZonedDateTime creationDate = ((creationdateStr!=null) ? ZonedDateTime.parse(creationdateStr) : null);
+		        ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null);	
+			    
+		        NodeSection section = new NodeSection(sectionId,chapterId,bookId,languageId,sameSectionId,sectionName,sectionType,sectionDesc,sectionStr,  
+		        		authorName,sourceName,displayOrder,pageNumber,lineNumber,wordNumber,creationDate,modificationDate);
+		        //System.out.println("readRegistryTableEntry: regEntry = " + regEntry);
+		        bookSet.getListSection().add(section);
+		        bookSet.getMapId2Section().put(section.getSectionId(),section);
+		        cntRead++;
+		    }
+		    System.out.println("readBookSetTableSection: cntRead = " + cntRead);
 		    rs.close();
 		    ps.close();
 		} catch(SQLException e)	{
@@ -427,6 +477,7 @@ public class ReadBookTablesFromDb {
 		int cntReadBook = readBookSetTableBook(conn,bookSet);
 		int cntReadLanguage = readBookSetTableLanguage(conn,bookSet);
 		int cntReadChapter = readBookSetTableChapter(conn,bookSet);
+		int cntReadSection = readBookSetTableSection(conn,bookSet);
 		int cntReadParagraph = readBookSetTableParagraph(conn,bookSet);
 		int cntReadSentence = readBookSetTableSentence(conn,bookSet);
 		int cntReadToken = readBookSetTableToken(conn,bookSet);
@@ -434,7 +485,7 @@ public class ReadBookTablesFromDb {
 		postProcessBookSet(bookSet);
 		
 		int cntRead = cntReadBookFile + cntReadBookImage + cntReadBookBlob + cntReadBook + cntReadLanguage + cntReadChapter + 
-				cntReadParagraph + cntReadSentence + cntReadToken + 1;
+				cntReadSection + cntReadParagraph + cntReadSentence + cntReadToken + 1;
 	    System.out.println("readBookSet: total recordS read = " + cntRead);
 		return(bookSet);
 	}	
@@ -456,6 +507,7 @@ public class ReadBookTablesFromDb {
 			System.out.println("bookSet.getListLanguage().size() = "+bookSet.getListLanguage().size());
 			System.out.println("bookSet.getListBook().size() = "+bookSet.getListBook().size());
 			System.out.println("bookSet.getListChapter().size() = "+bookSet.getListChapter().size());
+			System.out.println("bookSet.getListSection().size() = "+bookSet.getListSection().size());
 			System.out.println("bookSet.getListParagraph().size() = "+bookSet.getListParagraph().size());
 			System.out.println("bookSet.getListSentence().size() = "+bookSet.getListSentence().size());
 			System.out.println("bookSet.getListToken().size() = "+bookSet.getListToken().size());
@@ -466,6 +518,7 @@ public class ReadBookTablesFromDb {
 			System.out.println("bookSet.getMapId2Language().size() = "+bookSet.getMapId2Language().size());
 			System.out.println("bookSet.getMapId2Book().size() = "+bookSet.getMapId2Book().size());
 			System.out.println("bookSet.getMapId2Chapter().size() = "+bookSet.getMapId2Chapter().size());
+			System.out.println("bookSet.getMapId2Section().size() = "+bookSet.getMapId2Section().size());
 			System.out.println("bookSet.getMapId2Paragraph().size() = "+bookSet.getMapId2Paragraph().size());
 			System.out.println("bookSet.getMapId2Sentence().size() = "+bookSet.getMapId2Sentence().size());
 			System.out.println("bookSet.getMapId2Token().size() = "+bookSet.getMapId2Token().size());

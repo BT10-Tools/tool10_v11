@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class CliRun {
 	
-	public static String[] getArgs0()	{
+	public static String[] getArgs0(String argsType)	{
 		HashMap<String,String[]> maps = new HashMap<String,String[]>();
 		
 		String[] args1 = new String[] {"-help"}; 
@@ -50,6 +50,13 @@ public class CliRun {
 				"-hashtype","all",
 				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
 				
+				};
+		
+		String[] argsRead = new String[] {"",
+				"-read",
+				"-readtype","all",
+				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
+				"-filesetname","fileSet02",
 				};
 		
 		String[] args4 = new String[] {"",
@@ -99,13 +106,13 @@ public class CliRun {
 				};
 		
 		String[] args9 = new String[] {"",
-				"-image",
+				"-media",
 				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
 				"-filesetname","fileSet02",
-				"-imagesetname","fileSet02_Image",
-			//	"-imagedbname","C:\\app\\sqlite\\similarity\\fileSet02Image.db",  //this is optional, default and preferred is current db  
-			//	"-imagedbaction","renewdb",
-				"-tempdir","C:\\tmp\\similarity\\10_Image"
+				"-mediasetname","fileSet02_Media",
+			//	"-mediadbname","C:\\app\\sqlite\\similarity\\fileSet02Media.db",  //this is optional, default and preferred is current db  
+			//	"-mediadbaction","renewdb",
+				"-tempdir","C:\\tmp\\similarity\\10_Media"
 				};
 	
 		String[] args10 = new String[] {"",
@@ -120,11 +127,15 @@ public class CliRun {
 		
 		String[] args99 = new String[] {"",
 				"-similarity",
-				"-similaritytype","all",
-				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
-				"-filesetname","fileSet02"
+				"-similaritytype","file",  //dir, image, video, audio, book
+ 				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
+				"-filesetname","fileSet02",
+				"-simdbname","C:\\app\\sqlite\\similarity\\fileSet02Sim.db",
+				"-simsetname","fileSet02_Sim",
+				"-tempdir","C:\\tmp\\similarity\\12_Sim"
 				};
 	
+		if ("read".equalsIgnoreCase(argsType)) {	return(argsRead);	}
 		return(args10);
 	}
 	public static CliParameter processFileSetCli(NodeF10 f10, String[] args0)	{

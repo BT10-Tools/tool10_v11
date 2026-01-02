@@ -334,7 +334,7 @@ public class MakeBookSetTanzil {
 					"sentence["+sentenceName+"]";
 			//public static NodeSentence createOneSentence(NodeF10 f10, Long paragraphId, Long displayOrder, 
 			//		String sentenceName, String sentenceType, String sentenceDesc, String sentenceStr)	{
-			NodeSentence newSentence = MakeBookSetTables.createOneSentence(f10, paragraph.getParagraphId(), (long) displayOrder, 
+			NodeSentence newSentence = MakeBookSetTables.createOneSentence(f10, paragraph.getParagraphId(), book.getBookId(), (long) displayOrder, 
 					sentenceName, sentenceType, sentenceDesc, sentenceStr);
 			
 			ArrayList<String> sntcList = new ArrayList<String>();
@@ -344,19 +344,19 @@ public class MakeBookSetTanzil {
 		}
 		return(mapSentence2StringList);
 	}
-	public static HashMap<NodeParagraph,ArrayList<String>> createParagraphs(NodeF10 f10, NodeBook book, NodeChapter chapter,
-			ArrayList<String> chapterStringList) {
+	public static HashMap<NodeParagraph,ArrayList<String>> createParagraphs(NodeF10 f10, NodeBook book, NodeChapter chapter, NodeSection section,
+			ArrayList<String> sectionStringList) {
 		HashMap<NodeParagraph,ArrayList<String>> mapParagraph2StringList = new HashMap<>();
-		if ((chapterStringList==null) || (chapterStringList.isEmpty())) return(null);
+		if ((sectionStringList==null) || (sectionStringList.isEmpty())) return(null);
 		int displayOrder = 0;
-		for (String str : chapterStringList)	{
+		for (String str : sectionStringList)	{
 
 			String paragraphName=("OtherLines".equals(chapter.getChapterName())) ? "OtherLine"+displayOrder : "Ayat"+displayOrder ; 
 			String paragraphType="ayat";
-			String paragraphDesc="Tanzil_book["+book.getBookName()+"].chapter["+chapter.getChapterName() + "].paragraph[" + paragraphName+"]";
+			String paragraphDesc="Tanzil_book["+book.getBookName()+"].chapter["+chapter.getChapterName() +"].section["+section.getSectionName() + "].paragraph[" + paragraphName+"]";
 			//public static NodeParagraph createOneParagraph(NodeF10 f10, Long chapterId, Long displayOrder, 
 			//		String paragraphName, String paragraphType, String paragraphDesc)	{
-			NodeParagraph newParagraph = MakeBookSetTables.createOneParagraph(f10, chapter.getChapterId(), (long) displayOrder, paragraphName, paragraphType, paragraphDesc);
+			NodeParagraph newParagraph = MakeBookSetTables.createOneParagraph(f10, section.getSectionId(), book.getBookId(), (long) displayOrder, paragraphName, paragraphType, paragraphDesc);
 			
 			ArrayList<String> prfList = new ArrayList<String>();
 			prfList.add(str);
@@ -364,6 +364,27 @@ public class MakeBookSetTanzil {
 			displayOrder++;
 		}
 		return(mapParagraph2StringList);
+	}
+	public static HashMap<NodeSection,ArrayList<String>> createSections(NodeF10 f10, NodeBook book, NodeChapter chapter,
+			ArrayList<String> chapterStringList) {
+		HashMap<NodeSection,ArrayList<String>> mapSection2StringList = new HashMap<>();
+		if ((chapterStringList==null) || (chapterStringList.isEmpty())) return(null);
+		int displayOrder = 0;
+		for (String str : chapterStringList)	{
+
+			String sectionName=("OtherLines".equals(chapter.getChapterName())) ? "OtherLine"+displayOrder : "Ayat"+displayOrder ; 
+			String sectionType="ayat";
+			String sectionDesc="Tanzil_book["+book.getBookName()+"].chapter["+chapter.getChapterName() + "].section[" + sectionName+"]";
+			//public static NodeSection createOneSection(NodeF10 f10, Long chapterId, Long bookId, Long displayOrder, 
+			//String sectionName, String sectionType, String sectionDesc)	{
+			NodeSection newSection = MakeBookSetTables.createOneSection(f10, chapter.getChapterId(), book.getBookId(), (long) displayOrder, sectionName, sectionType, sectionDesc);
+			
+			ArrayList<String> sctList = new ArrayList<String>();
+			sctList.add(str);
+			mapSection2StringList.put(newSection,sctList);
+			displayOrder++;
+		}
+		return(mapSection2StringList);
 	}
 	private static ArrayList<ArrayList<String>> getChapters(List<String> bookLineList)	{
 		ArrayList<ArrayList<String>> chapterList = new ArrayList<ArrayList<String>>();
@@ -434,21 +455,28 @@ public class MakeBookSetTanzil {
 		for (NodeChapter chapter : mapChapter2StringList.keySet())	{
 			ArrayList<String> chapterStringList = mapChapter2StringList.get(chapter); 
 			
-			HashMap<NodeParagraph,ArrayList<String>> mapParagraph2StringList = createParagraphs(f10,book, chapter,chapterStringList);
-			System.out.println("MakeBookSetTanzil processBook mapParagraph2StringList.size():"+mapParagraph2StringList.size());
-			for (NodeParagraph paragraph : mapParagraph2StringList.keySet())	{
-				ArrayList<String> paragraphStringList = mapParagraph2StringList.get(paragraph);
-				HashMap<NodeSentence,ArrayList<String>> mapSentence2StringList = createSentences(f10,book, chapter, paragraph, paragraphStringList);
-				System.out.println("MakeBookSetTanzil processBook mapSentence2StringList.size():"+mapSentence2StringList.size());
-				
-				for (NodeSentence sentence : mapSentence2StringList.keySet())	{
-					ArrayList<String> sentenceStringList = mapSentence2StringList.get(sentence);
-					createTokens(f10, sentence, sentenceStringList);
-					String sentenceHolder = getSentenceHolderString(sentence, sentenceStringList);
-					sentence.setSentenceHolder(sentenceHolder);
-				}
-			}
-		}
+			HashMap<NodeSection,ArrayList<String>> mapSection2StringList = createSections(f10,book, chapter,chapterStringList);
+			System.out.println("MakeBookSetTanzil processBook mapSSection2StringList.size():"+mapSection2StringList.size());
+			for (NodeSection section : mapSection2StringList.keySet())	{
+				ArrayList<String> sectionStringList = mapSection2StringList.get(section); 
+
+				SECTION KISMI DÜZELTİLECEK , TEST EDİLECEK
+				HashMap<NodeParagraph,ArrayList<String>> mapParagraph2StringList = createParagraphs(f10,book, chapter, section, sectionStringList);
+				System.out.println("MakeBookSetTanzil processBook mapParagraph2StringList.size():"+mapParagraph2StringList.size());
+				for (NodeParagraph paragraph : mapParagraph2StringList.keySet())	{
+					ArrayList<String> paragraphStringList = mapParagraph2StringList.get(paragraph);
+					HashMap<NodeSentence,ArrayList<String>> mapSentence2StringList = createSentences(f10,book, chapter, paragraph, paragraphStringList);
+					System.out.println("MakeBookSetTanzil processBook mapSentence2StringList.size():"+mapSentence2StringList.size());
+					
+					for (NodeSentence sentence : mapSentence2StringList.keySet())	{
+						ArrayList<String> sentenceStringList = mapSentence2StringList.get(sentence);
+						createTokens(f10, sentence, sentenceStringList);
+						String sentenceHolder = getSentenceHolderString(sentence, sentenceStringList);
+						sentence.setSentenceHolder(sentenceHolder);
+					} //for sentence
+				} //for paragraph
+			} //for section 
+		} //for chapter
 		
 	}
 }

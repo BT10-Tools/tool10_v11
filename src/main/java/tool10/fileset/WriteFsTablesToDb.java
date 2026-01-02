@@ -4,20 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
-import tool10.fileset.nodes.NodeBlob;
+import tool10.blobset.NodeBlob;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
-import tool10.fileset.nodes.NodeFileBlobOld;
 import tool10.fileset.nodes.NodeFileBlobSmall;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.fileset.nodes.NodeFileStore;
 import tool10.fileset.nodes.NodeFileSystem;
 import tool10.fileset.nodes.NodeHash;
 import tool10.fileset.nodes.NodeProperty;
-import tool10.fileset.nodes.NodeSimilarity;
 import tool10.fileset.transform.NodeArchive;
 import tool10.fileset.transform.NodeContainer;
 import tool10.fileset.transform.NodeTransform;
@@ -576,84 +573,6 @@ public class WriteFsTablesToDb {
 		}
 		return(cntInserted);
 	}
-	public static int writeTableSimilarity(Connection conn,NodeFileSet fileSet)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO FS_SIMILARITY(similarityId,fileSetId,entityId1,entityId2,similarityType,similarityKey,\r\n"
-				+ "		sim00,sim01,sim02,sim03,sim04,sim05,sim06,sim07,sim08,sim09,sim10,sim11,sim12,sim13,\r\n"
-				+ "		sim14,sim15,sim16,sim17,sim18,sim19,alg00,alg01,alg02,alg03,alg04,alg05,alg06,alg07,\r\n"
-				+ "		alg08,alg09,alg10,alg11,alg12,alg13,alg14,\r\n"
-				+ "		alg15,alg16,alg17,alg18,alg19,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,  "+
-				                "?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,  ?, ?, ?)";
-		//public NodeSimilarity(Long similarityId, Long fileSetId, Long entityId1, Long entityId2, String similarityType, String similarityKey,
-		//Double sim00, Double sim01, Double sim02, Double sim03, Double sim04, Double sim05, Double sim06,
-		//Double sim07, Double sim08, Double sim09, Double sim10, Double sim11, Double sim12, Double sim13,
-		//Double sim14, Double sim15, Double sim16, Double sim17, Double sim18, Double sim19, String alg00,
-		//String alg01, String alg02, String alg03, String alg04, String alg05, String alg06, String alg07,
-		//String alg08, String alg09, String alg10, String alg11, String alg12, String alg13, String alg14,
-		//String alg15, String alg16, String alg17, String alg18, String alg19, ZonedDateTime creationDate,ZonedDateTime modificationDate) {
-		
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeSimilarity ent : fileSet.getListSimilarity())	{
-			    int cnt=1;
-			    if (ent.getSimilarityId()!=null) {ps.setLong(cnt++, ent.getSimilarityId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getEntityId1()!=null) {ps.setLong(cnt++, ent.getEntityId1());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getEntityId2()!=null) {ps.setLong(cnt++, ent.getEntityId2());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getSimilarityType());
-			    ps.setString(cnt++, ent.getSimilarityKey());
-			    if (ent.getSim00()!=null) {ps.setDouble(cnt++, ent.getSim00());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim01()!=null) {ps.setDouble(cnt++, ent.getSim01());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim02()!=null) {ps.setDouble(cnt++, ent.getSim02());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim03()!=null) {ps.setDouble(cnt++, ent.getSim03());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim04()!=null) {ps.setDouble(cnt++, ent.getSim04());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim05()!=null) {ps.setDouble(cnt++, ent.getSim05());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim06()!=null) {ps.setDouble(cnt++, ent.getSim06());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim07()!=null) {ps.setDouble(cnt++, ent.getSim07());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim08()!=null) {ps.setDouble(cnt++, ent.getSim08());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim09()!=null) {ps.setDouble(cnt++, ent.getSim09());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim10()!=null) {ps.setDouble(cnt++, ent.getSim10());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim11()!=null) {ps.setDouble(cnt++, ent.getSim11());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim12()!=null) {ps.setDouble(cnt++, ent.getSim12());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim13()!=null) {ps.setDouble(cnt++, ent.getSim13());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim14()!=null) {ps.setDouble(cnt++, ent.getSim14());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim15()!=null) {ps.setDouble(cnt++, ent.getSim15());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim16()!=null) {ps.setDouble(cnt++, ent.getSim16());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim17()!=null) {ps.setDouble(cnt++, ent.getSim17());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim18()!=null) {ps.setDouble(cnt++, ent.getSim18());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getSim19()!=null) {ps.setDouble(cnt++, ent.getSim19());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    ps.setString(cnt++, ent.getAlg00());
-			    ps.setString(cnt++, ent.getAlg01());
-			    ps.setString(cnt++, ent.getAlg02());
-			    ps.setString(cnt++, ent.getAlg03());
-			    ps.setString(cnt++, ent.getAlg04());
-			    ps.setString(cnt++, ent.getAlg05());
-			    ps.setString(cnt++, ent.getAlg06());
-			    ps.setString(cnt++, ent.getAlg07());
-			    ps.setString(cnt++, ent.getAlg08());
-			    ps.setString(cnt++, ent.getAlg09());
-			    ps.setString(cnt++, ent.getAlg10());
-			    ps.setString(cnt++, ent.getAlg11());
-			    ps.setString(cnt++, ent.getAlg12());
-			    ps.setString(cnt++, ent.getAlg13());
-			    ps.setString(cnt++, ent.getAlg14());
-			    ps.setString(cnt++, ent.getAlg15());
-			    ps.setString(cnt++, ent.getAlg16());
-			    ps.setString(cnt++, ent.getAlg17());
-			    ps.setString(cnt++, ent.getAlg18());
-			    ps.setString(cnt++, ent.getAlg19());
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableSimilarity: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
 	public static int writeTableProperty(Connection conn,NodeFileSet fileSet)	{
 		int cntInserted = 0;
 		String query =  "INSERT INTO FS_PROPERTY (propertyId, fileSetId, entityId, displayOrder, mapName, entityName, propertyKey, propertyValue, \r\n"
@@ -1016,18 +935,17 @@ public class WriteFsTablesToDb {
 		return(cntInserted);
 	}
 	public static int writeFileSet(Connection conn,  NodeFileSet fileSet)	{
-		int ctInsertedCorpus = writeTableFileSet(conn,fileSet);
-		int ctInsertedFile = writeTableFile(conn,fileSet);
-		int ctInsertedFileSystem = writeTableFileSystem(conn,fileSet);
-		int ctInsertedFileStore = writeTableFileStore(conn,fileSet);
-		int ctInsertedFileBlob = writeTableFileBlob(conn,fileSet.getListFileBlob()); 
-		int ctInsertedBlob = writeTableBlob(conn,"","",fileSet.getListBlob()); 
-		int ctInsertedProperty = writeTableProperty(conn,fileSet); 
-		int ctInsertedSimilarity = writeTableSimilarity(conn,fileSet); 
-		int ctInsertedHash = writeTableHash(conn,fileSet);
-		int ctInsertedArchive = writeTableArchive(conn,fileSet);
-		int ctInsertedContainer = writeTableContainer(conn,fileSet);
-		int ctInsertedTransform = writeTableTransform(conn,fileSet);
+		int cntInsertedCorpus = writeTableFileSet(conn,fileSet);
+		int cntInsertedFile = writeTableFile(conn,fileSet);
+		int cntInsertedFileSystem = writeTableFileSystem(conn,fileSet);
+		int cntInsertedFileStore = writeTableFileStore(conn,fileSet);
+		int cntInsertedFileBlob = writeTableFileBlob(conn,fileSet.getListFileBlob()); 
+		int cntInsertedBlob = writeTableBlob(conn,"","",fileSet.getListBlob()); 
+		int cntInsertedProperty = writeTableProperty(conn,fileSet); 
+		int cntInsertedHash = writeTableHash(conn,fileSet);
+		int cntInsertedArchive = writeTableArchive(conn,fileSet);
+		int cntInsertedContainer = writeTableContainer(conn,fileSet);
+		int cntInsertedTransform = writeTableTransform(conn,fileSet);
 	/*		
 		int ctInsertedFileGroup = writeTableFileGroup(conn,corpus);
 		int ctInsertedFileType = writeTableFileType(conn,corpus);
@@ -1038,8 +956,8 @@ public class WriteFsTablesToDb {
 		int ctInsertedTokenType = writeTableTokenType(conn, corpus);
 		int ctInsertedDistance = writeTableDistance(conn, corpus);
 	*/	
-		int cntInserted = ctInsertedCorpus + ctInsertedFile + ctInsertedFileSystem + ctInsertedFileStore + ctInsertedFileBlob + ctInsertedBlob + 
-				ctInsertedProperty + ctInsertedSimilarity + ctInsertedHash + ctInsertedArchive + ctInsertedContainer + ctInsertedTransform; //+ ctInsertedToken + 
+		int cntInserted = cntInsertedCorpus + cntInsertedFile + cntInsertedFileSystem + cntInsertedFileStore + cntInsertedFileBlob + cntInsertedBlob + 
+				cntInsertedProperty + cntInsertedHash + cntInsertedArchive + cntInsertedContainer + cntInsertedTransform; //+ ctInsertedToken + 
 		return(cntInserted);
 	}	
 	public static int writeBlob(Connection conn,  NodeFileSet fileSet)	{
@@ -1048,11 +966,6 @@ public class WriteFsTablesToDb {
 		int cntInserted = ctInsertedFileBlob + ctInsertedBlob ;
 		return(cntInserted);
 	}
-	public static int writeSimilarity(Connection conn,  NodeFileSet fileSet)	{
-		int ctInsertedSimilarity = writeTableSimilarity(conn,fileSet); 
-		int cntInserted = ctInsertedSimilarity;
-		return(cntInserted);
-	}	
 	public static void writeFileSetTables(Connection conn, NodeFileSet fileSet)	{
 		writeFileSet(conn,fileSet);
 	}

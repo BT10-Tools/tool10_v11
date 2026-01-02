@@ -1,10 +1,12 @@
 package tool10.preview.api;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
-import tool10.fileset.nodes.NodeBlob;
+import org.apache.commons.text.StringEscapeUtils;
+
+import tool10.blobset.NodeBlob;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
 import tool10.fileset.nodes.NodeFileSet;
@@ -12,24 +14,27 @@ import tool10.fileset.nodes.NodeFileStore;
 import tool10.fileset.nodes.NodeFileSystem;
 import tool10.fileset.nodes.NodeHash;
 import tool10.fileset.nodes.NodeHost;
-import tool10.fileset.nodes.NodeSimilarity;
 import tool10.fileset.transform.NodeArchive;
 import tool10.fileset.transform.NodeContainer;
 import tool10.fileset.transform.NodeTransform;
 
 public class ShowForm {
 
+	public static String escapeStr (String str)	{
+		String escaped = StringEscapeUtils.escapeHtml4(str);
+		return(escaped);
+	}
 	public static String showLong(String outType, String fieldName, Long val)	{
-		return(fieldName+"(Long):"+val.toString());
+		return(fieldName+"(Long):"+escapeStr((val==null) ? "null" : val.toString()) );
 	}
 	public static String showDouble(String outType, String fieldName, Double val)	{
-		return(fieldName+"(Double):"+val.toString());
+		return(fieldName+"(Double):"+escapeStr((val==null) ? "null" : val.toString()));
 	}
 	public static String showString(String outType, String fieldName, String val)	{
-		return(fieldName+"(String):'"+val.toString()+"'");
+		return(fieldName+"(String):'"+escapeStr(val)+"'");
 	}
 	public static String showZDT(String outType, String fieldName, ZonedDateTime val)	{
-		return(fieldName+"(ZonedDateTime):"+val.toString());
+		return(fieldName+"(ZonedDateTime):"+((val==null) ? "null" : escapeStr(val.toString())));
 	}
 	private static final int showBytesHeadLength = 10;
 	private static final int showBytesTailLength = 6;
@@ -94,7 +99,6 @@ public class ShowForm {
 		sb.append(showList(outType,"NodeHost","listHost",ent.getListHost())+nl);
 		sb.append(showList(outType,"NodeProperty","listProperty",ent.getListProperty())+nl);
 		sb.append(showList(outType,"NodeQuery","listQuery",ent.getListQuery())+nl);
-		sb.append(showList(outType,"NodeSimilarity","listSimilarity",ent.getListSimilarity())+nl);
 		sb.append(showList(outType,"NodeStat","listStat",ent.getListStat())+nl);
 		sb.append(showList(outType,"NodeArchive","listArchive",ent.getListArchive())+nl);
 		sb.append(showList(outType,"NodeContainer","listContainer",ent.getListContainer())+nl);
@@ -109,7 +113,6 @@ public class ShowForm {
 		sb.append(showMap(outType,"Long","NodeHost","mapId2Host",ent.getMapId2Host())+nl);
 		sb.append(showMap(outType,"Long","NodeProperty","mapId2Property",ent.getMapId2Property())+nl);
 		sb.append(showMap(outType,"Long","NodeQuery","mapId2Query",ent.getMapId2Query())+nl);
-		sb.append(showMap(outType,"Long","NodeSimilarity","mapId2Similarity",ent.getMapId2Similarity())+nl);
 		sb.append(showMap(outType,"Long","NodeStat","mapId2Stat",ent.getMapId2Stat())+nl);
 		sb.append(showMap(outType,"Long","NodeArchive","mapId2Archive",ent.getMapId2Archive())+nl);
 		sb.append(showMap(outType,"Long","NodeContainer","mapId2Container",ent.getMapId2Container())+nl);
@@ -120,7 +123,6 @@ public class ShowForm {
 		sb.append(showMap(outType,"FileSystem","NodeFileSystem","mapRawFileSystem2FileSystem",ent.getMapRawFileSystem2FileSystem())+nl);
 		sb.append(showMap(outType,"FileStore","NodeFileStore","mapRawFileStore2FileStore",ent.getMapRawFileStore2FileStore())+nl);
 		sb.append(showMap(outType,"Long","NodeHash","mapCrc2NodeHash",ent.getMapCrc2NodeHash())+nl);
-		sb.append(showMap(outType,"String","NodeSimilarity","mapKey2Similarity",ent.getMapKey2Similarity())+nl);
 		sb.append(showMap(outType,"Long","NodeFileBlob","mapFileId2FileBlob",ent.getMapFileId2FileBlob())+nl);
 		
 		return(sb.toString());
@@ -365,66 +367,7 @@ public class ShowForm {
 		
 		//sb.append(showLong(outType,"serialVersionUID",ent.getSerialVersionUID())+nl);
 		return(sb.toString());
-	}
-	public static String getShowString(String outType,NodeSimilarity ent)	{
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append(showLong(outType,"similarityId",ent.getSimilarityId())+nl);
-		sb.append(showLong(outType,"fileSetId",ent.getFileSetId())+nl);
-		sb.append(showLong(outType,"entityId1",ent.getEntityId1())+nl);
-		sb.append(showLong(outType,"entityId2",ent.getEntityId2())+nl);
-		
-		sb.append(showString(outType,"similarityType",ent.getSimilarityType())+nl);
-		sb.append(showString(outType,"similarityKey",ent.getSimilarityKey())+nl);
-		
-		sb.append(showDouble(outType,"sim00",ent.getSim00())+nl);
-		sb.append(showDouble(outType,"sim01",ent.getSim01())+nl);
-		sb.append(showDouble(outType,"sim02",ent.getSim02())+nl);
-		sb.append(showDouble(outType,"sim03",ent.getSim03())+nl);
-		sb.append(showDouble(outType,"sim04",ent.getSim04())+nl);
-		sb.append(showDouble(outType,"sim05",ent.getSim05())+nl);
-		sb.append(showDouble(outType,"sim06",ent.getSim06())+nl);
-		sb.append(showDouble(outType,"sim07",ent.getSim07())+nl);
-		sb.append(showDouble(outType,"sim08",ent.getSim08())+nl);
-		sb.append(showDouble(outType,"sim09",ent.getSim09())+nl);
-		sb.append(showDouble(outType,"sim10",ent.getSim10())+nl);
-		sb.append(showDouble(outType,"sim11",ent.getSim11())+nl);
-		sb.append(showDouble(outType,"sim12",ent.getSim12())+nl);
-		sb.append(showDouble(outType,"sim13",ent.getSim13())+nl);
-		sb.append(showDouble(outType,"sim14",ent.getSim14())+nl);
-		sb.append(showDouble(outType,"sim15",ent.getSim15())+nl);
-		sb.append(showDouble(outType,"sim16",ent.getSim16())+nl);
-		sb.append(showDouble(outType,"sim17",ent.getSim17())+nl);
-		sb.append(showDouble(outType,"sim18",ent.getSim18())+nl);
-		sb.append(showDouble(outType,"sim19",ent.getSim19())+nl);
-		
-		sb.append(showString(outType,"alg00",ent.getAlg00())+nl);
-		sb.append(showString(outType,"alg01",ent.getAlg01())+nl);
-		sb.append(showString(outType,"alg02",ent.getAlg02())+nl);
-		sb.append(showString(outType,"alg03",ent.getAlg03())+nl);
-		sb.append(showString(outType,"alg04",ent.getAlg04())+nl);
-		sb.append(showString(outType,"alg05",ent.getAlg05())+nl);
-		sb.append(showString(outType,"alg06",ent.getAlg06())+nl);
-		sb.append(showString(outType,"alg07",ent.getAlg07())+nl);
-		sb.append(showString(outType,"alg08",ent.getAlg08())+nl);
-		sb.append(showString(outType,"alg09",ent.getAlg09())+nl);
-		sb.append(showString(outType,"alg10",ent.getAlg10())+nl);
-		sb.append(showString(outType,"alg11",ent.getAlg11())+nl);
-		sb.append(showString(outType,"alg12",ent.getAlg12())+nl);
-		sb.append(showString(outType,"alg13",ent.getAlg13())+nl);
-		sb.append(showString(outType,"alg14",ent.getAlg14())+nl);
-		sb.append(showString(outType,"alg15",ent.getAlg15())+nl);
-		sb.append(showString(outType,"alg16",ent.getAlg16())+nl);
-		sb.append(showString(outType,"alg17",ent.getAlg17())+nl);
-		sb.append(showString(outType,"alg18",ent.getAlg18())+nl);
-		sb.append(showString(outType,"alg19",ent.getAlg19())+nl);
-		
-		sb.append(showZDT(outType,"creationDate",ent.getCreationDate())+nl);
-		sb.append(showZDT(outType,"modificationDate",ent.getModificationDate())+nl);
-		
-		//sb.append(showLong(outType,"serialVersionUID",ent.getSerialVersionUID())+nl);
-		return(sb.toString());
-	}
+	}	
 	public static String getShowString(String outType,NodeArchive ent)	{
 		StringBuilder sb = new StringBuilder();
 		
@@ -507,7 +450,7 @@ public class ShowForm {
 		//sb.append(showLong(outType,"serialVersionUID",ent.getSerialVersionUID())+nl);
 		return(sb.toString());
 	}	
-	public static String getAllClassesFileSet(String outType,NodeFileSet fileSet)	{
+	public static String getAllClassesFileSet(NodeFileSet fileSet,String outType)	{
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(showClass("tool10.fileset.nodes.NodeFileSet","NodeFileSet"));
@@ -518,7 +461,6 @@ public class ShowForm {
 		sb.append(showClass("tool10.fileset.nodes.NodeFileSystem","NodeFileSet"));
 		sb.append(showClass("tool10.fileset.nodes.NodeHash","NodeFileSet"));
 		sb.append(showClass("tool10.fileset.nodes.NodeHost","NodeFileSet"));
-		sb.append(showClass("tool10.fileset.nodes.NodeSimilarity","NodeFileSet"));
 		
 		sb.append(showClass("tool10.fileset.transform.NodeArchive","NodeArchive"));
 		sb.append(showClass("tool10.fileset.transform.NodeContainer","NodeContainer"));
@@ -526,7 +468,7 @@ public class ShowForm {
 		
 		return(sb.toString());
 	}
-	public static String getAllPackagesFileSet(NodeFileSet fileSet)	{
+	public static String getAllPackagesFileSet(NodeFileSet fileSet,String outType)	{
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(showPackage("tool10.fileset.nodes","nodes"));
@@ -534,23 +476,22 @@ public class ShowForm {
 		
 		return(sb.toString());
 	}
-	public static String getAllShowString4FileSet(String outType,NodeFileSet fileSet)	{
+	public static String getAllShowString4FileSet(NodeFileSet fileSet,String outType,HashSet<String> nodeSet)	{
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(getShowString(outType,fileSet));
-		for (NodeFile file : fileSet.getListFile())						{	sb.append(getShowString(outType,file)); }
-		for (NodeFileBlob fileBlob : fileSet.getListFileBlob())			{	sb.append(getShowString(outType,fileBlob)); }
+		if (nodeSet.contains("fileSet")) 	{sb.append(getShowString(outType,fileSet));}
+		if (nodeSet.contains("file")) 		{for (NodeFile file : fileSet.getListFile())	{	sb.append(getShowString(outType,file)); }}
+	/*	for (NodeFileBlob fileBlob : fileSet.getListFileBlob())			{	sb.append(getShowString(outType,fileBlob)); }
 		for (NodeBlob blob : fileSet.getListBlob())						{	sb.append(getShowString(outType,blob)); }
 		for (NodeFileStore fileStore : fileSet.getListFileStore())		{	sb.append(getShowString(outType,fileStore)); }
 		for (NodeFileSystem fileSystem : fileSet.getListFileSystem())	{	sb.append(getShowString(outType,fileSystem)); }
 		for (NodeHash hash : fileSet.getListHash())						{	sb.append(getShowString(outType,hash)); }
 		for (NodeHost host : fileSet.getListHost())						{	sb.append(getShowString(outType,host)); }
-		for (NodeSimilarity similarity : fileSet.getListSimilarity())	{	sb.append(getShowString(outType,similarity)); }
 		
 		for (NodeArchive archive : fileSet.getListArchive())			{	sb.append(getShowString(outType,archive)); }
 		for (NodeContainer container : fileSet.getListContainer())		{	sb.append(getShowString(outType,container)); }
 		for (NodeTransform transform : fileSet.getListTransform())		{	sb.append(getShowString(outType,transform)); }
-				
+	*/			
 		//NodeFileGroup,NodeFileGrouping,NodeFileGroupMember,NodeLog, NodeProperty, NodeQuery, NodeStat will come in future 
 		return(sb.toString());
 	}

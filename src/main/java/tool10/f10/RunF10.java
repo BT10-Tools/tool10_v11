@@ -1,20 +1,20 @@
 package tool10.f10;
 
+import tool10.blobset.MakeFileSetBlob;
 import tool10.bookset.RunBook;
 import tool10.fileset.ExportFileSet;
 import tool10.fileset.ExtractorFile;
 import tool10.fileset.MainFileSet;
 import tool10.fileset.MakeFileSet;
-import tool10.fileset.MakeFileSetSimilarity;
 import tool10.fileset.PropConfig;
 import tool10.fileset.ReadFsTablesFromDb;
 import tool10.fileset.WriteFsTablesToDb;
-import tool10.fileset.blob.MakeFileSetBlob;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.fileset.transform.TransformFileSet;
 import tool10.fileset.transform.UnembedFileSet;
 import tool10.fileset.transform.UnzipFileSet;
-import tool10.imageset.RunImage;
+import tool10.mediaset.RunImage;
+import tool10.simset.RunSim;
 import tool10.sql.Conn10;
 import tool10.tagset.RunTag;
 
@@ -64,23 +64,9 @@ public class RunF10 {
 		if (f10.getConn10()!=f10.getConnBlob()) { f10.getConnBlob().closeConnection(); }
 	}
 	public static void runSimilarity(NodeF10 f10) {
-		
-		f10.println("MainFileSet runSimilarity");
-		
-		NodeFileSet fileSet = getReadFileSet(f10);
-        if (fileSet==null) return;
-        f10.setFileSet(fileSet);
-        fileSet.getListSimilarity().clear();
-        fileSet.getMapId2Similarity().clear();
-        fileSet.getMapKey2Similarity().clear();
-        
-        MakeFileSetSimilarity.makeSimilarity(f10);
-	    WriteFsTablesToDb.writeSimilarity(f10.getConn10().getConn(), fileSet);
-    
-		f10.getConn10().closeConnection();
-		
+		RunSim.runSimSet(f10);  	
     }
-	private static NodeFileSet getReadFileSet(NodeF10 f10) {
+	public static NodeFileSet getReadFileSet(NodeF10 f10) {
 		if (f10==null) return(null);
 	    //System.out.println("Selamun Aleyküm");
 	    
@@ -90,6 +76,11 @@ public class RunF10 {
 	    if (fileSetId==null) return(null);
 	    NodeFileSet fileSet = MainFileSet.readFileSet (conn10, fileSetId);
 	    return(fileSet);
+	}
+	public static void runRead(NodeF10 f10) {
+        NodeFileSet fileSet = getReadFileSet(f10);
+        if (fileSet==null) return;
+        f10.setFileSet(fileSet);      
 	}
 	public static void runExtract(NodeF10 f10) {
         NodeFileSet fileSet = getReadFileSet(f10);
@@ -186,6 +177,7 @@ public class RunF10 {
 		
 		if ("load".equals(action))	{runLoad(f10);}
 		else if ("loadblob".equals(action))	{runLoadBlob(f10);}
+		else if ("read".equals(action))	{runRead(f10);}
 		else if ("extract".equals(action))	{runExtract(f10);}
 		else if ("export".equals(action))	{runExport(f10);}
 		else if ("unzip".equals(action))	{runUnzip(f10);}

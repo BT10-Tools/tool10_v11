@@ -98,6 +98,9 @@ public class CliParameter implements Serializable {
 	private String log;
 	private String error;
 	
+	private String read;
+	private String readType;
+	
 	private String extract;
 	private String extractType;
 	private String extractDir;
@@ -124,11 +127,11 @@ public class CliParameter implements Serializable {
 	private String tagDbName;
 	private String tagDbAction; //newdb, newroot, 
 	
-	private String image;
-	private String imageSetName;
-	private String imageDbType; //not required, default, sqlite. ser serialization will come. in future pg, oracle, mysql,...
-	private String imageDbName;
-	private String imageDbAction; //newdb, newroot, 
+	private String media;
+	private String mediaSetName;
+	private String mediaDbType; //not required, default, sqlite. ser serialization will come. in future pg, oracle, mysql,...
+	private String mediaDbName;
+	private String mediaDbAction; //newdb, newroot, 
 	
 	private String book;
 	private String bookSetName;
@@ -140,7 +143,12 @@ public class CliParameter implements Serializable {
 	private String similarityType;
 	private String similarityAlg;
 	private String similarityLevel;
-	
+	private String setName;
+	private String simSetName;
+	private String simDbType; //not required, default, sqlite. ser serialization will come. in future pg, oracle, mysql,...
+	private String simDbName;
+	private String simDbAction; //newdb, newroot,
+		
 	private ZonedDateTime creationDate;
 	private ZonedDateTime modificationDate;
 	
@@ -713,36 +721,6 @@ public class CliParameter implements Serializable {
 	public void setTagSetName(String tagSetName) {
 		this.tagSetName = tagSetName;
 	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
-	}
-	public String getImageSetName() {
-		return imageSetName;
-	}
-	public void setImageSetName(String imageSetName) {
-		this.imageSetName = imageSetName;
-	}
-	public String getImageDbType() {
-		return imageDbType;
-	}
-	public void setImageDbType(String imageDbType) {
-		this.imageDbType = imageDbType;
-	}
-	public String getImageDbName() {
-		return imageDbName;
-	}
-	public void setImageDbName(String imageDbName) {
-		this.imageDbName = imageDbName;
-	}
-	public String getImageDbAction() {
-		return imageDbAction;
-	}
-	public void setImageDbAction(String imageDbAction) {
-		this.imageDbAction = imageDbAction;
-	}
 	public String getBook() {
 		return book;
 	}
@@ -772,6 +750,78 @@ public class CliParameter implements Serializable {
 	}
 	public void setBookDbAction(String bookDbAction) {
 		this.bookDbAction = bookDbAction;
+	}
+	public String getRead() {
+		return read;
+	}
+	public void setRead(String read) {
+		this.read = read;
+	}
+	public String getReadType() {
+		return readType;
+	}
+	public void setReadType(String readType) {
+		this.readType = readType;
+	}
+	public String getMedia() {
+		return media;
+	}
+	public void setMedia(String media) {
+		this.media = media;
+	}
+	public String getMediaSetName() {
+		return mediaSetName;
+	}
+	public void setMediaSetName(String mediaSetName) {
+		this.mediaSetName = mediaSetName;
+	}
+	public String getMediaDbType() {
+		return mediaDbType;
+	}
+	public void setMediaDbType(String mediaDbType) {
+		this.mediaDbType = mediaDbType;
+	}
+	public String getMediaDbName() {
+		return mediaDbName;
+	}
+	public void setMediaDbName(String mediaDbName) {
+		this.mediaDbName = mediaDbName;
+	}
+	public String getMediaDbAction() {
+		return mediaDbAction;
+	}
+	public void setMediaDbAction(String mediaDbAction) {
+		this.mediaDbAction = mediaDbAction;
+	}
+	public String getSetName() {
+		return setName;
+	}
+	public void setSetName(String setName) {
+		this.setName = setName;
+	}
+	public String getSimSetName() {
+		return simSetName;
+	}
+	public void setSimSetName(String simSetName) {
+		this.simSetName = simSetName;
+	}
+	public String getSimDbType() {
+		return simDbType;
+	}
+	public void setSimDbType(String simDbType) {
+		this.simDbType = simDbType;
+	}
+	public String getSimDbName() {
+		return simDbName;
+	}
+	public void setSimDbName(String simDbName) {
+		this.simDbName = simDbName;
+	}
+	public String getSimDbAction() {
+		return simDbAction;
+	}
+	public void setSimDbAction(String simDbAction) {
+		this.simDbAction = simDbAction;
 	}
 	
 }

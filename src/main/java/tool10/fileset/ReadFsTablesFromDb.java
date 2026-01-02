@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 
+import tool10.blobset.NodeBlob;
 import tool10.fileset.nodes.NodeBinary;
-import tool10.fileset.nodes.NodeBlob;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
 import tool10.fileset.nodes.NodeFileBlobOld;
@@ -19,7 +19,6 @@ import tool10.fileset.nodes.NodeHash;
 import tool10.fileset.nodes.NodeHost;
 import tool10.fileset.nodes.NodeProperty;
 import tool10.fileset.nodes.NodeQuery;
-import tool10.fileset.nodes.NodeSimilarity;
 import tool10.fileset.transform.NodeArchive;
 import tool10.fileset.transform.NodeContainer;
 import tool10.fileset.transform.NodeTransform;
@@ -531,91 +530,6 @@ public class ReadFsTablesFromDb {
 		} 
 		return(cntRead); 
 	} 
-	public static int readTableSimilarity(Connection conn, NodeFileSet fileSet)	{ 
-		int cntRead = 0; 
-		String query = 	" SELECT "+
-				"similarityId,fileSetId,entityId1,entityId2,similarityType,similarityKey,sim00,sim01,sim02,sim03,sim04,sim05,sim06,sim07,sim08,sim09,"+
-				" sim10,sim11,sim12,sim13,sim14,sim15,sim16,sim17,sim18,sim19,alg00,alg01,alg02,alg03,alg04,alg05,alg06,alg07,alg08,alg09,alg10,"+
-				" alg11,alg12,alg13,alg14,alg15,alg16,alg17,alg18,alg19,creationDate,modificationDate"+
-			 " FROM FS_SIMILARITY WHERE fileSetId = ? ORDER BY similarityId"; 
-		//public NodeSimilarity(Long similarityId,Long fileSetId,Long entityId1,Long entityId2,String similarityType,Double sim00,Double sim01,
-		//Double sim02,Double sim03,Double sim04,Double sim05,Double sim06,Double sim07,Double sim08,Double sim09,Double sim10,
-		//Double sim11,Double sim12,Double sim13,Double sim14,Double sim15,Double sim16,Double sim17,Double sim18,Double sim19,
-		//String alg00,String alg01,String alg02,String alg03,String alg04,String alg05,String alg06,String alg07,String alg08,
-		//String alg09,String alg10,String alg11,String alg12,String alg13,String alg14,String alg15,String alg16,String alg17,
-		//String alg18,String alg19,ZonedDateTime creationDate,ZonedDateTime modificationDate)
-
-		try	{
-			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setLong(1, fileSet.getFileSetId());
-			ResultSet rs = ps.executeQuery(); 
-			while (rs.next()) { 
-				Long similarityId = rs.getLong("similarityId");	if (rs.wasNull()) {similarityId = null;}
-				Long fileSetId = rs.getLong("fileSetId");	if (rs.wasNull()) {fileSetId = null;}
-				Long entityId1 = rs.getLong("entityId1");	if (rs.wasNull()) {entityId1 = null;}
-				Long entityId2 = rs.getLong("entityId2");	if (rs.wasNull()) {entityId2 = null;}
-				String similarityType = rs.getString("similarityType");
-				String similarityKey = rs.getString("similarityKey");
-				Double sim00 = rs.getDouble("sim00");	if (rs.wasNull()) {sim00 = null;}
-				Double sim01 = rs.getDouble("sim01");	if (rs.wasNull()) {sim01 = null;}
-				Double sim02 = rs.getDouble("sim02");	if (rs.wasNull()) {sim02 = null;}
-				Double sim03 = rs.getDouble("sim03");	if (rs.wasNull()) {sim03 = null;}
-				Double sim04 = rs.getDouble("sim04");	if (rs.wasNull()) {sim04 = null;}
-				Double sim05 = rs.getDouble("sim05");	if (rs.wasNull()) {sim05 = null;}
-				Double sim06 = rs.getDouble("sim06");	if (rs.wasNull()) {sim06 = null;}
-				Double sim07 = rs.getDouble("sim07");	if (rs.wasNull()) {sim07 = null;}
-				Double sim08 = rs.getDouble("sim08");	if (rs.wasNull()) {sim08 = null;}
-				Double sim09 = rs.getDouble("sim09");	if (rs.wasNull()) {sim09 = null;}
-				Double sim10 = rs.getDouble("sim10");	if (rs.wasNull()) {sim10 = null;}
-				Double sim11 = rs.getDouble("sim11");	if (rs.wasNull()) {sim11 = null;}
-				Double sim12 = rs.getDouble("sim12");	if (rs.wasNull()) {sim12 = null;}
-				Double sim13 = rs.getDouble("sim13");	if (rs.wasNull()) {sim13 = null;}
-				Double sim14 = rs.getDouble("sim14");	if (rs.wasNull()) {sim14 = null;}
-				Double sim15 = rs.getDouble("sim15");	if (rs.wasNull()) {sim15 = null;}
-				Double sim16 = rs.getDouble("sim16");	if (rs.wasNull()) {sim16 = null;}
-				Double sim17 = rs.getDouble("sim17");	if (rs.wasNull()) {sim17 = null;}
-				Double sim18 = rs.getDouble("sim18");	if (rs.wasNull()) {sim18 = null;}
-				Double sim19 = rs.getDouble("sim19");	if (rs.wasNull()) {sim19 = null;}
-				String alg00 = rs.getString("alg00");
-				String alg01 = rs.getString("alg01");
-				String alg02 = rs.getString("alg02");
-				String alg03 = rs.getString("alg03");
-				String alg04 = rs.getString("alg04");
-				String alg05 = rs.getString("alg05");
-				String alg06 = rs.getString("alg06");
-				String alg07 = rs.getString("alg07");
-				String alg08 = rs.getString("alg08");
-				String alg09 = rs.getString("alg09");
-				String alg10 = rs.getString("alg10");
-				String alg11 = rs.getString("alg11");
-				String alg12 = rs.getString("alg12");
-				String alg13 = rs.getString("alg13");
-				String alg14 = rs.getString("alg14");
-				String alg15 = rs.getString("alg15");
-				String alg16 = rs.getString("alg16");
-				String alg17 = rs.getString("alg17");
-				String alg18 = rs.getString("alg18");
-				String alg19 = rs.getString("alg19");
-				String creationDateStr = rs.getString("creationDate");
-				ZonedDateTime creationDate = ((creationDateStr!=null) ? ZonedDateTime.parse(creationDateStr) : null); 
-				String modificationDateStr = rs.getString("modificationDate");
-				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
-				NodeSimilarity newSimilarity = new NodeSimilarity(
-						similarityId,fileSetId,entityId1,entityId2,similarityType,similarityKey,sim00,sim01,sim02,sim03,sim04,sim05,sim06,sim07,sim08,sim09,
-						sim10,sim11,sim12,sim13,sim14,sim15,sim16,sim17,sim18,sim19,alg00,alg01,alg02,alg03,alg04,alg05,alg06,alg07,alg08,alg09,alg10,
-						alg11,alg12,alg13,alg14,alg15,alg16,alg17,alg18,alg19,creationDate,modificationDate);
-				fileSet.getListSimilarity().add(newSimilarity); 
-				fileSet.getMapId2Similarity().put(newSimilarity.getSimilarityId(),newSimilarity); 
-				cntRead++; 
-			}
-			System.out.println("readTableSimilarity: cntRead = " + cntRead); 
-			rs.close(); 
-			ps.close(); 
-		} catch(SQLException e)	{ 
-			e.printStackTrace(System.err); 
-		} 
-		return(cntRead); 
-	} 
 	public static int readTableArchive(Connection conn, NodeFileSet fileSet)	{ 
 		int cntRead = 0; 
 		String query = 	" SELECT "+
@@ -832,7 +746,6 @@ public class ReadFsTablesFromDb {
 	public static NodeFileSet readFileSet(Connection conn, long fileSetId) {
 		NodeFileSet fileSet = readTableFileSet(conn, fileSetId);
 		if (fileSet==null) return (null);
-		int cntReadSimilarity = readTableSimilarity(conn,fileSet);
 		int cntReadQuery = readTableQuery(conn,fileSet);
 		int cntReadProperty = readTableProperty(conn,fileSet);
 		int cntReadHost = readTableHost(conn,fileSet);
@@ -848,7 +761,7 @@ public class ReadFsTablesFromDb {
 				
 		postProcessFileSet(fileSet);
 		
-		int cntRead = cntReadSimilarity + cntReadQuery + cntReadProperty + cntReadHost + cntReadHash + 
+		int cntRead = cntReadQuery + cntReadProperty + cntReadHost + cntReadHash + 
 				cntReadFileSystem + cntReadFileStore + cntReadFileBlob + cntReadBlob + cntReadFile + 
 				cntReadArchive + cntReadContainer + cntReadTransform + 1;
 	    System.out.println("readFileSet: total record read = " + cntRead);
