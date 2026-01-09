@@ -14,13 +14,13 @@ public class MakeImageSet {
 		Long mediaId = null; 
 		String mediaFileType = nodeFile.getFileType();  
         String sourceAbsolutePath = nodeFile.getFileNameAbsolute();
-        String sourceDirName = nodeFile.getDirNameAbsolute(); 
+        String sourceDirName = nodeFile.getRefFileName().getDirNameAbsolute(); 
         String sourceFileName = nodeFile.getFileName();
 		//String sourceFileName = shortFilename;
         String sourceExtensionName = nodeFile.getExtensionName(); 
         Long sourceFileSize =null; 
 		
-		ZonedDateTime sourceFileCreationDate = nodeFile.getFileCreationDate();
+		ZonedDateTime sourceFileCreationDate = nodeFile.getRefFileProp().getFileCreationDate();
 		ZonedDateTime creationDate = ZonedDateTime.now();	
 		ZonedDateTime modificationDate = null;
 	    //public NodeMediaFile(Long mediaFileId, Long mediaId, Long fileId, Long mediaSetId, String mediaFileType, String sourceAbsolutePath, String sourceDirName, 
@@ -42,7 +42,7 @@ public class MakeImageSet {
 		int cnt = 0; 
 		for (NodeFile nodeFile : f10.getFileSet().getListFile())	{
 			if ("yes".equals(nodeFile.getIsDirectory())) continue;
-			if ("yes".equals(nodeFile.getIsSymbolicLink())) continue;
+			if ("yes".equals(nodeFile.getRefFileProp().getIsSymbolicLink())) continue;
 			//other filters can come here like wildcards
 			
 			if (!"pdf".equals(nodeFile.getExtensionName())) continue; 

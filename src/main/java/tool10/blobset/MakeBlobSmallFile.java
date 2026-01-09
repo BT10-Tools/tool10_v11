@@ -14,10 +14,56 @@ import tool10.fileset.nodes.NodeHash;
 
 public class MakeBlobSmallFile {
 
+	private static byte[] processOneBlobEntityInBin(NodeF10 f10, ArrayList<NodeFileBlob> listBlobSmallForBin, 
+			SortedMap<Integer,ArrayList<NodeBlobEntity>> mapBin2NodeBlobEntityList, SortedMap<Integer,Long> mapBin2TotalSize, 
+			String blobType, int binNumber, int blockSize,
+			)	{
+		
+		//byte[] copiedBytes = processOneBin(f10, listBlobSmallForBin,mapBin2NodeBlobEntityList, mapBin2TotalSize, blobType, binNumber, blockSize);
+	/*	ArrayList<NodeFile> listFile = mapBin2NodeFileList.get(binNumber);
+		if (listFile.size()==0) return(null);
+		
+		int byteIndexStart = 0; 
+		int byteIndexEnd = 0;
+	
+		byte[] binBytes = new byte[(int) (3*mapBin2TotalSize.get(binNumber) / 2)];
+		ByteBuffer binBuffer = ByteBuffer.wrap(binBytes);
+		listBlobSmallForBin.clear();  //new list for every bin
+		//for each of the nodeFile in the bin
+		for (NodeFile nodeFile : listFile)	{
+	*/		byte[] fileBytesArray = File2BlobReader.readSmallFileBytes(nodeFile.getFileNameAbsolute());
+	
+			if ((fileBytesArray==null) || (fileBytesArray.length==0) || (fileBytesArray.length>blockSize)) continue; //it is a big file ???
+			
+			System.out.println("MakeBlobSmallFile nodeFile.getFileNameAbsolute()=\""+nodeFile.getFileNameAbsolute()+"\" ,fileBytesArray.length="+fileBytesArray.length);
+					
+			if (byteIndexEnd==0)	{
+				byteIndexStart = 0;  
+				byteIndexEnd  = fileBytesArray.length - 1;
+			} else {
+				byteIndexStart = byteIndexEnd + 1;  
+				byteIndexEnd  += fileBytesArray.length;
+			}
+			binBuffer.put(fileBytesArray);
+			
+			NodeHash hash = MakeFileSetHash.createOneHashForSmallFile(f10, nodeFile.getFileSize(), fileBytesArray);
+			Long hashId = hash.getHashId();
+			nodeFile.setHashId(hashId);
+			
+			//public static NodeFileBlob createOneFileBlob(NodeF10 f10, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId)
+			NodeFileBlob fileBlob = MakeBlobSetTables.createOneFileBlob(f10,nodeFile.getFileId(),nodeFile.getFileSize(),null,blobType,hashId);
+			fileBlob.setSmallByteIndexStart((long) byteIndexStart);
+			fileBlob.setSmallByteIndexEnd((long) byteIndexEnd);
+			
+			///NodeFileBlobSmall fileBlobSmall = createOneFileBlobSmall(f10, nodeFile, fileBlobId, (long) byteIndexStart, (long) byteIndexEnd, hashId);
+			listBlobSmallForBin.add(fileBlob);
+	//	}
+	}	
 	private static byte[] processOneBin(NodeF10 f10, ArrayList<NodeFileBlob> listBlobSmallForBin, 
-			SortedMap<Integer,ArrayList<NodeFile>> mapBin2NodeFileList, SortedMap<Integer,Long> mapBin2TotalSize, 
+			SortedMap<Integer,ArrayList<NodeBlobEntity>> mapBin2NodeBlobEntityList, SortedMap<Integer,Long> mapBin2TotalSize, 
 			String blobType, int binNumber, int blockSize)	{
 		
+		//byte[] copiedBytes = processOneBin(f10, listBlobSmallForBin,mapBin2NodeBlobEntityList, mapBin2TotalSize, blobType, binNumber, blockSize);
 		ArrayList<NodeFile> listFile = mapBin2NodeFileList.get(binNumber);
 		if (listFile.size()==0) return(null);
 		

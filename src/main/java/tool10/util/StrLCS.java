@@ -1,6 +1,6 @@
 package tool10.util;
 
-import tool10.preview.LongByteSequences;
+import tool10.underdev.LongByteSequences;
 
 public class StrLCS {
 

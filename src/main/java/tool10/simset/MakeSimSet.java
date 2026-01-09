@@ -62,7 +62,7 @@ public class MakeSimSet {
 		int cnt = 0; 
 		for (NodeFile nodeFile : f10.getFileSet().getListFile())	{
 			if ("yes".equals(nodeFile.getIsDirectory())) continue;
-			if ("yes".equals(nodeFile.getIsSymbolicLink())) continue;
+			if ("yes".equals(nodeFile.getRefFileProp().getIsSymbolicLink())) continue;
 			//other filters can come here like wildcards
 			
 			if (!"pdf".equals(nodeFile.getExtensionName())) continue; 
