@@ -1,12 +1,6 @@
 package tool10.blobset;
 
-import java.sql.Connection;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-
 import tool10.f10.NodeF10;
-import tool10.fileset.WriteFsTablesToDb;
-import tool10.fileset.nodes.NodeFileBlob;
 
 public class MakeFileBlobAndBlob {
 	
@@ -63,43 +57,9 @@ public class MakeFileBlobAndBlob {
 		}
 		return(encryptedBytes);
 	}
-	public static NodeFileBlob createOneFileBlob(NodeF10 f10, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId)	{
-		//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobId, Long fileSetId, String blobType, Long blobSize,
-		//Long fileSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
-		//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
-		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		
-		//public NodeFileBlob(Long fileBlobId, Long fileId, Long fileSetId, String blobType,
-		//		Long blobSize, Long fileSize, byte[] fileBytes, Long hashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-			
-		try {
-			Long fileBlobId = f10.getConn10().getNextId(-1); //"BSC_BASIC");;
-			ZonedDateTime creationDate = ZonedDateTime.now();
-			ZonedDateTime modificationDate = null; 
-			
-			NodeFileBlob fileBlob = new NodeFileBlob(fileBlobId, fileId, f10.getFileSet().getFileSetId(), blobType,
-							blobSize,fileSize,null,hashId,creationDate,modificationDate);
-			f10.getFileSet().getListFileBlob().add(fileBlob);
-			f10.getFileSet().getMapId2FileBlob().put(fileBlob.getFileBlobId(),fileBlob);
-			
-			return(fileBlob);
-		} catch (Exception e)	{
-			
-		}
-		return(null);
-	}
 	
-	public static NodeBlob createOneBlob(NodeF10 f10, Long fileId, Long fileSize, String blobType, Long cntPart,Long partNumber, byte[] blobBytes, Long hashId)	{
-		//public NodeBlob(Long blobId, Long sourceId, Long fileSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
-		//Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
-		//Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
-		//Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
-		//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		
-		//public NodeBlob(Long blobId, Long sourceId, Long fileSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
-		//Long blobSize, Long fileSize, byte[] blobBytes, Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try {
-			Long blobId = f10.getConnBlob().getNextId(-1); //"BSC_BASIC");
+	public static void updateOneBlobBytes(NodeF10 f10, NodeBlob blob, byte[] blobBytes)	{
+		/*		Long blobId = f10.getConnBlob().getNextId(-1); //"BSC_BASIC");
 			Long sourceId = fileId;
 			Long blobSize = (long) blobBytes.length;
 			Long firstPartBlobId = null;
@@ -110,54 +70,27 @@ public class MakeFileBlobAndBlob {
 							blobSize,fileSize,null,hashId,creationDate,modificationDate);
 			f10.getFileSet().getListBlob().add(blob);
 			f10.getFileSet().getMapId2Blob().put(blob.getBlobId(),blob);
-			
-			if ("yes".equals(f10.getCliParams().getBlobOriginal())) {
-				blob.setBlobBytes(blobBytes);
-				if ((blobBytes!=null) && (blobBytes.length>0)) { f10.getConnBlob().add2BlobSizeToWrite(blobBytes.length); }
-			}
-			byte[] compressedBytes = null;
-			byte[] encryptedBytes = null;
-			if ("yes".equals(f10.getCliParams().getCompression())) {
-				compressedBytes = setBlobCompressionFields(f10, blob, blobBytes, blobSize);
-				if ((compressedBytes!=null) && (compressedBytes.length>0)) { f10.getConnBlob().add2BlobSizeToWrite(compressedBytes.length); }
-			}
-			if ("yes".equals(f10.getCliParams().getEncryption())) {
-				if (compressedBytes!=null) { 
-					encryptedBytes = setBlobEncryptionFields(f10, blob, compressedBytes);
-				} else {
-					encryptedBytes = setBlobEncryptionFields(f10, blob, blobBytes);
-				}
-				if ((encryptedBytes!=null) && (encryptedBytes.length>0)) { f10.getConnBlob().add2BlobSizeToWrite(encryptedBytes.length); }
-			}
-			
-			return(blob);
-		} catch (Exception e)	{
+	 	*/		
+		Long blobSize = (long) blobBytes.length;
 		
+		if ("yes".equals(f10.getCliParams().getBlobOriginal())) {
+			blob.setBlobBytes(blobBytes);
+			if ((blob.getBlobBytes()!=null) && (blobBytes.length>0)) { f10.getConnBlob().add2BlobSizeToWrite(blobBytes.length); }
 		}
-		return(null);
+		byte[] compressedBytes = null;
+		byte[] encryptedBytes = null;
+		if ("yes".equals(f10.getCliParams().getCompression())) {
+			compressedBytes = setBlobCompressionFields(f10, blob, blobBytes, blobSize);
+			if ((compressedBytes!=null) && (compressedBytes.length>0)) { f10.getConnBlob().add2BlobSizeToWrite(compressedBytes.length); }
+		}
+		if ("yes".equals(f10.getCliParams().getEncryption())) {
+			if (compressedBytes!=null) { 
+				encryptedBytes = setBlobEncryptionFields(f10, blob, compressedBytes);
+			} else {
+				encryptedBytes = setBlobEncryptionFields(f10, blob, blobBytes);
+			}
+			if ((encryptedBytes!=null) && (encryptedBytes.length>0)) { f10.getConnBlob().add2BlobSizeToWrite(encryptedBytes.length); }
+		}
 	}
-	public static int writeFileBlobList2Db(Connection conn, ArrayList<NodeFileBlob> tmpListFileBlob)	{ 
-		if ((tmpListFileBlob==null) || (tmpListFileBlob.isEmpty()))	return(0); 	
-		int cntWritten = WriteFsTablesToDb.writeTableFileBlob(conn,tmpListFileBlob);
-		return(cntWritten);
-	}	
-	public static int writeFileBlob2Db(Connection conn, NodeFileBlob fileBlob)	{ 
-		if (fileBlob==null)	return(0); 	
-		ArrayList<NodeFileBlob> tmpListFileBlob = new ArrayList<>();
-		tmpListFileBlob.add(fileBlob);
-		int cntWritten = WriteFsTablesToDb.writeTableFileBlob(conn,tmpListFileBlob);
-		return(cntWritten);
-	}	
-	public static int writeBlob2Db(Connection conn, NodeBlob nodeBlob)	{ 
-		if (nodeBlob==null)	return(0); 	
-		ArrayList<NodeBlob> tmpListBlob = new ArrayList<>();
-		tmpListBlob.add(nodeBlob);
-		String blobTableName = ""; 
-		String blobDbAttachmentName = "";
-		int cntWritten = WriteFsTablesToDb.writeTableBlob(conn,blobTableName,blobDbAttachmentName,tmpListBlob);
-		nodeBlob.setCompressedBytes(null);
-		nodeBlob.setBlobBytes(null);
-		nodeBlob.setEncryptedBytes(null);
-		return(cntWritten);
-	}	
+	
 }

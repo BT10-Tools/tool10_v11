@@ -2,6 +2,7 @@ package tool10.preview.bgram;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -26,7 +27,7 @@ public class BGram {
 	}
 
 	private void initializeListsAndMaps()	{ 
-		this.b1 = new long[2];
+		this.b1 = new long[2];  
 		this.b4 = new long[16];
 		this.b8 = new long[256];
 		this.w16 = new long[256*256];
@@ -50,6 +51,31 @@ public class BGram {
 		for (int i=0; i < w16Norm.length; i++) w16Norm[i] = 0.0d;
 			
 		this.listBGram = new ArrayList<BGram>();
+		
+		this.mapW32Crc2NodeBinaryList = new HashMap<Long,ArrayList<NodeBinary>>(); 
+		this.mapW64Crc2NodeBinaryList = new HashMap<Long,ArrayList<NodeBinary>>() ;
+	}
+	public void clearListsAndMaps()	{ 
+		for (int i=0; i < b1.length; i++) b1[i] = 0l;
+		for (int i=0; i < b4.length; i++) b4[i] = 0l;
+		for (int i=0; i < b8.length; i++) b8[i] = 0l;
+		for (int i=0; i < w16.length; i++) w16[i] = 0l;
+		for (int i=0; i < b1Norm.length; i++) b1Norm[i] = 0.0d;
+		for (int i=0; i < b4Norm.length; i++) b4Norm[i] = 0.0d;
+		for (int i=0; i < b8Norm.length; i++) b8Norm[i] = 0.0d;
+		for (int i=0; i < w16Norm.length; i++) w16Norm[i] = 0.0d;
+		
+		this.w32.clear();
+		this.w64.clear();
+		this.b512.clear();
+		this.w32Norm.clear();
+		this.w64Norm.clear();
+		this.b512Norm.clear();
+		
+		this.listBGram.clear(); 
+		
+		this.mapW32Crc2NodeBinaryList.clear();  
+		this.mapW64Crc2NodeBinaryList.clear(); 
 	}
 	private long BGramId;
 	private Long fileId;
@@ -62,9 +88,9 @@ public class BGram {
 	private long cntBytes; 
 	private long cntBGram; 
 	
-	private static final int cntTop32 = 256;
-	private static final int cntTop64 = 256;
-	private static final int cntTop512 = 256;
+	private static final int cntTopW32 = 1024*1024;
+	private static final int cntTopW64 = 1024*1024;
+	private static final int cntTop512 = 16*1024;
 	
 	//windowed or block 
 	private long[] b1;  //1 bit counter, 2 elements, one bit
@@ -82,6 +108,9 @@ public class BGram {
 	private SortedMap<NodeBinary,Double> w32Norm;  //normalized frequencies,32 bit counter, floating windowed, 256*256 elements, one byte 
 	private SortedMap<NodeBinary,Double> w64Norm;  //normalized frequencies,64 bit counter, floating windowed, 256*256 elements, one byte 
 	private SortedMap<NodeBinary,Double> b512Norm;  //normalized frequencies,16 bit counter, 256*256 elements, one byte 
+	
+	private HashMap<Long,ArrayList<NodeBinary>> mapW32Crc2NodeBinaryList;
+	private HashMap<Long,ArrayList<NodeBinary>> mapW64Crc2NodeBinaryList;
 	
 	private ArrayList<BGram> listBGram;
 	
@@ -188,12 +217,12 @@ public class BGram {
 		return listBGram;
 	}
 
-	public static int getCnttop32() {
-		return cntTop32;
+	public static int getCnttopW32() {
+		return cntTopW32;
 	}
 
-	public static int getCnttop64() {
-		return cntTop64;
+	public static int getCnttopW64() {
+		return cntTopW64;
 	}
 
 	public static int getCnttop512() {
@@ -202,6 +231,14 @@ public class BGram {
 
 	public void setCntBytes(long cntBytes) {
 		this.cntBytes = cntBytes;
+	}
+
+	public HashMap<Long, ArrayList<NodeBinary>> getMapW32Crc2NodeBinaryList() {
+		return mapW32Crc2NodeBinaryList;
+	}
+
+	public HashMap<Long, ArrayList<NodeBinary>> getMapW64Crc2NodeBinaryList() {
+		return mapW64Crc2NodeBinaryList;
 	}
 	
 }

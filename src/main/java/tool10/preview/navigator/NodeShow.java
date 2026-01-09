@@ -1,4 +1,6 @@
-package tool10.preview.api;
+package tool10.preview.navigator;
+
+import java.util.HashMap;
 
 import tool10.f10.NodeF10;
 
@@ -8,12 +10,15 @@ public class NodeShow {
 		super();
 		this.f10 = f10;
 		this.outType = outType;
+		mapAnchor = new HashMap<>();
 	}
 
 	private NodeF10 f10;
 	private String outType; 
 	private String allPackagesStr;
 	private String allClassesStr;
+	private HashMap<String,String> mapAnchor; 
+	
 
 	//GETTERS AND SETTERS
 	public NodeF10 getF10() {
@@ -33,6 +38,9 @@ public class NodeShow {
 	}
 	public void setAllClassesStr(String allClassesStr) {
 		this.allClassesStr = allClassesStr;
+	}
+	public HashMap<String, String> getMapAnchor() {
+		return mapAnchor;
 	}
 	
 }

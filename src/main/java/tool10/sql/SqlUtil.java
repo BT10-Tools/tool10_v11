@@ -18,9 +18,10 @@ public class SqlUtil {
 	    	//System.out.println("cntUpdated = " + cntUpdated+"	,cmd='"+cmd+"'");
 	    	return(cntUpdated);
 	    } catch(SQLException e)	{
-	      // if the error message is "out of memory",
-	      // it probably means no database file is found
-	      e.printStackTrace(System.err);
+	    	// if the error message is "out of memory",
+	    	// it probably means no database file is found
+	    	System.out.println(cmd); 
+	    	e.printStackTrace(System.err);
 	    }
 	    return(cntUpdated);
 	}

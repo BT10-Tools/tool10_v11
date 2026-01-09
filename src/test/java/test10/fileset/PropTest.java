@@ -1,6 +1,6 @@
 package test10.fileset;
 
-import tool10.fileset.PropConfig;
+import tool10.f10.PropConfig;
 
 public class PropTest {
 

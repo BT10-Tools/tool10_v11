@@ -68,6 +68,7 @@ public class CliParameter implements Serializable {
 	private String[] fileArray;
 	
 	private String loadBlob;
+	private String blobSetName;
 	private String blobDbType; //not required, default, sqlite. ser serialization will come. in future pg, oracle, mysql,...
 	private String blobDbName;
 	private String blobDbAction; //newdb, newroot, 
@@ -210,6 +211,8 @@ public class CliParameter implements Serializable {
 				"similarityLevel:"+similarityLevel+",\n"; 
 		return(ss);
 	}
+	
+	//GETTERS AND SETTERS
 	public String getHelp() {
 		return help;
 	}
@@ -822,6 +825,12 @@ public class CliParameter implements Serializable {
 	}
 	public void setSimDbAction(String simDbAction) {
 		this.simDbAction = simDbAction;
+	}
+	public String getBlobSetName() {
+		return blobSetName;
+	}
+	public void setBlobSetName(String blobSetName) {
+		this.blobSetName = blobSetName;
 	}
 	
 }

@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
-import tool10.blobset.NodeBlob;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
-import tool10.fileset.nodes.NodeFileBlobSmall;
+import tool10.fileset.nodes.NodeFileName;
+import tool10.fileset.nodes.NodeFileProp;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.fileset.nodes.NodeFileStore;
 import tool10.fileset.nodes.NodeFileSystem;
@@ -21,379 +21,6 @@ import tool10.fileset.transform.NodeTransform;
 
 public class WriteFsTablesToDb {
 
-/*
-	public static int writeTableDistance(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_DISTANCE(distanceId,corpusId,sourceId,entityId1,entityId2,distanceType,distance,similarity,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ? )";
-		//public NodeDistance(Long distanceId, Long corpusId, Long sourceId, Long entityId1, Long entityId2,
-		//String distanceType, Double distance, Double similarity, ZonedDateTime creationDate,ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeDistance ent : corpus.getRef().getListDistance())	{
-			    int cnt=1;
-			    if (ent.getDistanceId()!=null) {ps.setLong(cnt++, ent.getDistanceId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getSourceId()!=null) {ps.setLong(cnt++, ent.getSourceId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getEntityId1()!=null) {ps.setLong(cnt++, ent.getEntityId1());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getEntityId2()!=null) {ps.setLong(cnt++, ent.getEntityId2());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getDistanceType());
-			    if (ent.getDistance()!=null) {ps.setDouble(cnt++, ent.getDistance());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getSimilarity()!=null) {ps.setDouble(cnt++, ent.getSimilarity());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableDistance: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableTokenType(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_TOKENTYPE (tokenTypeId,corpusId,tokenTypeName,tokenTypeDesc,displayOrder,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?)";
-		//public NodeTokenType(Long tokenTypeId, Long corpusId, String tokenTypeName, String tokenTypeDesc, Long displayOrder,
-		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeTokenType ent : corpus.getRef().getListTokenType())	{
-			    int cnt=1;
-			    if (ent.getTokenTypeId()!=null) {ps.setLong(cnt++, ent.getTokenTypeId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getTokenTypeName());
-			    ps.setString(cnt++, ent.getTokenTypeDesc());
-			    if (ent.getDisplayOrder()!=null) {ps.setLong(cnt++, ent.getDisplayOrder());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableTokenType: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableToken(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_TOKEN(tokenId, tokenTypeId,corpusId,tokenLength, tokenName,tokenDesc,tokenStr,valueLong,valueDouble,valueDate,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ? )";
-		//public NodeToken(Long tokenId, Long tokenTypeId, Long corpusId, Long tokenLength, String tokenName, String tokenDesc, String tokenStr,
-		//Long valueLong, Double valueDouble, ZonedDateTime valueDate, ZonedDateTime creationDate,ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeToken ent : corpus.getRef().getListToken())	{
-			    int cnt=1;
-			    if (ent.getTokenId()!=null) {ps.setLong(cnt++, ent.getTokenId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getTokenTypeId()!=null) {ps.setLong(cnt++, ent.getTokenTypeId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getTokenLength()!=null) {ps.setLong(cnt++, ent.getTokenLength());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getTokenName());
-			    ps.setString(cnt++, ent.getTokenDesc());
-			    ps.setString(cnt++, ent.getTokenStr());
-			    if (ent.getValueLong()!=null) {ps.setLong(cnt++, ent.getValueLong());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getValueDouble()!=null) {ps.setDouble(cnt++, ent.getValueDouble());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getValueDate()!=null) {ps.setString(cnt++, ent.getValueDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableToken: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableStat(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_STAT("+
-			"statId,entityId,statType,fileTxtGroupId,sourceId,languageId,languageId2,fileSize,cntDistinctLanguageId,cntDistinctEncoding,"+
-			"cntFile,cntLine,cntDistinctLine,cntEmptyLine,minCntLinePerFile,maxCntLinePerFile,cntCharacter,cntDistinctCharacter,cntColumn,avgColumn,"+
-			"cntPhrase,cntDistinctPhrase,cntToken,cntDistinctToken,minLineLength,maxLineLength,sumLineLength,avgLineLength,crc64,creationDate,modificationDate"+
-			"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,  ? )";
-		//public NodeStat(Long statId, Long entityId, String statType, Long fileTxtGroupId, Long sourceId, Long languageId,
-		//Long languageId2, Long fileSize, Long cntDistinctLanguageId, Long cntDistinctEncoding,
-		//Long cntFile, Long cntLine, Long cntDistinctLine, Long cntEmptyLine, Long minCntLinePerFile,
-		//Long maxCntLinePerFile, Long cntCharacter, Long cntDistinctCharacter, Long cntColumn, Long avgColumn,
-		//Long cntPhrase, Long cntDistinctPhrase, Long cntToken, Long cntDistinctToken, Long minLineLength,
-		//Long maxLineLength, Long sumLineLength, Double avgLineLength, Long crc64, ZonedDateTime creationDate,
-		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeStat ent : corpus.getRef().getListStat())	{
-			    int cnt=1;
-			    if (ent.getStatId()!=null) {ps.setLong(cnt++, ent.getStatId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getEntityId()!=null) {ps.setLong(cnt++, ent.getEntityId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getStatType());			    
-			    if (ent.getFileTxtGroupId()!=null) {ps.setLong(cnt++, ent.getFileTxtGroupId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getSourceId()!=null) {ps.setLong(cnt++, ent.getSourceId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getLanguageId()!=null) {ps.setLong(cnt++, ent.getLanguageId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getLanguageId2()!=null) {ps.setLong(cnt++, ent.getLanguageId2());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileSize()!=null) {ps.setLong(cnt++, ent.getFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntDistinctLanguageId()!=null) {ps.setLong(cnt++, ent.getCntDistinctLanguageId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntDistinctEncoding()!=null) {ps.setLong(cnt++, ent.getCntDistinctEncoding());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntFile()!=null) {ps.setLong(cnt++, ent.getCntFile());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntLine()!=null) {ps.setLong(cnt++, ent.getCntLine());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntDistinctLine()!=null) {ps.setLong(cnt++, ent.getCntDistinctLine());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntEmptyLine()!=null) {ps.setLong(cnt++, ent.getCntEmptyLine());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getMinCntLinePerFile()!=null) {ps.setLong(cnt++, ent.getMinCntLinePerFile());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getMaxCntLinePerFile()!=null) {ps.setLong(cnt++, ent.getMaxCntLinePerFile());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntCharacter()!=null) {ps.setLong(cnt++, ent.getCntCharacter());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntDistinctCharacter()!=null) {ps.setLong(cnt++, ent.getCntDistinctCharacter());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntColumn()!=null) {ps.setLong(cnt++, ent.getCntColumn());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getAvgColumn()!=null) {ps.setLong(cnt++, ent.getAvgColumn());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntPhrase()!=null) {ps.setLong(cnt++, ent.getCntPhrase());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntDistinctPhrase()!=null) {ps.setLong(cnt++, ent.getCntDistinctPhrase());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntToken()!=null) {ps.setLong(cnt++, ent.getCntToken());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntDistinctToken()!=null) {ps.setLong(cnt++, ent.getCntDistinctToken());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getMinLineLength()!=null) {ps.setLong(cnt++, ent.getMinLineLength());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getMaxLineLength()!=null) {ps.setLong(cnt++, ent.getMaxLineLength());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getSumLineLength()!=null) {ps.setLong(cnt++, ent.getSumLineLength());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getAvgLineLength()!=null) {ps.setLong(cnt++, ent.getAvgLineLength());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCrc64()!=null) {ps.setLong(cnt++, ent.getCrc64());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableStat: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableRef(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_REF(refId, entityId, corpusId, entityType, refName, refDesc, creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?)";
-		//public NodeRef(Long refId, Long entityId, Long corpusId, String entityType, String refName, String refDesc,
-		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeRef ent : corpus.getRef().getListRef())	{
-			    int cnt=1;
-			    if (ent.getRefId()!=null) {ps.setLong(cnt++, ent.getRefId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getEntityId()!=null) {ps.setLong(cnt++, ent.getEntityId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getEntityType());
-			    ps.setString(cnt++, ent.getRefName());
-			    ps.setString(cnt++, ent.getRefDesc());
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableRef: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTablePhrase(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_PHRASE(phraseId, phraseTypeId, corpusId, phraseLength, phraseName, phraseDesc, phraseStr,"+
-						"isMultiLine, isIgnoreCase, isAbbreviation,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ?)";
-		//public NodePhrase(Long phraseId, Long phraseTypeId, Long corpusId, Long phraseLength, String phraseName, String phraseDesc, String phraseStr,
-		//String isMultiLine, String isIgnoreCase, String isAbbreviation, ZonedDateTime creationDate,ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodePhrase ent : corpus.getRef().getListPhrase())	{
-			    int cnt=1;
-			    if (ent.getPhraseId()!=null) {ps.setLong(cnt++, ent.getPhraseId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getPhraseTypeId()!=null) {ps.setLong(cnt++, ent.getPhraseTypeId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getPhraseLength()!=null) {ps.setLong(cnt++, ent.getPhraseLength());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getPhraseName());
-			    ps.setString(cnt++, ent.getPhraseDesc());
-			    ps.setString(cnt++, ent.getPhraseStr());
-			    ps.setString(cnt++, ent.getIsMultiLine());
-			    ps.setString(cnt++, ent.getIsIgnoreCase());
-			    ps.setString(cnt++, ent.getIsAbbreviation());
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTablePhrase: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableLineTemplate(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_LINETEMPLATE (lineTemplateId,corpusId,lineTemplateName,lineTemplateDesc,displayOrder,"+
-						"creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?)";
-		//public NodeLineTemplate(Long lineTemplateId, Long corpusId, String lineTemplateName, String lineTemplateDesc, Long displayOrder,
-		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeLineTemplate ent : corpus.getRef().getListLineTemplate())	{
-			    int cnt=1;
-			    if (ent.getLineTemplateId()!=null) {ps.setLong(cnt++, ent.getLineTemplateId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getLineTemplateName());
-			    ps.setString(cnt++, ent.getLineTemplateDesc());
-			    if (ent.getDisplayOrder()!=null) {ps.setLong(cnt++, ent.getDisplayOrder());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableLineTemplate: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableLineGroup(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_LINEGROUP (lineGroupId,corpusId,higherLineGroupId,lineGroupName,lineGroupDesc,displayOrder,"+
-						"creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?)";
-		//public NodeLineGroup(Long lineGroupId, Long corpusId, Long higherLineGroupId, String lineGroupName,
-		//String lineGroupDesc, Long displayOrder, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeLineGroup ent : corpus.getRef().getListLineGroup())	{
-			    int cnt=1;
-			    if (ent.getLineGroupId()!=null) {ps.setLong(cnt++, ent.getLineGroupId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getHigherLineGroupId()!=null) {ps.setLong(cnt++, ent.getHigherLineGroupId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getLineGroupName());
-			    ps.setString(cnt++, ent.getLineGroupDesc());
-			    if (ent.getDisplayOrder()!=null) {ps.setLong(cnt++, ent.getDisplayOrder());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableLineGroup: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableLine(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_LINE (lineId,fileId,lineTemplateId,lineGroupId,referenceLineId,lineNumber,lineLength,"+
-						"lineStr,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?)";
-		//public NodeLine(Long lineId, Long fileId, Long lineTemplateId, Long lineGroupId, Long referenceLineId, Long lineNumber,
-		//Long lineLength, String lineStr,ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeLine ent : corpus.getRef().getListLine())	{
-			    int cnt=1;
-			    if (ent.getLineId()!=null) {ps.setLong(cnt++, ent.getLineId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getFileId()!=null) {ps.setLong(cnt++, ent.getFileId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getLineTemplateId()!=null) {ps.setLong(cnt++, ent.getLineTemplateId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getReferenceLineId()!=null) {ps.setLong(cnt++, ent.getReferenceLineId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getLineNumber()!=null) {ps.setLong(cnt++, ent.getLineNumber());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getLineLength()!=null) {ps.setLong(cnt++, ent.getLineLength());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getLineStr());
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableLine: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableFileType(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_FILETYPE (fileTypeId,corpusId,fileTemplateId,fileTypeName,fileTypeDesc,displayOrder,"+
-						"creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?)";
-		//public NodeFileType(Long fileTypeId, Long corpusId, Long fileTemplateId, String fileTypeName, String fileTypeDesc,
-		//Long displayOrder, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeFileType ent : corpus.getRef().getListFileType())	{
-			    int cnt=1;
-			    if (ent.getFileTypeId()!=null) {ps.setLong(cnt++, ent.getFileTypeId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getFileTemplateId()!=null) {ps.setLong(cnt++, ent.getFileTemplateId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getFileTypeName());
-			    ps.setString(cnt++, ent.getFileTypeDesc());
-			    if (ent.getDisplayOrder()!=null) {ps.setLong(cnt++, ent.getDisplayOrder());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableFileType: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableFileTemplate(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_FILETEMPLATE (fileTemplateId,corpusId,fileTemplateName,fileTemplateDesc,displayOrder,"+
-						"creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?)";
-		//public NodeFileTemplate(Long fileTemplateId, Long corpusId, String fileTemplateName, String fileTemplateDesc,
-		//Long displayOrder, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeFileTemplate ent : corpus.getRef().getListFileTemplate())	{
-			    int cnt=1;
-			    if (ent.getFileTemplateId()!=null) {ps.setLong(cnt++, ent.getFileTemplateId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    ps.setString(cnt++, ent.getFileTemplateName());
-			    ps.setString(cnt++, ent.getFileTemplateDesc());
-			    if (ent.getDisplayOrder()!=null) {ps.setLong(cnt++, ent.getDisplayOrder());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableFileTemplate: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableFileGroup(Connection conn,NodeFileSet corpus)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO TXT_FILEGROUP (fileGroupId,corpusId,sourceId,higherFileGroupId,fileGroupName,fileGroupDesc,displayOrder,"+
-						"creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?)";
-		//public NodeFileGroup(Long fileGroupId, Long corpusId, Long sourceId, Long higherFileGroupId, String fileGroupName,
-		//String fileGroupDesc, Long displayOrder, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeFileGroup ent : corpus.getRef().getListFileGroup())	{
-			    int cnt=1;
-			    if (ent.getFileGroupId()!=null) {ps.setLong(cnt++, ent.getFileGroupId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getCorpusId()!=null) {ps.setLong(cnt++, ent.getCorpusId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getSourceId()!=null) {ps.setLong(cnt++, ent.getSourceId());} else {ps.setNull(cnt++,Types.INTEGER);} 			    
-			    if (ent.getHigherFileGroupId()!=null) {ps.setLong(cnt++, ent.getHigherFileGroupId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getFileGroupName());
-			    ps.setString(cnt++, ent.getFileGroupDesc());
-			    if (ent.getDisplayOrder()!=null) {ps.setLong(cnt++, ent.getDisplayOrder());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    System.out.println("writeTableFileGroup: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-*/	
 	public static int writeTableContainer(Connection conn,NodeFileSet fileSet)	{
 		int cntInserted = 0;
 		String query =  "INSERT INTO FS_CONTAINER(containerId, fileSetId, containerFileId, containerFileSetId, containerType,extensionType, algorithmName,\r\n" +
@@ -609,35 +236,6 @@ public class WriteFsTablesToDb {
 		}
 		return(cntInserted);
 	}
-	public static int writeTableFileBlobSmallXXX(Connection conn, ArrayList<NodeFileBlobSmall> listFileBlobSmall)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO FS_FILEBLOBSMALL (fileBlobSmallId,fileBlobId,fileId,fileSetId,byteIndexStart,byteIndexEnd,hashId,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?)";
-		//public NodeFileBlobSmall(Long fileBlobSmallId, Long fileBlobId, Long fileId, Long fileSetId, Long byteIndexStart,
-		//Long byteIndexEnd, Long hashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeFileBlobSmall ent : listFileBlobSmall)	{
-			    int cnt=1;
-			    if (ent.getFileBlobSmallId()!=null) {ps.setLong(cnt++, ent.getFileBlobSmallId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileBlobId()!=null) {ps.setLong(cnt++, ent.getFileBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileId()!=null) {ps.setLong(cnt++, ent.getFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getByteIndexStart()!=null) {ps.setLong(cnt++, ent.getByteIndexStart());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getByteIndexEnd()!=null) {ps.setLong(cnt++, ent.getByteIndexEnd());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getHashId()!=null) {ps.setLong(cnt++, ent.getHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    //System.out.println("writeTableFileBlobSmall: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
 	public static int writeTableFileBlob(Connection conn, ArrayList<NodeFileBlob> listFileBlob)	{
 		int cntInserted = 0;
 		String query =  "INSERT INTO FS_FILEBLOB (fileBlobId,fileId,blobId,fileSetId, blobType, blobSize, \r\n"+
@@ -675,63 +273,6 @@ public class WriteFsTablesToDb {
 			    cntInserted += ps.executeUpdate();
 		    }
 		    //System.out.println("writeTableFileBlob: cntInserted = " + cntInserted);
-		    ps.close();
-		} catch(SQLException e)	{
-		      e.printStackTrace(System.err);
-		}
-		return(cntInserted);
-	}
-	public static int writeTableBlob(Connection conn, String blobTableName, String blobDbAttachmentName, ArrayList<NodeBlob> listBlob)	{
-		int cntInserted = 0;
-		String query =  "INSERT INTO FS_BLOB (blobId,sourceId,fileSetId,firstPartBlobId,partNumber,cntPart,blobType,"+
-						"blobSize,compressionType,compressedSize,compressionGainRatio,\r\n"+
-						"compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType, "+
-						"encryptedSize,encrytedByteHashId,blobBytes,compressedBytes,encryptedBytes, \r\n"+
-				 		"blobHashId,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?)";
-		//public NodeBlob(Long blobId, Long sourceId, Long fileSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
-		//Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
-		//Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
-		//Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
-		//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try	{  
-		    PreparedStatement ps = conn.prepareStatement(query);
-		    for (NodeBlob ent : listBlob)	{
-			    int cnt=1;
-			    if (ent.getBlobId()!=null) {ps.setLong(cnt++, ent.getBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getSourceId()!=null) {ps.setLong(cnt++, ent.getSourceId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFirstPartBlobId()!=null) {ps.setLong(cnt++, ent.getFirstPartBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getPartNumber()!=null) {ps.setLong(cnt++, ent.getPartNumber());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCntPart()!=null) {ps.setLong(cnt++, ent.getCntPart());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getBlobType());
-			    if (ent.getBlobSize()!=null) {ps.setLong(cnt++, ent.getBlobSize());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getCompressionType());
-			    if (ent.getCompressedSize()!=null) {ps.setLong(cnt++, ent.getCompressedSize());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCompressionGainRatio()!=null) {ps.setDouble(cnt++, ent.getCompressionGainRatio());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCompressionGainBytes()!=null) {ps.setLong(cnt++, ent.getCompressionGainBytes());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCompressedByteHashId()!=null) {ps.setLong(cnt++, ent.getCompressedByteHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    
-			    if (ent.getSandByteLengthHead()!=null) {ps.setLong(cnt++, ent.getSandByteLengthHead()); } 	else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getSandByteLengthTail()!=null) {ps.setLong(cnt++, ent.getSandByteLengthTail()); } 	else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getEncryptionBlobKey());
-			    ps.setString(cnt++, ent.getEncryptionType());
-			    if (ent.getEncryptedSize()!=null) {ps.setLong(cnt++, ent.getEncryptedSize()); } 	else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getEncrytedByteHashId()!=null) {ps.setLong(cnt++, ent.getEncrytedByteHashId()); } 	else {ps.setNull(cnt++,Types.INTEGER);}
-			    
-			    if (ent.getBlobBytes()!=null) 		{ps.setBytes(cnt++, ent.getBlobBytes());} else {ps.setNull(cnt++,Types.BLOB);}
-			    if (ent.getCompressedBytes()!=null) {ps.setBytes(cnt++, ent.getCompressedBytes());} else {ps.setNull(cnt++,Types.BLOB);}
-			    if (ent.getEncryptedBytes()!=null) 	{ps.setBytes(cnt++, ent.getEncryptedBytes());} else {ps.setNull(cnt++,Types.BLOB);}
-			    
-			    //compressedBytes,encyptedBytes
-			    
-			    if (ent.getBlobHashId()!=null) {ps.setLong(cnt++, ent.getBlobHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    
-			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    cntInserted += ps.executeUpdate();
-		    }
-		    //System.out.println("writeTableBlob: cntInserted = " + cntInserted);
 		    ps.close();
 		} catch(SQLException e)	{
 		      e.printStackTrace(System.err);
@@ -813,91 +354,34 @@ public class WriteFsTablesToDb {
 	}
 	public static int writeTableFile(Connection conn,NodeFileSet fileSet)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO FS_FILE (fileId,fileSetId,fileSystemId,fileStoreId,parentFileId,rootFileId,fileTypeId,sourceId,languageId,languageId2,fileSize,hashCode,hashId, "+
-				"fileType,linkType,linkedId,fileStatus,depth,depthFromRoot,fileName,fileNameRelative,fileNameAbsolute,fileNameCanonical,"+
-				"dirNameRelative,dirNameAbsolute,altName1,altName2,altName3,encryptedNameRelative,encryptedNameAbsolute,nameHashId,fileURI,fileURL,extensionName,nameWithoutExtension, "+
-				"fileNameAbsoluteLength,ownerName,canExecute,canRead,canWrite,isExists,isDirectory,isFile,isSymbolicLink,isHidden,isReadOnly,isArchive,isSystem,isOther,  "+
-				"isRegularFile,probeContentType,freeSpace,totalSpace,usableSpace,compressedFileSize,compressionGainRatio,"+
-				"compressionGainBytes,encoding,charsetStr,lastModified,fileCreationDate,fileModificationDate,fileRemark,creationDate,modificationDate) "+
-				"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,"+
-				        "?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?)";
-		//public NodeFile(Long fileId, Long fileSetId, Long fileSystemId, Long fileStoreId, Long parentFileId, Long rootFileId, Long fileTypeId,
-				//Long sourceId, Long languageId, Long languageId2, Long fileSize, Long hashCode, Long hashId,
-				//String fileType, String linkType, Long linkedId, String fileStatus, Long depth, Long depthFromRoot, String fileName, String fileNameRelative, String fileNameAbsolute,
-				//String fileNameCanonical, String dirNameRelative, String dirNameAbsolute, String altName1,String altName2,String altName3,
-				//String encryptedNameRelative, String encryptedNameAbsolute, Long nameHashId, 
-				//String fileURI, String fileURL, String extensionName, String nameWithoutExtension,
-				//Long fileNameAbsoluteLength, String ownerName, String canExecute, String canRead, String canWrite,
-				//String isExists, String isDirectory, String isFile, String isSymbolicLink, String isHidden, String isReadOnly, String isArhive, String isSystem, String isOther,
-				//String isRegularFile, String probeContentType, Long freeSpace, Long totalSpace, Long usableSpace, Long compressedFileSize, Double compressionGainRatio,
-				//Long compressionGainBytes,String encoding, String charsetStr,Long lastModified, ZonedDateTime fileCreationDate, ZonedDateTime fileModificationDate,
-				//ZonedDateTime fileLastAccessTime, String fileRemark, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		String query =  "INSERT INTO FS_FILE (fileId,fileSetId,parentFileId,rootFileId,fileTypeId,sourceId,fileSize,hashCode,hashId, \n"+
+				"fileType,linkedId,fileStatus,fileName,fileNameAbsolute,extensionName,isDirectory,isFile,fileRemark,creationDate,modificationDate) \n"+
+				"VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?) \n";
+		//public NodeFile(Long fileId, Long fileSetId, Long parentFileId, Long rootFileId, Long fileTypeId, Long sourceId,
+		//		Long fileSize, Long hashCode, Long hashId, String fileType, Long linkedId, String fileStatus,
+		//		String fileName, String fileNameAbsolute, String extensionName, String isDirectory, String isFile,
+		//		String fileRemark, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
 		    PreparedStatement ps = conn.prepareStatement(query);
 		    for (NodeFile ent : fileSet.getListFile())	{
 			    int cnt=1;
 			    if (ent.getFileId()!=null) {ps.setLong(cnt++, ent.getFileId());} else {ps.setNull(cnt++,Types.INTEGER);} 
 			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);} 
-			    if (ent.getFileSystemId()!=null) {ps.setLong(cnt++, ent.getFileSystemId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileStoreId()!=null) {ps.setLong(cnt++, ent.getFileStoreId());} else {ps.setNull(cnt++,Types.INTEGER);} 
 			    if (ent.getParentFileId()!=null) {ps.setLong(cnt++, ent.getParentFileId());} else {ps.setNull(cnt++,Types.INTEGER);} 
 			    if (ent.getRootFileId()!=null) {ps.setLong(cnt++, ent.getRootFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getFileTypeId()!=null) {ps.setLong(cnt++, ent.getFileTypeId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getSourceId()!=null) {ps.setLong(cnt++, ent.getSourceId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getLanguageId()!=null) {ps.setLong(cnt++, ent.getLanguageId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getLanguageId2()!=null) {ps.setLong(cnt++, ent.getLanguageId2());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getFileSize()!=null) {ps.setLong(cnt++, ent.getFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getHashCode()!=null) {ps.setLong(cnt++, ent.getHashCode());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getHashId()!=null) {ps.setLong(cnt++, ent.getHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getFileType());
-			    ps.setString(cnt++, ent.getLinkType());
 			    if (ent.getLinkedId()!=null) {ps.setLong(cnt++, ent.getLinkedId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getFileStatus());
-			    if (ent.getDepth()!=null) {ps.setLong(cnt++, ent.getDepth());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getDepthFromRoot()!=null) {ps.setLong(cnt++, ent.getDepthFromRoot());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getFileName());
-			    ps.setString(cnt++, ent.getFileNameRelative());
 			    ps.setString(cnt++, ent.getFileNameAbsolute());
-			    ps.setString(cnt++, ent.getFileNameCanonical());
-			    ps.setString(cnt++, ent.getDirNameRelative());
-			    ps.setString(cnt++, ent.getDirNameAbsolute());
-			    ps.setString(cnt++, ent.getAltName1());
-			    ps.setString(cnt++, ent.getAltName2());
-			    ps.setString(cnt++, ent.getAltName3());
-			    ps.setString(cnt++, ent.getEncryptedNameRelative());
-			    ps.setString(cnt++, ent.getEncryptedNameAbsolute());
-			    if (ent.getNameHashId()!=null) {ps.setLong(cnt++, ent.getNameHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getFileURI());
-			    ps.setString(cnt++, ent.getFileURL());
 			    ps.setString(cnt++, ent.getExtensionName());
-			    ps.setString(cnt++, ent.getNameWithoutExtension());
-			    if (ent.getFileNameAbsoluteLength()!=null) {ps.setLong(cnt++, ent.getFileNameAbsoluteLength());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getOwnerName());
-			    ps.setString(cnt++, ent.getCanExecute());
-			    ps.setString(cnt++, ent.getCanRead());
-			    ps.setString(cnt++, ent.getCanWrite());
-			    ps.setString(cnt++, ent.getIsExists());
 			    ps.setString(cnt++, ent.getIsDirectory());
 			    ps.setString(cnt++, ent.getIsFile());
-			    ps.setString(cnt++, ent.getIsSymbolicLink());
-			    ps.setString(cnt++, ent.getIsHidden());
-			    ps.setString(cnt++, ent.getIsOther());
-			    ps.setString(cnt++, ent.getIsReadOnly());
-			    ps.setString(cnt++, ent.getIsArchive());
-			    ps.setString(cnt++, ent.getIsSystem());
-			    ps.setString(cnt++, ent.getIsRegularFile());
-			    ps.setString(cnt++, ent.getProbeContentType());
-			    if (ent.getFreeSpace()!=null) {ps.setLong(cnt++, ent.getFreeSpace());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getTotalSpace()!=null) {ps.setLong(cnt++, ent.getTotalSpace());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getUsableSpace()!=null) {ps.setLong(cnt++, ent.getUsableSpace());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCompressedFileSize()!=null) {ps.setLong(cnt++, ent.getCompressedFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getCompressionGainRatio()!=null) {ps.setDouble(cnt++, ent.getCompressionGainRatio());} else {ps.setNull(cnt++,Types.DOUBLE);}
-			    if (ent.getCompressionGainBytes()!=null) {ps.setLong(cnt++, ent.getCompressionGainBytes());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    ps.setString(cnt++, ent.getEncoding());
-			    ps.setString(cnt++, ent.getCharsetStr());
-			    if (ent.getLastModified()!=null) {ps.setLong(cnt++, ent.getLastModified());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getFileCreationDate()!=null) {ps.setString(cnt++, ent.getFileCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
-			    if (ent.getFileModificationDate()!=null) {ps.setString(cnt++, ent.getFileModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
 			    ps.setString(cnt++, ent.getFileRemark());
 			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
 			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
@@ -910,7 +394,303 @@ public class WriteFsTablesToDb {
 		}
 		return(cntInserted);
 	}
+	public static int writeTableFileName(Connection conn,NodeFileSet fileSet)	{
+		int cntInserted = 0;
+		String query =  "INSERT INTO FS_FILENAME ("+
+			"fileNameId,fileId,fileSetId,fileNameTypeId,nameLanguageId,nameLanguageId2,nameHashId,depth,depthFromRoot,fileName,\r\n"+
+			"fileNameRelative,fileNameAbsolute,fileNameCanonical,fileURI,fileURL,extensionName,nameWithoutExtension,dirNameRelative,dirNameAbsolute,\r\n"+
+			"fileNameLength,fileNameAbsoluteLength,compressedNameSize,fileName83,altName1,altName2,altName3,altNameFromTag,altNameFromContent,\r\n"+
+			"onlyAsciiLetter,onlyDigit,onlyUTFLetter,sortedLetters,sortedLettersUnique,encryptedNameRelative,encryptedNameAbsolute,isNameValid,\r\n"+
+			"validityRemark,isNameCorrect,correctedName,correctnessRemark,goodnessLevel,goodnessRemark,goodNameSuggested,isHumanGiven,\r\n"+
+			"isGenerated,isHumanUnderstandable,nameEncoding,nameCharsetStr,nameRemark,strEntityType,strEntityStr,strEntityId,strEntityType2,\r\n"+
+			"strEntityStr2,strEntityId2,cntLetter,cntLetterUnique,cntAsciiLetter,cntAsciiLetterUppercase,cntAsciiLetterLowercase,cntAsciiUnprintable,cntNonAscii,\r\n"+
+			"cntUTFLetter,cntUTFLetterByte1,cntUTFLetterByte2,cntUTFLetterByte3,cntUTFLetterByte4,cntEmoji,cntDigit,cntDigitUnique,cntSpace,\r\n"+
+			"cntUnderscore,cntDash,parsedNum,parsedZDT,tokenizedName,\r\n"+
+			"arrayToken,arrayLetter,arrayLetterCnt,arrayTokenId,creationDate,modificationDate) \r\n"+
+			" VALUES( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,"+
+					 "?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,"+
+					 "?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,"+
+					 "?, ?, ?, ?, ?,   ?, ?)";
+		//public NodeFileName(Long fileNameId, Long fileId, Long fileSetId, Long fileNameTypeId, Long nameLanguageId,
+		//Long nameLanguageId2, Long nameHashId, Long depth, Long depthFromRoot, String fileName,
+		//String fileNameRelative, String fileNameAbsolute, String fileNameCanonical, String fileURI, String fileURL,
+		//String extensionName, String nameWithoutExtension, String dirNameRelative, String dirNameAbsolute,
+		//Long fileNameLength, Long fileNameAbsoluteLength, Long compressedNameSize, String fileName83,
+		//String altName1, String altName2, String altName3, String altNameFromTag, String altNameFromContent,
+		
+		//String onlyAsciiLetter, String onlyDigit, String onlyUTFLetter, String sortedLetters,
+		//String sortedLettersUnique, String encryptedNameRelative, String encryptedNameAbsolute, String isNameValid,
+		//String validityRemark, String isNameCorrect, String correctedName, String correctnessRemark,
+		//String goodnessLevel, String goodnessRemark, String goodNameSuggested, String isHumanGiven,
+		//String isGenerated, String isHumanUnderstandable, String nameEncoding, String nameCharsetStr,
+		//String nameRemark, String strEntityType, String strEntityStr, Long strEntityId, String strEntityType2,
+		//String strEntityStr2, Long strEntityId2, Long cntLetter, Long cntLetterUnique, Long cntAsciiLetter,
+		
+		//Long cntAsciiLetterUppercase, Long cntAsciiLetterLowercase, Long cntAsciiUnprintable, Long cntNonAscii,
+		//Long cntUTFLetter, Long cntUTFLetterByte1, Long cntUTFLetterByte2, Long cntUTFLetterByte3,
+		//Long cntUTFLetterByte4, Long cntEmoji, Long cntDigit, Long cntDigitUnique, Long cntSpace,
+		//Long cntUnderscore, Long cntDash, Long parsedNum, ZonedDateTime parsedZDT, String tokenizedName,
+		//String[] arrayToken, String[] arrayLetter, Long[] arrayLetterCnt, Long[] arrayTokenId,
+		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {	
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    for (NodeFileName ent : fileSet.getListFileName())	{
+			    int cnt=1;
+			    if (ent.getFileNameId()!=null) {ps.setLong(cnt++, ent.getFileNameId());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getFileId()!=null) {ps.setLong(cnt++, ent.getFileId());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getFileNameTypeId()!=null) {ps.setLong(cnt++, ent.getFileNameTypeId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getNameLanguageId()!=null) {ps.setLong(cnt++, ent.getNameLanguageId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getNameLanguageId2()!=null) {ps.setLong(cnt++, ent.getNameLanguageId2());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getNameHashId()!=null) {ps.setLong(cnt++, ent.getNameHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getDepth()!=null) {ps.setLong(cnt++, ent.getDepth());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getDepthFromRoot()!=null) {ps.setLong(cnt++, ent.getDepthFromRoot());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getFileName());
+			    
+			    ps.setString(cnt++, ent.getFileNameRelative());
+			    ps.setString(cnt++, ent.getFileNameAbsolute());
+			    ps.setString(cnt++, ent.getFileNameCanonical());
+			    ps.setString(cnt++, ent.getFileURI());
+			    ps.setString(cnt++, ent.getFileURL());
+			    ps.setString(cnt++, ent.getExtensionName());
+			    ps.setString(cnt++, ent.getNameWithoutExtension());
+			    ps.setString(cnt++, ent.getDirNameRelative());
+			    ps.setString(cnt++, ent.getDirNameAbsolute());
+			    
+			    if (ent.getFileNameLength()!=null) {ps.setLong(cnt++, ent.getFileNameLength());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileNameAbsoluteLength()!=null) {ps.setLong(cnt++, ent.getFileNameAbsoluteLength());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCompressedNameSize()!=null) {ps.setLong(cnt++, ent.getCompressedNameSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getFileName83());
+			    ps.setString(cnt++, ent.getAltName1());
+			    ps.setString(cnt++, ent.getAltName2());
+			    ps.setString(cnt++, ent.getAltName3());
+			    ps.setString(cnt++, ent.getAltNameFromTag());
+			    ps.setString(cnt++, ent.getAltNameFromContent());
+	    
+		//String onlyAsciiLetter, String onlyDigit, String onlyUTFLetter, String sortedLetters,
+		//String sortedLettersUnique, String encryptedNameRelative, String encryptedNameAbsolute, String isNameValid,
+		//String validityRemark, String isNameCorrect, String correctedName, String correctnessRemark,
+		//String goodnessLevel, String goodnessRemark, String goodNameSuggested, String isHumanGiven,
+		//String isGenerated, String isHumanUnderstandable, String nameEncoding, String nameCharsetStr,
+		//String nameRemark, String strEntityType, String strEntityStr, Long strEntityId, String strEntityType2,
+		//String strEntityStr2, Long strEntityId2, Long cntLetter, Long cntLetterUnique, Long cntAsciiLetter,
+				    
+			    ps.setString(cnt++, ent.getOnlyAsciiLetter());
+			    ps.setString(cnt++, ent.getOnlyDigit());
+			    ps.setString(cnt++, ent.getOnlyUTFLetter());
+			    ps.setString(cnt++, ent.getSortedLetters());
+			    ps.setString(cnt++, ent.getSortedLettersUnique());
+			    ps.setString(cnt++, ent.getEncryptedNameRelative());
+			    ps.setString(cnt++, ent.getEncryptedNameAbsolute());
+			    ps.setString(cnt++, ent.getIsNameValid());
+			    
+			    ps.setString(cnt++, ent.getValidityRemark());
+			    ps.setString(cnt++, ent.getIsNameCorrect());
+			    ps.setString(cnt++, ent.getCorrectedName());
+			    ps.setString(cnt++, ent.getCorrectnessRemark());
+			    ps.setString(cnt++, ent.getGoodnessLevel());
+			    ps.setString(cnt++, ent.getGoodnessRemark());
+			    ps.setString(cnt++, ent.getGoodNameSuggested());
+			    ps.setString(cnt++, ent.getIsHumanGiven());
 
+			    ps.setString(cnt++, ent.getIsGenerated());
+			    ps.setString(cnt++, ent.getIsHumanUnderstandable());
+			    ps.setString(cnt++, ent.getNameEncoding());
+			    ps.setString(cnt++, ent.getNameCharsetStr());
+			    ps.setString(cnt++, ent.getNameRemark());
+			    ps.setString(cnt++, ent.getStrEntityType());
+			    ps.setString(cnt++, ent.getStrEntityStr());
+			    if (ent.getStrEntityId()!=null) {ps.setLong(cnt++, ent.getStrEntityId());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    ps.setString(cnt++, ent.getStrEntityType2());
+	    
+			    ps.setString(cnt++, ent.getStrEntityStr2());
+			    if (ent.getStrEntityId2()!=null) {ps.setLong(cnt++, ent.getStrEntityId2());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntLetter()!=null) {ps.setLong(cnt++, ent.getStrEntityId2());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntLetterUnique()!=null) {ps.setLong(cnt++, ent.getCntLetterUnique());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntAsciiLetter()!=null) {ps.setLong(cnt++, ent.getCntAsciiLetter());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    
+	    //Long cntAsciiLetterUppercase, Long cntAsciiLetterLowercase, Long cntAsciiUnprintable, Long cntNonAscii,
+		//Long cntUTFLetter, Long cntUTFLetterByte1, Long cntUTFLetterByte2, Long cntUTFLetterByte3,
+		//Long cntUTFLetterByte4, Long cntEmoji, Long cntDigit, Long cntDigitUnique, Long cntSpace,
+		//Long cntUnderscore, Long cntDash, Long parsedNum, ZonedDateTime parsedZDT, String tokenizedName,
+		//String[] arrayToken, String[] arrayLetter, Long[] arrayLetterCnt, Long[] arrayTokenId,
+		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {		    
+			    
+			    if (ent.getCntAsciiLetterUppercase()!=null) {ps.setLong(cnt++, ent.getCntAsciiLetterUppercase());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntAsciiLetterLowercase()!=null) {ps.setLong(cnt++, ent.getCntAsciiLetterLowercase());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntAsciiUnprintable()!=null) {ps.setLong(cnt++, ent.getCntAsciiUnprintable());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntNonAscii()!=null) {ps.setLong(cnt++, ent.getCntNonAscii());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    
+			    if (ent.getCntUTFLetter()!=null) {ps.setLong(cnt++, ent.getCntUTFLetter());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntUTFLetterByte1()!=null) {ps.setLong(cnt++, ent.getCntUTFLetterByte1());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntUTFLetterByte2()!=null) {ps.setLong(cnt++, ent.getCntUTFLetterByte2());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntUTFLetterByte3()!=null) {ps.setLong(cnt++, ent.getCntUTFLetterByte3());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    
+			    if (ent.getCntUTFLetterByte4()!=null) {ps.setLong(cnt++, ent.getCntUTFLetterByte4());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntEmoji()!=null) {ps.setLong(cnt++, ent.getCntEmoji());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntDigit()!=null) {ps.setLong(cnt++, ent.getCntDigit());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntDigitUnique()!=null) {ps.setLong(cnt++, ent.getCntDigitUnique());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntSpace()!=null) {ps.setLong(cnt++, ent.getCntSpace());} else {ps.setNull(cnt++,Types.INTEGER);} 
+				
+			    if (ent.getCntUnderscore()!=null) {ps.setLong(cnt++, ent.getCntUnderscore());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getCntDash()!=null) {ps.setLong(cnt++, ent.getCntDash());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getParsedNum()!=null) {ps.setLong(cnt++, ent.getParsedNum());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getParsedZDT()!=null) {ps.setString(cnt++, ent.getParsedZDT().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    ps.setString(cnt++, ent.getTokenizedName());
+			    
+			    if (ent.getArrayToken()!=null) {ps.setBytes(cnt++, null);} else {ps.setNull(cnt++,Types.BLOB);} 
+			    if (ent.getArrayLetter()!=null) {ps.setBytes(cnt++, null);} else {ps.setNull(cnt++,Types.BLOB);} 
+			    if (ent.getArrayLetterCnt()!=null) {ps.setBytes(cnt++, null);} else {ps.setNull(cnt++,Types.BLOB);} 
+			    if (ent.getArrayTokenId()!=null) {ps.setBytes(cnt++, null);} else {ps.setNull(cnt++,Types.BLOB);} 
+			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    cntInserted += ps.executeUpdate();
+		    }
+		    System.out.println("writeTableFileName: cntInserted = " + cntInserted);
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntInserted);
+	}
+	public static int writeTableFileProp(Connection conn,NodeFileSet fileSet)	{
+		int cntInserted = 0;
+		String query =  "INSERT INTO FS_FILEPROP (\r\n"+
+		"filePropId,fileId,fileSetId,fileSystemId,fileStoreId,propertyType,signatureId,fileSize,fileSizeOnDisk,fileSizeClass,\r\n"+
+		"hashCode,fileType,linkType,linkedId,ownerName,computerName,canExecute,canRead,canWrite,isExists,isDirectory,isFile,\r\n"+
+		"isSymbolicLink,isHidden,isArchive,isSystem,isReadOnly,isOther,isRegularFile,probeContentType,isCompressed,isEncrypted,\r\n"+
+		"isIndexed,isContentIndexed,isBlocked,isSystemFile,isAppFile,isCompanyFile,isUserFile,isExecutable,isTextFile,isXMLFile,\r\n"+
+		"isConfigFile,isBinaryFile,isImmutable,isInUserPath,isInSystemPath,isShareable,isShared,hasPreviousVersions,uxPermission,uxInfo,\r\n"+
+		"compressedFileSize,compressionGainRatio,compressionGainBytes,duration,contentLanguageId,contentLanguageId2,contentEncoding,contentCharsetStr,\r\n"+
+		"iconName,origin,copyrightInfo,licenseInfo,assetInfo,dlpInfo,lastModified,fileCreationDate,fileModificationDate,\r\n"+
+		"fileLastAccessTime,fileRemark,creationDate,modificationDate) \r\n"+
+		" VALUES( 	?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,"+
+				   "?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,"+
+				   "?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ? )";
+		//public NodeFileProp(Long filePropId, Long fileId, Long fileSetId, Long fileSystemId, Long fileStoreId,
+		//String propertyType, Long signatureId, Long fileSize, Long fileSizeOnDisk, String fileSizeClass,
+		//Long hashCode, String fileType, String linkType, Long linkedId, String ownerName, String computerName,
+		//String canExecute, String canRead, String canWrite, String isExists, String isDirectory, String isFile,
+		//String isSymbolicLink, String isHidden, String isArchive, String isSystem, String isReadOnly,
+		//String isOther, String isRegularFile, String probeContentType, String isCompresssed, String isEncrypted,
+		//String isIndexed, String isContentIndexed, String isBlocked, String isSystemFile, String isAppFile,
+		//String isCompanyFile, String isUserFile, String isExecutable, String isTextFile, String isXMLFile,
+		//String isConfigFile, String isBinaryFile, String isImmutable, String isInUserPath, String isInSystemPath,
+		//String isShareable, String isShared, String hasPreviousVersions, String uxPermission, String uxInfo,
+		//Long compressedFileSize, Double compressionGainRatio, Long compressionGainBytes, Long duration,
+		//Long contentLanguageId, Long contentLanguageId2, String contentEncoding, String contentCharsetStr,
+		//String iconName, String origin, String copyrightInfo, String licenseInfo, String assetInfo, String dlpInfo,
+		//Long lastModified, ZonedDateTime fileCreationDate, ZonedDateTime fileModificationDate,
+		//ZonedDateTime fileLastAccessTime, String fileRemark, ZonedDateTime creationDate,ZonedDateTime modificationDate) {
+		
+	/*	"filePropId,fileId,fileSetId,fileSystemId,fileStoreId,filePropertyTypeId,signatureId,fileSize,fileSizeOnDisk,fileSizeClass,\r\n"+
+		"hashCode,fileType,linkType,linkedId,ownerName,computerName,canExecute,canRead,canWrite,isExists,isDirectory,isFile,\r\n"+
+		"isSymbolicLink,isHidden,isArchive,isSystem,isReadOnly,isOther,isRegularFile,probeContentType,isCompresssed,isEncrypted,\r\n"+
+		"isIndexed,isContentIndexed,isBlocked,isSystemFile,isAppFile,isCompanyFile,isUserFile,isExecutable,isTextFile,isXMLFile,\r\n"+
+		"isConfigFile,isBinaryFile,isImmutable,isInUserPath,isInSystemPath,isShareable,isShared,hasPreviousVersions,uxPermission,uxInfo,\r\n"+
+		"compressedFileSize,compressionGainRatio,compressionGainBytes,duration,contentLanguageId,contentLanguageId2,contentEncoding,contentCharsetStr,\r\n"+
+		"iconName,origin,copyrightInfo,licenseInfo,assetInfo,dlpInfo,lastModified,fileCreationDate,fileModificationDate,\r\n"+
+		"fileLastAccessTime,fileRemark,creationDate,modificationDate \r\n"+
+	*/	
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    for (NodeFileProp ent : fileSet.getListFileProp())	{
+			    int cnt=1;
+			    if (ent.getFilePropId()!=null) {ps.setLong(cnt++, ent.getFilePropId());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getFileId()!=null) {ps.setLong(cnt++, ent.getFileId());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);} 
+			    if (ent.getFileSystemId()!=null) {ps.setLong(cnt++, ent.getFileSystemId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileStoreId()!=null) {ps.setLong(cnt++, ent.getFileStoreId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getPropertyType());
+			    if (ent.getSignatureId()!=null) {ps.setLong(cnt++, ent.getSignatureId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileSize()!=null) {ps.setLong(cnt++, ent.getFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileSizeOnDisk()!=null) {ps.setLong(cnt++, ent.getFileSizeOnDisk());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getFileSizeClass());
+				
+			    if (ent.getHashCode()!=null) {ps.setLong(cnt++, ent.getHashCode());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getFileType());
+			    ps.setString(cnt++, ent.getLinkType());
+			    if (ent.getLinkedId()!=null) {ps.setLong(cnt++, ent.getLinkedId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getOwnerName());
+			    ps.setString(cnt++, ent.getComputerName());
+			    ps.setString(cnt++, ent.getCanExecute());
+			    ps.setString(cnt++, ent.getCanRead());
+			    ps.setString(cnt++, ent.getCanWrite());
+			    ps.setString(cnt++, ent.getIsExists());
+			    ps.setString(cnt++, ent.getIsDirectory());
+			    ps.setString(cnt++, ent.getIsFile());
+			     
+			    ps.setString(cnt++, ent.getIsSymbolicLink());
+			    ps.setString(cnt++, ent.getIsHidden());
+			    ps.setString(cnt++, ent.getIsArchive());
+			    ps.setString(cnt++, ent.getIsSystem());
+			    ps.setString(cnt++, ent.getIsReadOnly());
+			    ps.setString(cnt++, ent.getIsOther());
+			    ps.setString(cnt++, ent.getIsRegularFile());
+			    ps.setString(cnt++, ent.getProbeContentType());
+			    ps.setString(cnt++, ent.getIsCompressed());
+			    ps.setString(cnt++, ent.getIsEncrypted());
+	
+		//"isIndexed,isContentIndexed,isBlocked,isSystemFile,isAppFile,isCompanyFile,isUserFile,isExecutable,isTextFile,isXMLFile,\r\n"+
+		//"isConfigFile,isBinaryFile,isImmutable,isInUserPath,isInSystemPath,isShareable,isShared,hasPreviousVersions,uxPermission,uxInfo,\r\n"+
+		//"compressedFileSize,compressionGainRatio,compressionGainBytes,duration,contentLanguageId,contentLanguageId2,contentEncoding,contentCharsetStr,\r\n"+
+					    
+			    ps.setString(cnt++, ent.getIsIndexed());
+			    ps.setString(cnt++, ent.getIsContentIndexed());
+			    ps.setString(cnt++, ent.getIsBlocked());
+			    ps.setString(cnt++, ent.getIsSystemFile());
+			    ps.setString(cnt++, ent.getIsAppFile());
+			    ps.setString(cnt++, ent.getIsCompanyFile());
+			    ps.setString(cnt++, ent.getIsUserFile());
+			    ps.setString(cnt++, ent.getIsExecutable());
+			    ps.setString(cnt++, ent.getIsTextFile());
+			    ps.setString(cnt++, ent.getIsXMLFile());
+			    
+			    ps.setString(cnt++, ent.getIsConfigFile());
+			    ps.setString(cnt++, ent.getIsBinaryFile());
+			    ps.setString(cnt++, ent.getIsImmutable());
+			    ps.setString(cnt++, ent.getIsInUserPath());
+			    ps.setString(cnt++, ent.getIsInSystemPath());
+			    ps.setString(cnt++, ent.getIsShareable());
+			    ps.setString(cnt++, ent.getIsShared());
+			    ps.setString(cnt++, ent.getHasPreviousVersions());
+			    ps.setString(cnt++, ent.getUxPermission());
+			    ps.setString(cnt++, ent.getUxInfo());
+			    
+			    if (ent.getCompressedFileSize()!=null) {ps.setLong(cnt++, ent.getCompressedFileSize());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCompressionGainRatio()!=null) {ps.setDouble(cnt++, ent.getCompressionGainRatio());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getCompressionGainBytes()!=null) {ps.setLong(cnt++, ent.getCompressionGainBytes());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getDuration()!=null) {ps.setLong(cnt++, ent.getDuration());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getContentLanguageId()!=null) {ps.setLong(cnt++, ent.getContentLanguageId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getContentLanguageId2()!=null) {ps.setLong(cnt++, ent.getContentLanguageId2());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getContentEncoding());
+			    ps.setString(cnt++, ent.getContentCharsetStr());
+		
+	    //"iconName,origin,copyrightInfo,licenseInfo,assetInfo,dlpInfo,lastModified,fileCreationDate,fileModificationDate,\r\n"+
+		//"fileLastAccessTime,fileRemark,creationDate,modificationDate \r\n"+
+			    ps.setString(cnt++, ent.getIconName());
+			    ps.setString(cnt++, ent.getOrigin());
+			    ps.setString(cnt++, ent.getCopyrightInfo());
+			    ps.setString(cnt++, ent.getLicenseInfo());
+			    ps.setString(cnt++, ent.getAssetInfo());
+			    ps.setString(cnt++, ent.getDlpInfo());
+			    if (ent.getLastModified()!=null) {ps.setLong(cnt++, ent.getLastModified());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getFileCreationDate()!=null) {ps.setString(cnt++, ent.getFileCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getFileModificationDate()!=null) {ps.setString(cnt++, ent.getFileModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    
+			    if (ent.getFileLastAccessTime()!=null) {ps.setString(cnt++, ent.getFileLastAccessTime().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    ps.setString(cnt++, ent.getFileRemark());
+			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    cntInserted += ps.executeUpdate();
+		    }
+		    System.out.println("writeTableFileProperty: cntInserted = " + cntInserted);
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntInserted);
+	}
 	public static int writeTableFileSet(Connection conn,NodeFileSet fileSet)	{
 		int cntInserted = 0;
 		String query = "INSERT INTO FS_FILESET (fileSetId,sourceId,fileSetName,fileSetDesc,fileSetURL,ownerName,creationDate,modificationDate) VALUES ( ?, ?, ?, ?, ?,   ?, ?, ?)";
@@ -935,35 +715,27 @@ public class WriteFsTablesToDb {
 		return(cntInserted);
 	}
 	public static int writeFileSet(Connection conn,  NodeFileSet fileSet)	{
-		int cntInsertedCorpus = writeTableFileSet(conn,fileSet);
+		int cntInsertedFileSet = writeTableFileSet(conn,fileSet);
 		int cntInsertedFile = writeTableFile(conn,fileSet);
+		int cntInsertedFileName = writeTableFileName(conn,fileSet);
+		int cntInsertedFileProp = writeTableFileProp(conn,fileSet);
 		int cntInsertedFileSystem = writeTableFileSystem(conn,fileSet);
 		int cntInsertedFileStore = writeTableFileStore(conn,fileSet);
 		int cntInsertedFileBlob = writeTableFileBlob(conn,fileSet.getListFileBlob()); 
-		int cntInsertedBlob = writeTableBlob(conn,"","",fileSet.getListBlob()); 
 		int cntInsertedProperty = writeTableProperty(conn,fileSet); 
 		int cntInsertedHash = writeTableHash(conn,fileSet);
 		int cntInsertedArchive = writeTableArchive(conn,fileSet);
 		int cntInsertedContainer = writeTableContainer(conn,fileSet);
 		int cntInsertedTransform = writeTableTransform(conn,fileSet);
-	/*		
-		int ctInsertedFileGroup = writeTableFileGroup(conn,corpus);
-		int ctInsertedFileType = writeTableFileType(conn,corpus);
-		int ctInsertedLine = writeTableLine(conn,corpus);
 		
-		int ctInsertedStat = writeTableStat(conn, corpus);
-		int ctInsertedToken = writeTableToken(conn, corpus);
-		int ctInsertedTokenType = writeTableTokenType(conn, corpus);
-		int ctInsertedDistance = writeTableDistance(conn, corpus);
-	*/	
-		int cntInserted = cntInsertedCorpus + cntInsertedFile + cntInsertedFileSystem + cntInsertedFileStore + cntInsertedFileBlob + cntInsertedBlob + 
-				cntInsertedProperty + cntInsertedHash + cntInsertedArchive + cntInsertedContainer + cntInsertedTransform; //+ ctInsertedToken + 
+		int cntInserted = cntInsertedFileSet + cntInsertedFile + cntInsertedFileName + cntInsertedFileProp + cntInsertedFileSystem + 
+				cntInsertedFileStore + cntInsertedFileBlob + cntInsertedProperty + cntInsertedHash + 
+				cntInsertedArchive + cntInsertedContainer + cntInsertedTransform; //+ ctInsertedToken + 
 		return(cntInserted);
 	}	
 	public static int writeBlob(Connection conn,  NodeFileSet fileSet)	{
 		int ctInsertedFileBlob = writeTableFileBlob(conn,fileSet.getListFileBlob()); 
-		int ctInsertedBlob = writeTableBlob(conn,"","",fileSet.getListBlob()); 
-		int cntInserted = ctInsertedFileBlob + ctInsertedBlob ;
+		int cntInserted = ctInsertedFileBlob ;
 		return(cntInserted);
 	}
 	public static void writeFileSetTables(Connection conn, NodeFileSet fileSet)	{

@@ -1,4 +1,4 @@
-package tool10.fileset;
+package tool10.preview.navigator;
 
 import java.io.IOException;
 import java.io.StringWriter;

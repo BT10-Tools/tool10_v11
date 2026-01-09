@@ -83,7 +83,7 @@ public class TableManager {
 	public static final String[] getTableList(String managerName)	{
 		String tblList[] = null;
 		if ("fsDb".equals(managerName))			{
-			tblList = new String[] {"REG_ENTITYID","FS_FILESET","FS_FILESYSTEM","FS_FILESTORE","FS_FILE","FS_FILEBLOB","FS_BLOB",
+			tblList = new String[] {"REG_ENTITYID","FS_FILESET","FS_FILESYSTEM","FS_FILESTORE","FS_FILE","FS_FILENAME","FS_FILEPROP","FS_FILEBLOB",
 									"FS_FILEGROUP","FS_FILEGROUPMEMBER","FS_HASH","FS_HOST","FS_PROPERTY","FS_QUERY","FS_STAT",
 									"FS_ARCHIVE","FS_CONTAINER", "FS_TRANSFORM"};
 		} else if ("tagDb".equals(managerName))			{

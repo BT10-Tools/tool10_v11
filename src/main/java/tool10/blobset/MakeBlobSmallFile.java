@@ -12,7 +12,7 @@ import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
 import tool10.fileset.nodes.NodeHash;
 
-public class MakeFileSetBlobSmall {
+public class MakeBlobSmallFile {
 
 	private static byte[] processOneBin(NodeF10 f10, ArrayList<NodeFileBlob> listBlobSmallForBin, 
 			SortedMap<Integer,ArrayList<NodeFile>> mapBin2NodeFileList, SortedMap<Integer,Long> mapBin2TotalSize, 
@@ -33,7 +33,7 @@ public class MakeFileSetBlobSmall {
 	
 			if ((fileBytesArray==null) || (fileBytesArray.length==0) || (fileBytesArray.length>blockSize)) continue; //it is a big file ???
 			
-			System.out.println("createAllFileBlobSmall nodeFile.getFileNameAbsolute()=\""+nodeFile.getFileNameAbsolute()+"\" ,fileBytesArray.length="+fileBytesArray.length);
+			System.out.println("MakeBlobSmallFile nodeFile.getFileNameAbsolute()=\""+nodeFile.getFileNameAbsolute()+"\" ,fileBytesArray.length="+fileBytesArray.length);
 					
 			if (byteIndexEnd==0)	{
 				byteIndexStart = 0;  
@@ -49,7 +49,7 @@ public class MakeFileSetBlobSmall {
 			nodeFile.setHashId(hashId);
 			
 			//public static NodeFileBlob createOneFileBlob(NodeF10 f10, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId)
-			NodeFileBlob fileBlob = MakeFileBlobAndBlob.createOneFileBlob(f10,nodeFile.getFileId(),nodeFile.getFileSize(),null,blobType,hashId);
+			NodeFileBlob fileBlob = MakeBlobSetTables.createOneFileBlob(f10,nodeFile.getFileId(),nodeFile.getFileSize(),null,blobType,hashId);
 			fileBlob.setSmallByteIndexStart((long) byteIndexStart);
 			fileBlob.setSmallByteIndexEnd((long) byteIndexEnd);
 			
@@ -61,60 +61,61 @@ public class MakeFileSetBlobSmall {
 	
 		System.arraycopy(binBytes, 0, copiedBytes, 0, byteIndexEnd+1);
 	
-		System.out.println("createAllFileBlobSmall binBytes.length="+binBytes.length+" ,listBlobSmallForBin.size()="+listBlobSmallForBin.size()+" ,copiedBytes.length="+ copiedBytes.length);
-		System.out.println("createAllFileBlobSmall byteIndexStart="+byteIndexStart+" ,byteIndexEnd="+byteIndexEnd);
+		System.out.println("MakeBlobSmallFile binBytes.length="+binBytes.length+" ,listBlobSmallForBin.size()="+listBlobSmallForBin.size()+" ,copiedBytes.length="+ copiedBytes.length);
+		System.out.println("MakeBlobSmallFile byteIndexStart="+byteIndexStart+" ,byteIndexEnd="+byteIndexEnd);
 		binBytes = null;
 		
 		return(copiedBytes);
 	}	
-	private static void createAllFileBlobSmall(NodeF10 f10, HashMap<NodeFile,Integer> mapNodeFile2BinNumber, int blockSize)	{
+	private static void createAllBlobEntityBlobSmall(NodeF10 f10, HashMap<NodeBlobEntity,Integer> mapNodeBlobEntity2BinNumber, int blockSize)	{
 		//transpose the map 
-		SortedMap<Integer,ArrayList<NodeFile>> mapBin2NodeFileList = new TreeMap<>();
+		SortedMap<Integer,ArrayList<NodeBlobEntity>> mapBin2NodeBlobEntityList = new TreeMap<>();
 		SortedMap<Integer,Long> mapBin2TotalSize = new TreeMap<>();
 		int maxBinNumber = 0;  
 		long cntBytes = 0; 
-		for (NodeFile nodeFile : mapNodeFile2BinNumber.keySet())	{
-			int binNumber = mapNodeFile2BinNumber.get(nodeFile);
-			if (mapBin2NodeFileList.get(binNumber)==null) { mapBin2NodeFileList.put(binNumber,new ArrayList<NodeFile>());}
-			mapBin2NodeFileList.get(binNumber).add(nodeFile);
+		for (NodeBlobEntity nodeBlobEntity : mapNodeBlobEntity2BinNumber.keySet())	{
+			int binNumber = mapNodeBlobEntity2BinNumber.get(nodeBlobEntity);
+			if (mapBin2NodeBlobEntityList.get(binNumber)==null) { mapBin2NodeBlobEntityList.put(binNumber,new ArrayList<NodeBlobEntity>());}
+			mapBin2NodeBlobEntityList.get(binNumber).add(nodeBlobEntity);
 			if (mapBin2TotalSize.get(binNumber)==null) { mapBin2TotalSize.put(binNumber,0l);}
 			if (binNumber > maxBinNumber) maxBinNumber = binNumber;
-			mapBin2TotalSize.put(binNumber,mapBin2TotalSize.get(binNumber) + nodeFile.getFileSize());
-			cntBytes += nodeFile.getFileSize();
+			mapBin2TotalSize.put(binNumber,mapBin2TotalSize.get(binNumber) + nodeBlobEntity.getSourceSize());
+			cntBytes += nodeBlobEntity.getSourceSize();
 		}
-		System.out.println("createAllFileBlobSmall maxBinNumber="+maxBinNumber+" ,cntBytes="+cntBytes+
-				" , mapBin2NodeFileList.size()="+mapBin2NodeFileList.size()+" ,mapBin2TotalSize.size()="+mapBin2TotalSize.size());
+		System.out.println("MakeBlobSmallFile maxBinNumber="+maxBinNumber+" ,cntBytes="+cntBytes+
+				" , mapBin2NodeBlobEntityList.size()="+mapBin2NodeBlobEntityList.size()+" ,mapBin2TotalSize.size()="+mapBin2TotalSize.size());
 		//byte[][] binBytes = new byte[maxBinNumber][];
 		String blobType = "smallfile";
 		ArrayList<NodeFileBlob> listBlobSmallForBin = new ArrayList<>(); 
 		try {
-			for (int binNumber : mapBin2NodeFileList.keySet())	{
-				if ((mapBin2NodeFileList.get(binNumber)==null) || (mapBin2NodeFileList.get(binNumber).isEmpty())) continue; 
-				byte[] copiedBytes = processOneBin(f10, listBlobSmallForBin,mapBin2NodeFileList, mapBin2TotalSize, blobType, binNumber, blockSize);
+			for (int binNumber : mapBin2NodeBlobEntityList.keySet())	{
+				if ((mapBin2NodeBlobEntityList.get(binNumber)==null) || (mapBin2NodeBlobEntityList.get(binNumber).isEmpty())) continue; 
+				byte[] copiedBytes = processOneBin(f10, listBlobSmallForBin,mapBin2NodeBlobEntityList, mapBin2TotalSize, blobType, binNumber, blockSize);
 		
 				NodeHash hashMergedBytes = MakeFileSetHash.createOneHashForSmallFile(f10, (long) copiedBytes.length, copiedBytes);
 				Long hashIdMergedBytes = hashMergedBytes.getHashId();
 				
-				//public static NodeBlob createOneBlob(NodeF10 f10, Long fileId, Long fileSize, String blobType, Long cntPart,Long partNumber, byte[] blobBytes, Long hashId)	{
-				NodeBlob blob = MakeFileBlobAndBlob.createOneBlob(f10,null,null,blobType,null,null,copiedBytes, hashIdMergedBytes); 
+				//public static NodeBlob createOneBlob(NodeF10 f10, Long fileId, Long fileSize, String blobType, Long cntPart,Long partNumber,  Long hashId)	{
+				NodeBlob blob = MakeBlobSetTables.createOneBlob(f10,null,null,blobType,null,null,hashIdMergedBytes); 
 				for (NodeFileBlob fileBlob : listBlobSmallForBin)	{
 					fileBlob.setBlobId(blob.getBlobId());
 				}
 				copiedBytes = null;
 						
-				int cntWritten2DbFileBlob = MakeFileBlobAndBlob.writeFileBlobList2Db (f10.getConn10().getConn(), listBlobSmallForBin);
-				int cntWritten2DbBlob = MakeFileBlobAndBlob.writeBlob2Db (f10.getConnBlob().getConn(), blob);
+				int cntWritten2DbFileBlob = MakeBlobSetTables.writeFileBlobList2Db (f10.getConn10().getConn(), listBlobSmallForBin);
+				int cntWritten2DbBlob = MakeBlobSetTables.writeBlob2Db (f10.getConnBlob().getConn(), blob);
 			} //for
 		} catch(Exception e) {
 			
 		}
 	}
-	public static HashMap<NodeFile,Integer> createFileBlobsSmall(NodeF10 f10, int blockSize, 
-			int binSize, int minFileSizeForPacking, HashSet<NodeFile> setCacheFile)	{
-		HashMap<NodeFile,Integer> mapNodeFile2BinNumber = MakeSmallFilePacking.createBinPacking(f10.getFileSet(),blockSize,binSize,minFileSizeForPacking, setCacheFile);
+	public static HashMap<NodeBlobEntity,Integer> createFileBlobsSmall(NodeF10 f10, int blockSize, 
+			int binSize, int minFileSizeForPacking, HashSet<NodeBlobEntity> setCacheBlobEntity)	{
+		HashMap<NodeBlobEntity,Integer> mapNodeBlobEntity2BinNumber = 
+				MakeSmallFilePacking.createBinPacking(f10.getBlobSet(),blockSize,binSize,minFileSizeForPacking, setCacheBlobEntity);
 		
-		createAllFileBlobSmall(f10,mapNodeFile2BinNumber, blockSize);
+		createAllBlobEntityBlobSmall(f10,mapNodeBlobEntity2BinNumber, blockSize);
 		
-		return(mapNodeFile2BinNumber);
+		return(mapNodeBlobEntity2BinNumber);
 	}
 }

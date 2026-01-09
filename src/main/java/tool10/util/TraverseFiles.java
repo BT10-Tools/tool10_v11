@@ -22,7 +22,7 @@ public class TraverseFiles {
 	        return null;
 	    }
 	    String fileExtension = getFileExtension(filename);
-	    if ((fileExtension == null) || (fileExtension.isEmpty()) || (fileExtension.isBlank())) {
+	    if ((fileExtension == null) || (fileExtension.isEmpty())) {
 	        return filename;
 	    }
 	    int dotIndex = filename.lastIndexOf(fileExtension);

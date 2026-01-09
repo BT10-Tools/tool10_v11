@@ -9,6 +9,7 @@ import java.nio.file.attribute.UserPrincipal;
 import java.nio.file.attribute.UserPrincipalLookupService;
 
 import tool10.fileset.nodes.NodeFile;
+import tool10.fileset.nodes.NodeFileProp;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.util.TimeUtil;
 
@@ -27,7 +28,7 @@ public class FilePropertySetter {
 			
 		}
 	}
-	public static void setFileProperties(NodeFileSet fileSet, NodeFile nodeFile, String fileName)	{
+	public static void setFileProperties(NodeFileSet fileSet, NodeFileProp nodeFileProp, String fileName)	{
 		//lastModifiedTime,isHidden, readOnly, executable, readable, wr,table, owner 
 		try {
 			
@@ -35,30 +36,30 @@ public class FilePropertySetter {
 			File file = path.toFile();
 			if (!file.exists()) return;
 		
-			if (nodeFile.getFileCreationDate()!=null) {
-				Files.setAttribute(path, "creationTime", TimeUtil.ZDT2FileTime(nodeFile.getFileCreationDate()));
+			if (nodeFileProp.getFileCreationDate()!=null) {
+				Files.setAttribute(path, "creationTime", TimeUtil.ZDT2FileTime(nodeFileProp.getFileCreationDate()));
 			}
-			if (nodeFile.getFileCreationDate()!=null) {
-				Files.setAttribute(path, "creationTime", TimeUtil.ZDT2FileTime(nodeFile.getFileCreationDate()));
+			if (nodeFileProp.getFileCreationDate()!=null) {
+				Files.setAttribute(path, "creationTime", TimeUtil.ZDT2FileTime(nodeFileProp.getFileCreationDate()));
 			}
-			if (nodeFile.getFileModificationDate()!=null) {
-				Files.setLastModifiedTime(path, TimeUtil.ZDT2FileTime(nodeFile.getFileModificationDate()));
+			if (nodeFileProp.getFileModificationDate()!=null) {
+				Files.setLastModifiedTime(path, TimeUtil.ZDT2FileTime(nodeFileProp.getFileModificationDate()));
 			}
 			
-			if ("true".equals(nodeFile.getIsHidden())) {
+			if ("true".equals(nodeFileProp.getIsHidden())) {
 				Files.setAttribute(path, "dos:hidden", true);
 			}
-			if ("true".equals(nodeFile.getIsReadOnly())) {
+			if ("true".equals(nodeFileProp.getIsReadOnly())) {
 				boolean success = file.setReadOnly();
 			}
-			if      ("true".equals(nodeFile.getCanExecute())) { boolean success = file.setExecutable(true); }
-			else if ("false".equals(nodeFile.getCanExecute())) { boolean success = file.setExecutable(false); }
-			if      ("true".equals(nodeFile.getCanRead())) { boolean success = file.setReadable(true); }
-			else if ("false".equals(nodeFile.getCanRead())) { boolean success = file.setReadable(false); }
-			if      ("true".equals(nodeFile.getCanWrite())) { boolean success = file.setWritable(true); }
-			else if ("false".equals(nodeFile.getCanWrite())) { boolean success = file.setWritable(false); }
+			if      ("true".equals(nodeFileProp.getCanExecute())) { boolean success = file.setExecutable(true); }
+			else if ("false".equals(nodeFileProp.getCanExecute())) { boolean success = file.setExecutable(false); }
+			if      ("true".equals(nodeFileProp.getCanRead())) { boolean success = file.setReadable(true); }
+			else if ("false".equals(nodeFileProp.getCanRead())) { boolean success = file.setReadable(false); }
+			if      ("true".equals(nodeFileProp.getCanWrite())) { boolean success = file.setWritable(true); }
+			else if ("false".equals(nodeFileProp.getCanWrite())) { boolean success = file.setWritable(false); }
 			
-			if (nodeFile.getOwnerName()!=null)	{ setOwner(path, nodeFile.getOwnerName()); }
+			if (nodeFileProp.getOwnerName()!=null)	{ setOwner(path, nodeFileProp.getOwnerName()); }
 			    
 			
 		} catch (Exception e)	{

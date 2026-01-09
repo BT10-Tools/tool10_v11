@@ -20,13 +20,9 @@
 
 package tool10.f10;
 
-import java.time.ZonedDateTime;
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
-import tool10.util.TimeUtil;
 
 /**
  * The main program for Tool10.  
@@ -79,21 +75,15 @@ public class Tool10 {
 		
 		printHeader("TR");
 		printHeader("EN");
-		ZonedDateTime startZdt = ZonedDateTime.now();
 		
-		String msg = "Tool10 runFileSet Execution Start Time:"+ZonedDateTime.now();
-		System.out.println(msg); logger.info(msg);
-
 		NodeF10 f10 = new NodeF10();
-	    
-	    String[] args0 = CliRun.getArgs0(null);
+	    f10.startAll(logger);
+		
+	    String[] args0 = CliRun.getArgs0("loadblob");
 	    RunF10.runF10(f10,args0);
-	    ZonedDateTime finishZdt = ZonedDateTime.now();
-	    long runTimeInMillis = TimeUtil.diffInMillisZDT(startZdt, finishZdt);
 	    
-	    msg = "Tool10 runFileSet Execution Finish Time:"+ZonedDateTime.now() + ", run time in milliseconds:"+runTimeInMillis;
-		System.out.println(msg); logger.info(msg);
-
+	    f10.endAll(logger);
+	   
 	}
 	public static void main(String[] args) {
 		runFileSet(args);

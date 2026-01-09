@@ -9,7 +9,7 @@ public class CliRun {
 		
 		String[] args1 = new String[] {"-help"}; 
 		String[] args2 = new String[] {"-credits"};
-		String[] args3 = new String[] {"",
+		String[] argsLoad1 = new String[] {"",
 				"-load",
 				//"-dbtype","sqlite",
 				//"-dbreadonly","no",
@@ -28,13 +28,13 @@ public class CliRun {
 				"-dir","C:\\tmp\\similarity\\11_Book"
 				};
 		
-		String[] args3b = new String[] {"",
+		String[] argsBlob1 = new String[] {"",
 				"-loadblob",
 				//"-dbtype","sqlite",
 				//"-dbreadonly","no",
 				//"-dbmem","no",
 				"-filesetname","fileSet02",
-				"-outputfilesetname","fileSet02Blob",
+				"-blobsetname","fileSet02Blob",
 				"-dbname","C:\\app\\sqlite\\similarity\\fileSet02.db",
 				"-blobdbname","C:\\app\\sqlite\\similarity\\fileSet02Blob.db",  //this is optional, default and preferred is current db  
 				"-blobdbaction","renewdb",
@@ -135,8 +135,11 @@ public class CliRun {
 				"-tempdir","C:\\tmp\\similarity\\12_Sim"
 				};
 	
-		if ("read".equalsIgnoreCase(argsType)) {	return(argsRead);	}
-		return(args10);
+		if ("read".equalsIgnoreCase(argsType)) 		{	return(argsRead);	}
+		else if ("load".equalsIgnoreCase(argsType)) {	return(argsLoad1);	}
+		else if ("loadblob".equalsIgnoreCase(argsType)) {	return(argsBlob1);	}
+		
+		return(argsRead);
 	}
 	public static CliParameter processFileSetCli(NodeF10 f10, String[] args0)	{
 		

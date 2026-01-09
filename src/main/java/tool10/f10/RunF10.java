@@ -1,12 +1,12 @@
 package tool10.f10;
 
-import tool10.blobset.MakeFileSetBlob;
+import tool10.blobset.MakeBlob;
+import tool10.blobset.RunBlob;
 import tool10.bookset.RunBook;
 import tool10.fileset.ExportFileSet;
 import tool10.fileset.ExtractorFile;
 import tool10.fileset.MainFileSet;
-import tool10.fileset.MakeFileSet;
-import tool10.fileset.PropConfig;
+import tool10.fileset.PrintFileSet;
 import tool10.fileset.ReadFsTablesFromDb;
 import tool10.fileset.WriteFsTablesToDb;
 import tool10.fileset.nodes.NodeFileSet;
@@ -54,10 +54,10 @@ public class RunF10 {
 		if (fileSet==null) return;
 		f10.setFileSet(fileSet);
 		
-		MakeFileSetBlob.createFileBlobs(f10);
+		RunBlob.runBlob4FileSet(f10, fileSet);
 		if (f10.getOutputFileSet()!=null)	{
 			WriteFsTablesToDb.writeBlob(f10.getConn10().getConn(), f10.getOutputFileSet());
-			MakeFileSet.printAllListsAndMaps(fileSet);
+			PrintFileSet.printAllListsAndMaps(fileSet);
 		}
 		
 		f10.getConn10().closeConnection();
@@ -176,19 +176,19 @@ public class RunF10 {
 		if (action==null) return;
 		
 		if ("load".equals(action))	{runLoad(f10);}
-		else if ("loadblob".equals(action))	{runLoadBlob(f10);}
-		else if ("read".equals(action))	{runRead(f10);}
-		else if ("extract".equals(action))	{runExtract(f10);}
-		else if ("export".equals(action))	{runExport(f10);}
-		else if ("unzip".equals(action))	{runUnzip(f10);}
-		else if ("unembed".equals(action))	{runUnembed(f10);}
+		else if ("loadblob".equals(action))		{runLoadBlob(f10);}
+		else if ("read".equals(action))			{runRead(f10);}
+		else if ("extract".equals(action))		{runExtract(f10);}
+		else if ("export".equals(action))		{runExport(f10);}
+		else if ("unzip".equals(action))		{runUnzip(f10);}
+		else if ("unembed".equals(action))		{runUnembed(f10);}
 		else if ("transform".equals(action))	{runTransform(f10);}
-		else if ("tag".equals(action))		{runTag(f10);}
-		else if ("image".equals(action))	{runImage(f10);}
-		else if ("book".equals(action))		{runBook(f10);}
+		else if ("tag".equals(action))			{runTag(f10);}
+		else if ("image".equals(action))		{runImage(f10);}
+		else if ("book".equals(action))			{runBook(f10);}
 		else if ("similarity".equals(action))	{runSimilarity(f10);}
-		else if ("help".equals(action))	{CliPrint.printHelp(f10.getCliParams().getCommandLine(), f10.getCliParams().getOpt()); }
-		else if ("credits".equals(action))	{CliPrint.printCredits();}
+		else if ("help".equals(action))			{CliPrint.printHelp(f10.getCliParams().getCommandLine(), f10.getCliParams().getOpt()); }
+		else if ("credits".equals(action))		{CliPrint.printCredits();}
 	}
 	
 }

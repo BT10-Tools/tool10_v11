@@ -1,4 +1,4 @@
-package tool10.fileset;
+package tool10.f10;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

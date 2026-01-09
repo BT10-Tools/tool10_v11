@@ -1,4 +1,4 @@
-package tool10.preview.api;
+package tool10.preview.navigator;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;

@@ -50,13 +50,13 @@ public class CliParseAndValidateBlob {
 	    	}	
 	    }
 	    if (cmd.hasOption("filesetname")) 	{	String str = cmd.getOptionValue("filesetname"); p.setFileSetName(str);	}
-	    if (cmd.hasOption("outputfilesetname")) 	{	
-  			String str = cmd.getOptionValue("outputfilesetname"); 
+	    if (cmd.hasOption("blobsetname")) 	{	
+  			String str = cmd.getOptionValue("blobsetname"); 
   			if ((str==null) || (str.isEmpty())) {
-  				System.out.println("outputfilesetname is not as expected: outputfilesetname "+str);
+  				System.out.println("blobsetname is not as expected: blobsetname "+str);
   				return(null);
   			} 
-  			p.setOutputFileSetName(str);
+  			p.setBlobSetName(str);
   		}
 		if (cmd.hasOption("dbname")) 	{	
 			String str = cmd.getOptionValue("dbname"); 

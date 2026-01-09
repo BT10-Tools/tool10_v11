@@ -57,7 +57,7 @@ public class CliInitialize {
 	    
 		options.addOption("loadblob", false, "Loading file content as binary large objects directories to sqlite database");
 		options.addOption("filesetname", true, "The name of the file set");
-	    options.addOption("outputfilesetname", true, "The name of the output file set");
+	    options.addOption("blobsetname", true, "The name of the blob set");
 		options.addOption("blobdbname", true, "The name format of the database/filename, for multiple files $nnn");
 		options.addOption("blobdbaction", true, "The action for the blob database, newdb, renewdb, newfileset, appendfile, usedb, default is newdb");
 	    options.addOption("blobdbsize", true, "The maximum file size of sqlite database, filename");

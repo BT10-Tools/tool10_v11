@@ -8,7 +8,6 @@ import java.util.List;
 import tool10.blobset.NodeBlob;
 import tool10.f10.NodeF10;
 import tool10.fileset.nodes.NodeFile;
-import tool10.sql.Conn10;
 import tool10.util.FileUtil;
 
 public class MakeBookSet {
@@ -36,12 +35,12 @@ public class MakeBookSet {
 	public static NodeBookFile createOneBookFileFromFile(NodeF10 f10,NodeFile nodeFile, Long bookId)	{
 		Long fileId = nodeFile.getFileId(); 
         String sourceAbsolutePath = nodeFile.getFileNameAbsolute();
-        String sourceDirName = nodeFile.getDirNameAbsolute(); 
-        String sourceFileName = nodeFile.getFileName();
+        String sourceDirName = (nodeFile.getRefFileName()==null) ? null : nodeFile.getRefFileName().getDirNameAbsolute(); 
+        String sourceFileName = (nodeFile.getRefFileName()==null) ? null : nodeFile.getRefFileName().getFileName();
 		//String sourceFileName = shortFilename;
         String sourceExtensionName = nodeFile.getExtensionName(); 
         Long sourceFileSize =null; 
-        ZonedDateTime sourceFileCreationDate = nodeFile.getFileCreationDate();
+        ZonedDateTime sourceFileCreationDate = (nodeFile.getRefFileProp()==null) ? null : nodeFile.getRefFileProp().getFileCreationDate();
 
         NodeBookFile bookFile = MakeBookSetTables.createOneBookFileFromFile(f10, bookId, fileId,sourceAbsolutePath, sourceDirName, sourceFileName, 
         		sourceExtensionName, sourceFileSize, sourceFileCreationDate);
@@ -68,7 +67,8 @@ public class MakeBookSet {
 		int cnt = 0; 
 		for (NodeFile nodeFile : f10.getFileSet().getListFile())	{
 			if ("yes".equals(nodeFile.getIsDirectory())) continue;
-			if ("yes".equals(nodeFile.getIsSymbolicLink())) continue;
+			String symLink = (nodeFile.getRefFileProp()==null) ? null : nodeFile.getRefFileProp().getIsSymbolicLink();
+			if ("yes".equals(symLink)) continue;
 			//other filters can come here like wildcards
 			
 			//if (!"pdf".equals(nodeFile.getExtensionName())) continue; 

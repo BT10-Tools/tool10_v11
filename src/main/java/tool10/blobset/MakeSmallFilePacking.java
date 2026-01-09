@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import tool10.fileset.nodes.NodeFile;
-import tool10.fileset.nodes.NodeFileSet;
 import tool10.misc.binpacking.AbstractBinPacking;
 import tool10.misc.binpacking.FirstFitDecreasing;
 
@@ -29,46 +27,47 @@ public class MakeSmallFilePacking {
     }
 
  	//puts the NodeFiles into the optimum number of bins 
-	public static HashMap<NodeFile,Integer> createBinPacking(NodeFileSet fileSet, int blockSize, int binSize, int minFileSizeForPacking, HashSet<NodeFile> setCacheFile)	{
+	public static HashMap<NodeBlobEntity,Integer> createBinPacking(NodeBlobSet blobSet, int blockSize, int binSize, 
+			int minFileSizeForPacking, HashSet<NodeBlobEntity> setCacheBlobEntity)	{
 		ArrayList<Integer> listSize4Binning = new ArrayList<Integer>();
 		//map from fileSize to the ArrayList of files whose filesize equal to that  
-		HashMap<Long,ArrayList<NodeFile>> mapSize2NodeFile = new HashMap<Long,ArrayList<NodeFile>>(); 
-		for (NodeFile nodeFile : fileSet.getListFile())	{
-			if (setCacheFile.contains(nodeFile)) continue; //it is wirtten 
-			if (nodeFile.getFileSize()==null) continue;
-			if (nodeFile.getFileSize().longValue()==0) continue;
-			if (nodeFile.getFileSize().longValue() > minFileSizeForPacking) continue;
+		HashMap<Long,ArrayList<NodeBlobEntity>> mapSize2NodeBlobEntity = new HashMap<Long,ArrayList<NodeBlobEntity>>(); 
+		for (NodeBlobEntity nodeBlobEntity : blobSet.getListBlobEntity())	{
+			if (setCacheBlobEntity.contains(nodeBlobEntity)) continue; //it is written 
+			if (nodeBlobEntity.getSourceSize()==null) continue;
+			if (nodeBlobEntity.getSourceSize().longValue()==0) continue;
+			if (nodeBlobEntity.getSourceSize().longValue() > minFileSizeForPacking) continue;
 			
-			listSize4Binning.add(nodeFile.getFileSize().intValue());
-			if (mapSize2NodeFile.get(nodeFile.getFileSize()) == null) {
-				mapSize2NodeFile.put(nodeFile.getFileSize(), new ArrayList<NodeFile>());
+			listSize4Binning.add(nodeBlobEntity.getSourceSize().intValue());
+			if (mapSize2NodeBlobEntity.get(nodeBlobEntity.getSourceSize()) == null) {
+				mapSize2NodeBlobEntity.put(nodeBlobEntity.getSourceSize(), new ArrayList<NodeBlobEntity>());
 			}
-			mapSize2NodeFile.get(nodeFile.getFileSize()).add(nodeFile); 
+			mapSize2NodeBlobEntity.get(nodeBlobEntity.getSourceSize()).add(nodeBlobEntity); 
 		}
 		//List<Integer> in = Arrays.asList(10, 3, 2, 3, 10, 1, 6, 7, 8);
 		List<Integer> in = listSize4Binning;
 		FirstFitDecreasing ffd = new FirstFitDecreasing(in, binSize);
 		HashMap<Integer,ArrayList<Integer>> binsMapList = runBinPacking(ffd, "first fit decreasing");
-		HashMap<NodeFile,Integer> mapNodeFile2BinNumber = new HashMap<NodeFile,Integer>();
+		HashMap<NodeBlobEntity,Integer> mapNodeBlobEntity2BinNumber = new HashMap<NodeBlobEntity,Integer>();
 		for (int binNumber : binsMapList.keySet())	{
 			System.out.print("BinNumber="+binNumber+" [");
 			ArrayList<Integer> itemList = binsMapList.get(binNumber);
 			if (itemList==null) continue;
-			int cntUpdatedFile4BinNumber = 0; 
+			int cntUpdatedBlobEntity4BinNumber = 0; 
 			for (int itemSize : itemList)	{
-				if (mapSize2NodeFile.get((long) itemSize)==null) continue;
-				if (mapSize2NodeFile.get((long) itemSize).size()==0) continue;
-				NodeFile nodeFile = mapSize2NodeFile.get((long) itemSize).get(0);
-				if (nodeFile==null) continue;
-				mapNodeFile2BinNumber.put(nodeFile, binNumber);
+				if (mapSize2NodeBlobEntity.get((long) itemSize)==null) continue;
+				if (mapSize2NodeBlobEntity.get((long) itemSize).size()==0) continue;
+				NodeBlobEntity nodeBlobEntity = mapSize2NodeBlobEntity.get((long) itemSize).get(0);
+				if (nodeBlobEntity==null) continue;
+				mapNodeBlobEntity2BinNumber.put(nodeBlobEntity, binNumber);
 				//remove one element from ArrayList with the filesize  
-				mapSize2NodeFile.get((long) itemSize).remove(0);
-				System.out.print(nodeFile.getFileSize()+",");
-				cntUpdatedFile4BinNumber++;
+				mapSize2NodeBlobEntity.get((long) itemSize).remove(0);
+				System.out.print(nodeBlobEntity.getBlobSize()+",");
+				cntUpdatedBlobEntity4BinNumber++;
 			}
-			System.out.println("] cntUpdatedFile4BinNumber="+cntUpdatedFile4BinNumber);
+			System.out.println("] cntUpdatedBlobEntity4BinNumber="+cntUpdatedBlobEntity4BinNumber);
 		}
-		 return(mapNodeFile2BinNumber);
+		 return(mapNodeBlobEntity2BinNumber);
         
 	/*	
 			mapFilesize2Id

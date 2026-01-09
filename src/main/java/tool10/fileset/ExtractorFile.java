@@ -14,8 +14,8 @@ public class ExtractorFile {
 	private static String getNewFileName(NodeFile nodeFile, String targetDirName) {
 		//String parentDirName = ((nodeFile.getDirNameRelative()==null) || (nodeFile.getDirNameRelative().isEmpty())) ? "" : "\\"+nodeFile.getDirNameRelative();
 		//String parentDirName = ((nodeFile.getDirNameRelative()==null) || (nodeFile.getDirNameRelative().isEmpty())) ? "" : "\\"+nodeFile.getDirNameRelative();
-		if (nodeFile.getFileNameRelative()==null) return (null); 
-		String fileName = targetDirName + "\\" + nodeFile.getFileNameRelative();
+		if ((nodeFile.getRefFileName()==null) || (nodeFile.getRefFileName().getFileNameRelative()==null)) return (null); 
+		String fileName = targetDirName + "\\" + nodeFile.getRefFileName().getFileNameRelative();
 		//targetDirName + parentDirName + "\\"+nodeFile.getFileName();
 		//System.out.println("ExtractorFile getNewFileName  fileName: "+fileName);
 		return(fileName);

@@ -1,11 +1,35 @@
 package tool10.sql;
 
+import tool10.blobset.CreateBlobSetTables;
 import tool10.bookset.CreateBookSetTables;
 import tool10.f10.NodeF10;
 import tool10.fileset.CreateFileSetTables;
 
 public class DbManager {
 
+	public static Conn10 createBblobDatabase(NodeF10 f10)	{
+		String dbFileName = f10.getCliParams().getBlobDbName();
+		String connectionName = "blobDb";
+		String dbType = f10.getCliParams().getBlobDbType();
+		Conn10 connBlob = null; 
+		if ((dbFileName==null) || (f10.getConn10().getDbFileName().equals(dbFileName)))	{
+			System.out.println("DbManager createBlobDatabase dbFileName:"+dbFileName+" ,f10.getConn10().getDbFileName():"+f10.getConn10().getDbFileName());	
+			connBlob = new Conn10(connectionName, f10.getConn10().getDbType(), f10.getConn10().getDbFileName());;
+		} else {
+			System.out.println("DbManager createBlobDatabase dbFileName:"+dbFileName+" ,dbType"+dbType);	
+			connBlob = new Conn10(connectionName, dbType, dbFileName);
+		}
+		//connBlob = f10.getConn10();
+		if (connBlob==null)	{
+			System.out.println("DbManager createBlobDatabase connBlob is null");	
+			return(null);
+		}
+		f10.setConnBlob(connBlob);	
+		CreateBlobSetTables.createBlobSetTables(connBlob);
+		System.out.println("DbManager createBlobDatabase connBlob:"+connBlob);
+		System.out.println("DbManager createBlobDatabase f10.getConn10():"+f10.getConn10());
+		return(connBlob);
+	}
 	public static Conn10 createBookDatabase(NodeF10 f10)	{
 		String dbFileName = f10.getCliParams().getBookDbName();
 		String connectionName = "bookDb";

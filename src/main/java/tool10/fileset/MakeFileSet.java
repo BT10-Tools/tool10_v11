@@ -21,36 +21,7 @@ public class MakeFileSet {
 		fileSet = new NodeFileSet(fileSetId, sourceId, fileSetName, fileSetDesc, fileSetURL, ownerName, displayOrder, creationDate, null);
 		
 		return(fileSet);
-	}
-	public static void printAllListsAndMaps(NodeFileSet fileSet)	{
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFile().size() = " + fileSet.getListFile().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFileBlob().size() = " + fileSet.getListFileBlob().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListBlob().size() = " + fileSet.getListBlob().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFileSystem().size() = " + fileSet.getListFileSystem().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListFileStore().size() = " + fileSet.getListFileStore().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListHash().size() = " + fileSet.getListHash().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListHost().size() = " + fileSet.getListHost().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListProperty().size() = " + fileSet.getListProperty().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListStat().size() = " + fileSet.getListStat().size());
-							
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2File().size() = " + fileSet.getMapId2File().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2FileBlob().size() = " + fileSet.getMapId2FileBlob().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Blob().size() = " + fileSet.getMapId2Blob().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2FileSystem().size() = " + fileSet.getMapId2FileSystem().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2FileStore().size() = " + fileSet.getMapId2FileStore().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Hash().size() = " + fileSet.getMapId2Hash().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Host().size() = " + fileSet.getMapId2Host().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Property().size() = " + fileSet.getMapId2Property().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Query().size() = " + fileSet.getMapId2Query().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapId2Stat().size() = " + fileSet.getMapId2Stat().size());
-									
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getListRoots().size() = " + fileSet.getListRoots().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapAbsoluteFileName2File().size() = " + fileSet.getMapAbsoluteFileName2File().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapRawFileSystem2FileSystem().size() = " + fileSet.getMapRawFileSystem2FileSystem().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapRawFileStore2FileStore().size() = " + fileSet.getMapRawFileStore2FileStore().size());
-		System.out.println("MakeFileSet printAllListsAndMaps fileSet.getMapCrc2NodeHash().size() = " + fileSet.getMapCrc2NodeHash().size());
-				
-	}
+	}	
 	public static NodeFileSet makeFileSet(NodeF10 f10)	{
 		NodeFileSet fileSet = null;
 		

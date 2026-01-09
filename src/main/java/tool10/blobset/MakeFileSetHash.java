@@ -15,47 +15,7 @@ import tool10.util.UtilCRC32;
 
 public class MakeFileSetHash {
 	
-	private static NodeHash createOneHash(NodeF10 f10,Long fileSize, Long crc64, Long crc32, Long adler32, String blake3, String md5,
-			String sha1,String sha256,String sha384,String sha512,String sha3256,String keccak256)	{
-		NodeHash newHash = null;
-		//public NodeHash(Long hashId, Long fileSetId, Long fileSize, Long crc64, Long crc32, Long adler32, String blake3, String md5,
-		//String sha1,String sha256,String sha384,String sha512,String sha3256,String keccak256,
-		//String hashFieldDesc, String hashStr01, String hashStr02, String hashStr03, String hashStr04,
-		//String hashStr05, Long hashLong01, Long hashLong02, Long hashLong03, Long hashLong04, Long hashLong05,
-		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		try {
-			Long hashId = f10.getConn10().getNextId(-1); //"BSC_BASIC");;
-		/*	Long fileSize = null; 
-			Long crc64 = null;
-			Long crc32 = null;
-			Long adler32 = null;
-			String blake3 = null;
-			String md5 = null;
-			String sha1 = null; 
-			String sha256 = null;
-			String sha384 = null; 
-			String sha512 = null; 
-			String sha3256 = null;
-			String keccak256 = null;  */
-			String hashFieldDesc = null;
-			String hashStr01 = null; String hashStr02 = null; String hashStr03 = null; String hashStr04 = null; String hashStr05 = null; 
-			Long hashLong01 = null; Long hashLong02 = null; Long hashLong03 = null;	Long hashLong04 = null; Long hashLong05 = null; 
-			ZonedDateTime creationDate = ZonedDateTime.now();;
-			ZonedDateTime modificationDate = null;
-			
-			newHash = new NodeHash(hashId,f10.getFileSet().getFileSetId(),fileSize,crc64,crc32,adler32,blake3,md5,
-					sha1,sha256,sha384,sha512,sha3256,keccak256,
-					hashFieldDesc,hashStr01,hashStr02,hashStr03,hashStr04,hashStr05,
-					hashLong01,hashLong02,hashLong03,hashLong04,hashLong05,
-					creationDate, modificationDate);
-			f10.getFileSet().getListHash().add(newHash);
-			f10.getFileSet().getMapId2Hash().put(newHash.getHashId(),newHash);
-			f10.getFileSet().getMapCrc2NodeHash().put(crc32, newHash);
-		} catch (Exception e)	{
-			
-		}
-		return(newHash);
-	}
+
 	public static NodeHash createOneHashForBigFile(NodeF10 f10, Long fileSize, byte[] smallFileBytes)	{
 		//it is used the same bigFile method
 		//called from MakeFileSetBlob.createFileBlobsBig
@@ -90,7 +50,7 @@ public class MakeFileSetHash {
 		String sha3256 = UtilCRC32.getBytesSHA3_256(smallFileBytes);
 		String keccak256 = UtilCRC32.getBytesKeccak256(smallFileBytes);
 		
-		nodeHash = createOneHash(f10, fileSize, crc64, crc32, adler32,blake3,md5,
+		nodeHash = MakeBlobSetTables.createOneHash(f10, fileSize, crc64, crc32, adler32,blake3,md5,
 				sha1, sha256, sha384, sha512, sha3256, keccak256);
 		return(nodeHash);
 	}
@@ -146,7 +106,7 @@ public class MakeFileSetHash {
 			hashList.add(nodeHash.getCrc32());
 		}	
 		Long hashValue = getDirHashFromList(hashList);
-		NodeHash nodeHash = createOneHash(f10, -1l, null, hashValue, null,null,null,
+		NodeHash nodeHash = MakeBlobSetTables.createOneHash(f10, -1l, null, hashValue, null,null,null,
 				null, null, null, null, null, null);
 		nodeFile.setHashId(nodeHash.getHashId());
 		hashList.clear();

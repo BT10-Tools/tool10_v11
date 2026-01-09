@@ -1,136 +1,151 @@
 package tool10.preview.bgram;
 
 import java.io.File;
+import java.nio.ByteBuffer;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.zip.CRC32;
 
 import tool10.fileset.nodes.NodeBinary;
-import tool10.util.FileUtil;
+import tool10.sql.JLite;
 import tool10.util.TraverseFiles;
+import tool10.util.UtilCRC32;
 
 public class BGramManager {
 
-	private static final byte B1 = (byte) 0b0000_0001;
-	private static final byte B2 = (byte) 0b0000_0010;
-	private static final byte B3 = (byte) 0b0000_0100;
-	private static final byte B4 = (byte) 0b0000_1000;
-	private static final byte B5 = (byte) 0b0001_0001;
-	private static final byte B6 = (byte) 0b0010_0000;
-	private static final byte B7 = (byte) 0b0100_0000;
-	private static final byte B8 = (byte) 0b1000_0000;
-	private static final byte[] BARRAY = new byte[] {B1,B2,B3,B4,B5,B6,B7,B8};
-	
-	
-	private static int getBitInIndex(int a, int idx)	{
-		if ((idx<0) || (idx>7)) return(-1); 
-		if ((a & BARRAY[idx]) > 0) return(1);
-		return(0);
-	}
-	private static int byte2IntUnsigned(byte value)	{
-		byte unsignedByte = (byte) (value & 0xFF);
-	    return(Byte.toUnsignedInt(unsignedByte));
-	}
-	private static int byte2IntUnsigned16(byte value1, byte value2)	{
-		int i1 = byte2IntUnsigned(value1);
-		int i2 = byte2IntUnsigned(value2);
-		return (256*i1 + i2);
-	}
-	private static long byte2IntUnsigned32(byte value1, byte value2, byte value3, byte value4)	{
-		long i1 = byte2IntUnsigned16(value1,value2);
-		long i2 = byte2IntUnsigned16(value3,value4);
-		return (256*256*i1 + i2);
-	}
-	private static long byte2IntUnsigned64(byte value1, byte value2, byte value3, byte value4,
-			byte value5, byte value6, byte value7, byte value8)	{
-		long i1 = byte2IntUnsigned32(value1,value2,value3,value4);
-		long i2 = byte2IntUnsigned32(value3,value4,value3,value4);
-		return (256*256*i1 + i2);
-	}
-	private static NodeBinary getNodeBinaryByte4(byte value1, byte value2, byte value3, byte value4)	{
-		return(new NodeBinary(4l,new byte[] {value1,value2,value3,value4}));
-	}
-	private static NodeBinary getNodeBinaryByte8(byte value1, byte value2, byte value3, byte value4,
-			byte value5, byte value6, byte value7, byte value8)	{
-		return(new NodeBinary(8l,new byte[] {value1,value2,value3,value4,value5, value6, value7, value8}));
-	}
-	private static NodeBinary getNodeBinaryByte512(byte[] value)	{
-		return(new NodeBinary((long) value.length, value));
-	}
-	private static boolean updateBGramFromBytes(BGram bGram, byte[] bytes)	{
-		IO.println("updateBGramFromBytes fName:"+bytes.length);
+	private static void keepOnlyTop(Connection conn, String tableName, String bGRamType, SortedMap<NodeBinary,Long> sMap, long topN)	{
+	/*	System.out.println("BGramManager keepOnlyTop  tableName:"+tableName+" ,bGRamType:"+bGRamType+"  sMap.size():"+sMap.size());
 		
-		for (int i=0; i < bytes.length; i++)	{
-			bGram.getB8()[byte2IntUnsigned(bytes[i])]++;
-			if (i < bytes.length - 1) {bGram.getW16()[byte2IntUnsigned16(bytes[i],bytes[i+1])]++;}
-			if (i < bytes.length - 3) {
-				NodeBinary nb32 = getNodeBinaryByte4(bytes[i],bytes[i+1],bytes[i+2],bytes[i+3]); 
-				if (bGram.getW32().get(nb32)==null) {bGram.getW32().put(nb32, 1l);} else {long cnt = bGram.getW32().get(nb32).longValue(); bGram.getW32().put(nb32, cnt++);} 
+		String sqlStrSelect = "SELECT  Count(*) cntEntry FROM "+tableName+" WHERE cnt>0";
+		try {
+			PreparedStatement psSelect = conn.prepareStatement(sqlStrSelect);
+			ResultSet rsSelect  = psSelect.executeQuery(); 
+			long maxEntryId = 0; 
+			if (!rsSelect.next()) { 
+				maxEntryId = rsSelect.getLong("maxEntryId");
 			}
-			if (i < bytes.length - 7) {
-				NodeBinary nb64 = getNodeBinaryByte8(bytes[i],bytes[i+1],bytes[i+2],bytes[i+3],bytes[i+4],bytes[i+5],bytes[i+6],bytes[i+7]); 
-				if (bGram.getW64().get(nb64)==null) {bGram.getW64().put(nb64, 1l);} else {long cnt = bGram.getW64().get(nb64).longValue(); bGram.getW64().put(nb64, cnt++);}
-			}
-			//512 byte calculations is not windowed, it is as blocks 
-			if ((i % 512) == 0) { 
-				int copyLength = 512;
-				if ((i+512) > bytes.length ) {
-					copyLength = bytes.length - i;
-				} 
-				byte[] copiedArray = new byte[copyLength];
-
-				System.arraycopy(bytes, i, copiedArray, 0, copyLength);
-				NodeBinary nb512 = getNodeBinaryByte512(copiedArray);
-				if (bGram.getB512().get(nb512)==null) {
-					bGram.getB512().put(nb512, 1l);
+		} catch (SQLException e) {
+			System.out.println("SQLExcception e:"+e);
+		} */
+	}
+	static long newId = 1;
+	private static void updateOneBGramTable(Connection conn, String tableName, String bGRamType, SortedMap<NodeBinary,Long> sMap)	{
+		//tableName w32
+		//SortedMap<NodeBinary,Long> sMap = bGram.getW32();
+		System.out.println("BGramManager updateOneBGramTable  tableName:"+tableName+" ,bGRamType:"+bGRamType+"  sMap.size():"+sMap.size());
+		
+		CRC32 crc32 = UtilCRC32.getCRC32();
+		//String fieldStr = 	"entryId INTEGER PRIMARY KEY, bGRamType TEXT, crc32 INTEGER, cnt INTEGER, blobVal BLOB, creationDate TEXT, modificationDate TEXT";
+		String sqlStrSelect = "SELECT  count(entryId) cntEntry FROM "+tableName+" WHERE crc32 = ? and blobVal = ?";
+		String sqlStrUpdate = "UPDATE "+tableName+" SET cnt = cnt + ? WHERE entryId = ? ";
+		String sqlStrInsert = "INSERT INTO "+tableName+"(entryId,bGRamType,crc32,cnt,blobVal,creationDate) VALUES (?, ?, ?, ?, ?,   ?)";
+		
+		int cntInserted = 0;
+		int cntUpdated = 0;
+		try {
+			PreparedStatement psSelect = conn.prepareStatement(sqlStrSelect);
+			PreparedStatement psUpdate = conn.prepareStatement(sqlStrUpdate);
+			PreparedStatement psInsert = conn.prepareStatement(sqlStrInsert);
+			ResultSet rsSelect; 
+			for (NodeBinary nodeBin : sMap.keySet())	{
+				if (sMap.get(nodeBin)==null) continue;
+				long cntW32 = sMap.get(nodeBin);
+				long valCrc32 = UtilCRC32.getBytesCRC32(crc32, nodeBin.getByteArray());
+				
+				//System.out.println("BGramManager updateOneBGramTable  cntW32:"+cntW32+" ,valCrc32:"+valCrc32+
+				//		"  nodeBin.getByteArray().length:"+nodeBin.getByteArray().length);
+				
+				psSelect.setLong(1,valCrc32); 
+				psSelect.setBytes(2,nodeBin.getByteArray());
+				rsSelect  = psSelect.executeQuery(); 
+				long cntEntry = 0; 
+				if (rsSelect.next()) { 
+					cntEntry = rsSelect.getLong("cntEntry");
+				}
+				if (cntEntry <= 0)	 {
+					//insert
+					//System.out.println("BGramManager updateOneBGramTable  insert newId:"+newId+" ,cntW32:"+cntW32); 
+					newId++;
+					psInsert.setLong(1, newId);	psInsert.setString(2,bGRamType); 				psInsert.setLong(3,valCrc32);
+					psInsert.setLong(4,cntW32);		psInsert.setBytes(5,nodeBin.getByteArray());		psInsert.setString(6, LocalDate.now().toString());
+					cntInserted += psInsert.executeUpdate();					
 				} else {
-					long cnt = bGram.getB512().get(nb512).longValue(); 
-					bGram.getB512().put(nb512, cnt++);
+					//update
+					System.out.println("BGramManager updateOneBGramTable update cntEntry:"+cntEntry+" ,cntW32:"+cntW32); 
+					psUpdate.setLong(1, cntW32);
+					psUpdate.setLong(2, cntEntry);
+					cntUpdated += psUpdate.executeUpdate();
 				}
 			}
-		}	
-		for (int i=0; i < bGram.getB8().length; i++)	{
-			for (int j=0; j<8; j++) {
-				int bitIJ = getBitInIndex(i,j); //return 0 or 1 as integer
-				bGram.getB1()[bitIJ] = bGram.getB1()[bitIJ] + bGram.getB8()[i] ;				
-			}
-			int mod16 = i % 16;
-			int div16 = i / 16;
-			if (div16>15)	{	System.out.println("updateBGramFromBytes div by 16 is greater than 16, i:"+i); div16=0;}
-			bGram.getB4()[mod16] = bGram.getB4()[mod16] + bGram.getB8()[i] ;
-			bGram.getB4()[div16] = bGram.getB4()[div16] + bGram.getB8()[i] ;
+			psSelect.close();
+			psUpdate.close();
+			psInsert.close();
+		} catch (SQLException e) {
+			System.out.println("SQLExcception e:"+e);
 		}
-		return(true);
+		System.out.println("BGramManager updateOneBGramTable  cntInserted:"+cntInserted);
+		System.out.println("BGramManager updateOneBGramTable  cntUpdated:"+cntUpdated);
 	}
-	private static BGram createOneBGramFromFile(String fileName)	{
-		BGram bGram = null;
-		//public BGram(long bGramId, Long fileId, Long sourceId, String bGramName, String bGramDesc, String bGramStatus,
-		//		String bGramType, long cntBytes, long cntBGram) {
-		String bGramName = fileName; 
-		String bGramDesc = null; 
-		String bGramStatus = "new";
-		String bGramType = "file";
-		byte[] bytes = FileUtil.getBytes(fileName);
-		
-		bGram = new BGram(-1, null, null, bGramName, bGramDesc, bGramStatus, bGramType, bytes.length, 0);
-		
-		if (bytes!=null)	{
-			updateBGramFromBytes(bGram, bytes);
+	private static SortedMap<NodeBinary,Long> getSortedMapFromArray(long[] arrLong)	{
+		SortedMap<NodeBinary,Long> sMap = new TreeMap<>();
+		//NodeBinary(Long byteLength, Long crc64, byte[] byteArray) {
+		ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+		for (int i=0; i<arrLong.length; i++)	{ 
+			buffer.putLong((long)i);
+	        byte[] bytes = buffer.array();
+	        long valCrc32 = UtilCRC32.getBytesCRC32(bytes);
+			NodeBinary nb = new NodeBinary((long)bytes.length,valCrc32,bytes);
+			sMap.put(nb, arrLong[i]);
+			buffer.clear();
 		}
-		return(bGram);
+		return(sMap);
+	}
+	private static void updateBGramTables(Connection conn, BGram bGram)	{
+		System.out.println("updateBGramTables      bGram.getW32().size():"+bGram.getW32().size() + "   , bGram.getW64().size():"+bGram.getW64().size());
+		System.out.println("updateBGramTables      bGram.getB512().size():"+bGram.getB512().size());
+		updateOneBGramTable(conn, "w32", "w32", bGram.getW32());
+		updateOneBGramTable(conn, "w64", "w64", bGram.getW64());
+		updateOneBGramTable(conn, "b512", "b512", bGram.getB512());
+		SortedMap<NodeBinary,Long> sMap1  = getSortedMapFromArray(bGram.getB1()); 	updateOneBGramTable(conn, "b1", "b1", sMap1); 
+		SortedMap<NodeBinary,Long> sMap4  = getSortedMapFromArray(bGram.getB4());	updateOneBGramTable(conn, "b4", "b4", sMap4);
+		SortedMap<NodeBinary,Long> sMap8  = getSortedMapFromArray(bGram.getB8()); 	updateOneBGramTable(conn, "b8", "b8", sMap8);
+		SortedMap<NodeBinary,Long> sMap16 = getSortedMapFromArray(bGram.getW16()); 	updateOneBGramTable(conn, "w16", "w16", sMap16);
+		
+		System.out.println("updateBGramTables      sMap1.size():"+sMap1.size() + "    , sMap4.size():"+sMap4.size());
+		System.out.println("updateBGramTables      sMap8.size():"+sMap8.size() + "   , sMap16.size():"+sMap16.size());
+		
+		bGram.clearListsAndMaps();
+		//keepOnlyTop(conn, "w32", "w32", bGram.getW32(), BGram.getCnttopW32());
+		//keepOnlyTop(conn, "w64", "w64", bGram.getW64(), BGram.getCnttopW64());
+		//keepOnlyTop(conn, "b512", "b512", bGram.getB512(), BGram.getCnttop512());
+		//for others no need for deleting some entries from the table b1,b4, b8, w16 
 	}
 	private static void runBGram()	{
-		String dir = "C:\\tmp\\similarity\\07_Transform\\01_Org\\CD2";
+		Connection w32Db = BGramDb.createBGramDb();
+		
+		//String dir = "C:\\tmp\\similarity\\07_Transform\\01_Org\\CD2";
+		String dir = "C:\\app\\sqlite\\02_TanzilQuran";
 		File fileDir = new File(dir);
 		//public static int traverseFiles(ArrayList<String> filenameList,String[] extArray, File folder) {
 		ArrayList<String> filenameList = new ArrayList<String>();
 		String[] extArray = new String[] {};
 		
 		TraverseFiles.traverseFiles(filenameList, extArray, fileDir);
+		int i = 0; 
 		for (String fName : filenameList)	{
-			IO.println(fName);
-			BGram bGram = createOneBGramFromFile(fName);
+			System.out.println(fName + "     i:"+i);
+			BGram bGram = BGramCreate.createOneBGramFromFile(fName);
+			updateBGramTables(w32Db,bGram);
 			System.out.println(bGram.getPrintString());
+			if (i++ > 10) break;
 		}
+		JLite.closeConnection(w32Db);
 	}
 	public static void main(String[] args) {
 		runBGram();

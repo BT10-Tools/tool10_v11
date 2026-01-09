@@ -22,7 +22,7 @@ public class MainFileSet {
 	public static NodeFileSet createFileSet (NodeF10 f10)	{
 		NodeFileSet fileSet = MakeFileSet.makeFileSet(f10); 
 		if (fileSet!=null)	{
-			MakeFileSet.printAllListsAndMaps(fileSet);
+			PrintFileSet.printAllListsAndMaps(fileSet);
 		}
 		return(fileSet);
 	}
