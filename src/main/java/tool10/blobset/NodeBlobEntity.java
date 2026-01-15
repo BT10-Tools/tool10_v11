@@ -3,10 +3,12 @@ package tool10.blobset;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
+import tool10.fileset.nodes.NodeFileBlob;
+
 public class NodeBlobEntity implements Serializable  {
 
 	public NodeBlobEntity(Long blobEntityId, Long entityId, Long blobId, Long blobSetId, String blobType, Long blobSize,
-			Long sourceSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
+			Long sourceSize, Long hashId, String entityName, String blobDbName, String blobDbAttachmentName, String blobTableName,
 			Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
 			ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
@@ -18,6 +20,7 @@ public class NodeBlobEntity implements Serializable  {
 		this.blobSize = blobSize;
 		this.sourceSize = sourceSize;
 		this.hashId = hashId;
+		this.entityName = entityName;
 		this.blobDbName = blobDbName;
 		this.blobDbAttachmentName = blobDbAttachmentName;
 		this.blobTableName = blobTableName;
@@ -29,7 +32,7 @@ public class NodeBlobEntity implements Serializable  {
 		this.modificationDate = modificationDate;
 	}
 	public NodeBlobEntity(Long blobEntityId, Long entityId, Long blobId, Long blobSetId, String blobType,
-			Long blobSize, Long sourceSize, byte[] fileBytes, Long hashId, 
+			Long blobSize, Long sourceSize, Long hashId, String entityName, 
 			ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
 		this.blobEntityId = blobEntityId;
@@ -40,6 +43,7 @@ public class NodeBlobEntity implements Serializable  {
 		this.blobSize = blobSize;
 		this.sourceSize = sourceSize;
 		this.hashId = hashId;
+		this.entityName = entityName;
 		this.creationDate = creationDate;
 		this.modificationDate = modificationDate;
 	}	
@@ -56,6 +60,7 @@ public class NodeBlobEntity implements Serializable  {
 	private Long blobSize;
 	private Long sourceSize;
 	private Long hashId;	
+	private String entityName;  //filename for files
 	
 	private String blobDbName;
 	private String blobDbAttachmentName;
@@ -68,7 +73,9 @@ public class NodeBlobEntity implements Serializable  {
 	
 	private ZonedDateTime creationDate;
 	private ZonedDateTime modificationDate;
-		
+	
+	private NodeFileBlob refFileBlob;
+	
 	public void setFieldsBig(Long blobId,String blobDbName, String blobDbAttachmentName, String blobTableName,
 			Long bigPartNumber, Long bigCntPart) {	
 		this.blobDbName = blobDbName;
@@ -156,6 +163,18 @@ public class NodeBlobEntity implements Serializable  {
 	}
 	public void setBlobId(Long blobId) {
 		this.blobId = blobId;
+	}
+	public String getEntityName() {
+		return entityName;
+	}
+	public void setHashId(Long hashId) {
+		this.hashId = hashId;
+	}
+	public NodeFileBlob getRefFileBlob() {
+		return refFileBlob;
+	}
+	public void setRefFileBlob(NodeFileBlob refFileBlob) {
+		this.refFileBlob = refFileBlob;
 	}
 	
 	

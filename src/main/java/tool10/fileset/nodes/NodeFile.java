@@ -242,6 +242,9 @@ public class NodeFile implements Serializable {
 	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
 	}
+	public void setHashId(Long hashId) {
+		this.hashId = hashId;
+	}
 	
 	
 }

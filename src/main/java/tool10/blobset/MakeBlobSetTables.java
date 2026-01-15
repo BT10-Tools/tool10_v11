@@ -207,24 +207,25 @@ public class MakeBlobSetTables {
 			return(null);
 		}
 	}
-	public static NodeBlob createOneBlob(NodeF10 f10, Long fileId, Long fileSize, String blobType, Long cntPart,Long partNumber,  Long hashId)	{
+	public static NodeBlob createOneBlob(NodeF10 f10, Long blobEntityId, Long fileSize, String blobType, Long cntPart,Long partNumber,
+			byte[] blobBytes, Long hashId)	{
 		//public NodeBlob(Long blobId, Long sourceId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
 		//		Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
 		//		Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
 		//		Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
 		//		Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-		//public NodeBlob(Long blobId, Long sourceId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
-		//		Long blobSize, Long fileSize, byte[] blobBytes, Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		
+		//public NodeBlob(Long blobId, Long blobEntityId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+		//		Long blobSize, Long fileSize, byte[] blobBytes, Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+			
 		Long blobId = f10.getConnBlob().getNextId(-1); //"BSC_BASIC");
-		Long sourceId = fileId;
-		Long blobSize = null; //(long) blobBytes.length;
+		Long blobSize = (blobBytes == null) ? null : (long) blobBytes.length;
 		Long firstPartBlobId = null;
 		ZonedDateTime creationDate = ZonedDateTime.now();
 		ZonedDateTime modificationDate = null; 
 		
-		NodeBlob blob = new NodeBlob(blobId, sourceId, f10.getFileSet().getFileSetId(), firstPartBlobId, partNumber, cntPart, blobType,
-						blobSize,fileSize,null,hashId,creationDate,modificationDate);
+		NodeBlob blob = new NodeBlob(blobId, blobEntityId, f10.getFileSet().getFileSetId(), firstPartBlobId, partNumber, cntPart, blobType,
+						blobSize,fileSize,blobBytes,hashId,creationDate,modificationDate);
 		f10.getBlobSet().getListBlob().add(blob);
 		f10.getBlobSet().getMapId2Blob().put(blob.getBlobId(),blob);
 		return(blob);
@@ -255,14 +256,15 @@ public class MakeBlobSetTables {
 		}
 		return(null);
 	}
-	public static NodeBlobEntity createOneBlobEntity(NodeF10 f10, Long blobId, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId)	{
+	public static NodeBlobEntity createOneBlobEntity(NodeF10 f10, Long blobId, Long fileId, Long fileSize, Long blobSize, 
+			String blobType, Long hashId, String entityName)	{
 		//public NodeBlobEntity(Long blobEntityId, Long entityId, Long blobId, Long blobSetId, String blobType, Long blobSize,
 		//Long sourceSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
 		//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
 		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		
-		//	public NodeBlobEntity(Long blobEntityId, Long entityId, Long blobId, Long blobSetId, String blobType,
-		//Long blobSize, Long sourceSize, byte[] fileBytes, Long hashId,ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		//public NodeBlobEntity(Long blobEntityId, Long entityId, Long blobId, Long blobSetId, String blobType,
+		//		Long blobSize, Long sourceSize, Long hashId, String entityName,	ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 			
 		try {
 			Long blobEntityId = f10.getConn10().getNextId(-1); //"BSC_BASIC");
@@ -272,7 +274,7 @@ public class MakeBlobSetTables {
 			ZonedDateTime modificationDate = null; 
 			
 			NodeBlobEntity blobEntity = new NodeBlobEntity(blobEntityId, entityId, blobId, f10.getBlobSet().getBlobSetId(), blobType,
-							blobSize,sourceSize,null,hashId,creationDate,modificationDate);
+							blobSize,sourceSize,hashId,entityName,creationDate,modificationDate);
 			f10.getBlobSet().getListBlobEntity().add(blobEntity);
 			f10.getBlobSet().getMapId2BlobEntity().put(blobEntity.getBlobEntityId(),blobEntity);	
 			return(blobEntity);
@@ -283,7 +285,7 @@ public class MakeBlobSetTables {
 	}
 	public static NodeBlobSet createOneBlobSet(NodeF10 f10,Long fileSetId,String blobSetName,String sourceDir)	{
 		NodeBlobSet blobSet = null;
-		Long blobSetId = f10.getConnBook().getNextId(-1); //"BLOB_BLOBSET");
+		Long blobSetId = f10.getConnBlob().getNextId(-1); //"BLOB_BLOBSET");
 		
 		String blobSetDesc = blobSetName+"_DESC";
 		String blobSetURL = null;
@@ -308,6 +310,13 @@ public class MakeBlobSetTables {
 		int cntWritten = WriteFsTablesToDb.writeTableFileBlob(conn,tmpListFileBlob);
 		return(cntWritten);
 	}	
+	public static int writeBlobEntity2Db(Connection conn, NodeBlobEntity blobEntity)	{ 
+		if (blobEntity==null)	return(0); 	
+		ArrayList<NodeBlobEntity> tmpListBlobEntity = new ArrayList<>();
+		tmpListBlobEntity.add(blobEntity);
+		int cntWritten = WriteBlobTablesToDb.writeTableBlobEntity(conn,tmpListBlobEntity);
+		return(cntWritten);
+	}
 	public static int writeBlob2Db(Connection conn, NodeBlob nodeBlob)	{ 
 		if (nodeBlob==null)	return(0); 	
 		ArrayList<NodeBlob> tmpListBlob = new ArrayList<>();

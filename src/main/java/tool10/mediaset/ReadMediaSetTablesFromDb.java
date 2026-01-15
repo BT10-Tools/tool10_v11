@@ -8,10 +8,60 @@ import java.time.ZonedDateTime;
 
 public class ReadMediaSetTablesFromDb {
 	
+	public static int readMediaSetTableMediaProp(Connection conn,NodeMediaSet mediaSet)	{
+		int cntRead = 0;
+		String query = 	"SELECT mediaPropId,mediaId,mediaSetId,mediaPropType,engineName,propKeyGroup,propKey,propValue,\r\n"+
+				"displayOrder,valueLong,valueDouble,valueBoolean, valueZDT, valueBytes,valueStringArray,creationDate,modificationDate\r\n"+
+				"FROM MED_MEDIAPROP WHERE mediaSetId= ? ORDER BY mediaPropId, mediaMediaId";
+		//public NodeMediaProp(Long mediaPropId, Long mediaId, Long mediaSetId, String mediaPropType,
+		//		String engineName, String propKeyGroup, String propKey, String propValue, Long displayOrder, Long valueLong,
+		//		Double valueDouble, String valueBoolean, ZonedDateTime valueZDT, byte[] valueBytes,
+		//		String[] valueStringArray, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    ps.setLong(1, mediaSet.getMediaSetId()); 
+		    ResultSet rs = ps.executeQuery();
+		    while (rs.next()) {
+		    	Long mediaPropId = rs.getLong("mediaPropId");  	if (rs.wasNull()) {mediaPropId = null;}
+		    	Long mediaId = rs.getLong("mediaId");  	if (rs.wasNull()) {mediaId = null;}
+		    	Long mediaSetId = rs.getLong("mediaSetId");  	if (rs.wasNull()) {mediaSetId = null;}
+		    	String mediaPropType = rs.getString("mediaPropType");
+		        String engineName = rs.getString("engineName");
+		        String propKeyGroup = rs.getString("propKeyGroup");
+		        String propKey = rs.getString("propKey");
+		        String propValue = rs.getString("propValue");
+		        Long displayOrder = rs.getLong("displayOrder");  	if (rs.wasNull()) {displayOrder = null;}
+		        Long valueLong = rs.getLong("valueLong");  	if (rs.wasNull()) {valueLong = null;}
+		        Double valueDouble = rs.getDouble("valueDouble");  	if (rs.wasNull()) {valueDouble = null;}
+		        String valueBoolean = rs.getString("displayOrder");  	
+		        String valueZDTStr = rs.getString("valueZDT");
+		        ZonedDateTime valueZDT = ((valueZDTStr!=null) ? ZonedDateTime.parse(valueZDTStr) : null);	
+			    byte[] valueBytes= rs.getBytes("valueBytes");  	if (rs.wasNull()) {valueBytes = null;}
+			    String[] valueStringArray = rs.getString("valueStringArray").split(",");
+			    
+			    String creationDateStr = rs.getString("creationDate");
+		        String modificationDateStr = rs.getString("modificationDate");
+			    ZonedDateTime creationDate = ((creationDateStr!=null) ? ZonedDateTime.parse(creationDateStr) : null);	
+			    ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null);	
+			    NodeMediaProp mediaProp = new NodeMediaProp(mediaPropId,mediaId,mediaSetId,mediaPropType,engineName,propKeyGroup,
+			    		propKey,propValue,displayOrder,valueLong,valueDouble,valueBoolean, valueZDT, valueBytes,valueStringArray, 
+			    		creationDate,modificationDate);
+			    mediaSet.getListMediaProp().add(mediaProp);
+			    mediaSet.getMapId2MediaProp().put(mediaProp.getMediaPropId(),mediaProp);  
+			    cntRead++;
+		    }
+		    System.out.println("readMediaSetTableMediaProp: cntRead = " + cntRead);
+		    rs.close();
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntRead);
+	}
 	public static int readMediaSetTableMediaBlob(Connection conn,NodeMediaSet mediaSet)	{
 		int cntRead = 0;
 		String query = 	"SELECT mediaBlobId,mediaId,mediaSetId,fileBlobId,mediaType,blobType,mediaSize,mediaBytes,crc64,creationDate,modificationDate "+
-					    "FROM IMG_MEDIABLOB WHERE mediaSetId= ? "+
+					    "FROM MED_MEDIABLOB WHERE mediaSetId= ? "+
 					    "ORDER BY mediaId, mediaBlobId";
 		//public NodeMediaBlob(Long mediaBlobId, Long mediaId, Long mediaSetId, Long fileBlobId, String mediaType, String blobType, Long mediaSize, 
 		//byte[] mediaBytes, Long crc64, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
@@ -50,7 +100,7 @@ public class ReadMediaSetTablesFromDb {
 		int cntRead = 0;
 		String query = 	"SELECT mediaFileId,mediaId,fileId,mediaSetId,mediaFileType,sourceAbsolutePath,sourceDirName,sourceFileName,sourceExtensionName,"+
 						"	sourceFileSize,sourceFileCreationDate,creationDate,modificationDate "+
-					    "FROM IMG_MEDIAFILE WHERE mediaSetId= ? ORDER BY mediaSetId, mediaFileId";
+					    "FROM MED_MEDIAFILE WHERE mediaSetId= ? ORDER BY mediaSetId, mediaFileId";
 		//public NodeMediaFile(Long mediaFileId, Long mediaId, Long fileId, Long mediaSetId, String mediaFileType, String sourceAbsolutePath, String sourceDirName, 
 		//String sourceFileName, String sourceExtensionName, Long sourceFileSize, ZonedDateTime sourceFileCreationDate,ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -92,7 +142,7 @@ public class ReadMediaSetTablesFromDb {
 	public static int readMediaSetTableImage(Connection conn,NodeMediaSet mediaSet)	{
 		int cntRead = 0;
 		String query = "SELECT imageId,mediaSetId,mediaFileId,sourceImageId,imageName,imageType,imageSize,sizeX, sizeY,pixelNum,creationDate,modificationDate "+
-					   "FROM IMG_IMAGE WHERE mediaSetId= ? ORDER BY mediaSetId, imageId";
+					   "FROM MED_IMAGE WHERE mediaSetId= ? ORDER BY mediaSetId, imageId";
 		//public NodeImage(Long imageId, Long mediaSetId, Long mediaFileId, Long sourceImageId, String imageName, String imageType, String imageSize,
 		//Long sizeX, Long sizeY, Long pixelNum, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -133,7 +183,7 @@ public class ReadMediaSetTablesFromDb {
 				+ "	nextVideoId,previousVideoId,defaultSubtitleId,videoName,videoDesc,videoGroupName,videoType,colorModel,\r\n"
 				+ "	videoSize,sizeX,sizeY,pixelNum,aspectRatio, durationMs,fps,dataRateBPS,cntFrame,\r\n"
 				+ "	cntSection,videoQuality,videoCompression,videoFormat,videoEncoding,creationDate,modificationDate "+
-				  "FROM IMG_VIDEO WHERE mediaSetId= ? ORDER BY mediaSetId, videoId";
+				  "FROM MED_VIDEO WHERE mediaSetId= ? ORDER BY mediaSetId, videoId";
 		//public NodeVideo(Long videoId, Long mediaSetId, Long mediaFileId, Long sourceMediaId, Long rootVideoId,
 		//Long nextVideoId, Long previousVideoId, Long defaultSubtitleId, String videoName, String videoDesc,
 		//String videoGroupName, String videoType, String colorModel, Long videoSize, Long sizeX, Long sizeY,
@@ -202,7 +252,7 @@ public class ReadMediaSetTablesFromDb {
 				+ "		previousFrameId,frameName,frameDesc,frameGroupName,frameType,\r\n"
 				+ "		sectionName,frameSize,numFrame,cntFrame,startMs,endMs,\r\n"
 				+ "		durationMs,similarityRatioPrevious,similarityRatioNext,subtitleLineNum,creationDate,modificationDate "+
-				  "FROM IMG_FRAME WHERE mediaSetId= ? ORDER BY mediaSetId, frameId";
+				  "FROM MED_FRAME WHERE mediaSetId= ? ORDER BY mediaSetId, frameId";
 		//public NodeFrame(Long frameId, Long videoId, Long mediaSetId, Long imageId, Long firstFrameId, Long nextFrameId,
 		//		Long previousFrameId, String frameName, String frameDesc, String frameGroupName, String frameType,
 		//		String sectionName, Long frameSize, Long numFrame, Long cntFrame, Long startMs, Long endMs,
@@ -268,7 +318,7 @@ public class ReadMediaSetTablesFromDb {
 				+ "		rootAudioId,nextAudioId,previousAudioId,defaultSubtitleId,lyricsId,audioName,audioDesc,audioGroupName,audioType,\r\n"
 				+ "		contentType,artistName,albumName,songName,audioSize,durationMs,bitRateBPS,dataRateBPS,sampleRateKHZ,cntChannel,cntSection,\r\n"
 				+ "		audioQuality,audioCompression,audioFormat,audioEncoding,creationDate,modificationDate "+
-				  "FROM IMG_AUDIO WHERE mediaSetId= ? ORDER BY mediaSetId, audioId";
+				  "FROM MED_AUDIO WHERE mediaSetId= ? ORDER BY mediaSetId, audioId";
 		//public NodeAudio(Long audioId, Long mediaSetId, Long mediaFileId, Long sourceImageId, Long videoId,
 		//Long rootAudioId, Long nextAudioId, Long previousAudioId, Long defaultSubtitleId, Long lyricsId,
 		//String audioName, String audioDesc, String audioGroupName, String audioType, 
@@ -340,8 +390,9 @@ public class ReadMediaSetTablesFromDb {
 	}
 	public static NodeMediaSet readMediaSetTableMediaSet(Connection conn,long mediaSetId)	{
 		NodeMediaSet mediaSet = null;
-		String query = "SELECT mediaSetId,fileSetId,mediaSetName,mediaSetDesc,sourceName,sourceURL,cntMedia,sumMediaSize,avgMediaSize,"+
-						"sourceFileSize,creationDate,modificationDate FROM IMG_mediaSet WHERE mediaSetId= ? ORDER BY mediaSetId";
+		String query = 	" SELECT mediaSetId,fileSetId,mediaSetName,mediaSetDesc,sourceName,sourceURL,cntMedia,sumMediaSize,avgMediaSize,"+
+						" sourceFileSize,creationDate,modificationDate "+
+						" FROM MED_MEDIASET WHERE mediaSetId= ? ORDER BY mediaSetId";
 		//public NodeMediaSet(Long mediaSetId, Long fileSetId, String mediaSetName, String mediaSetDesc, String sourceName,
 		//String sourceURL, Long cntMedia, Long sumMediaSize, Double avgMediaSize, Long sourceFileSize,ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -380,13 +431,14 @@ public class ReadMediaSetTablesFromDb {
 		int cntReadImage = readMediaSetTableImage(conn,mediaSet);
 		int cntReadMediaFile = readMediaSetTableMediaFile(conn,mediaSet);
 		int cntReadMediaBlob = readMediaSetTableMediaBlob(conn,mediaSet);
+		int cntReadMediaProp = readMediaSetTableMediaProp(conn,mediaSet);
 		int cntReadVideo = readMediaSetTableVideo(conn,mediaSet);
 		int cntReadFrame = readMediaSetTableFrame(conn,mediaSet);
 		int cntReadAudio = readMediaSetTableAudio(conn,mediaSet);
 		
 		postProcessMediaSet(mediaSet);
 		
-		int cntRead = cntReadImage + cntReadMediaFile + cntReadMediaBlob + cntReadVideo + cntReadFrame + cntReadAudio + 1;
+		int cntRead = cntReadImage + cntReadMediaFile + cntReadMediaBlob + cntReadMediaProp + cntReadVideo + cntReadFrame + cntReadAudio + 1;
 	    System.out.println("readMediaSetId: total recordS read = " + cntRead);
 		return(mediaSet);
 	}	

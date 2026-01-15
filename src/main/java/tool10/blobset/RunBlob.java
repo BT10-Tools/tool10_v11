@@ -1,7 +1,6 @@
 package tool10.blobset;
 
 import tool10.f10.NodeF10;
-import tool10.fileset.CreateFileSetTables;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.mediaset.NodeMediaSet;
 import tool10.sql.Conn10;
@@ -13,12 +12,12 @@ public class RunBlob {
 		
 		System.out.println("RunBlob runBook4FileSet creating books for files in the fileSet");
 		
-		Conn10 connBlob = DbManager.createBookDatabase(f10);
+		Conn10 connBlob = DbManager.createBlobDatabase(f10);
 		if (connBlob==null)	return;
 	
 		NodeBlobSet blobSet = MakeBlob.makeBlobSetFromFileSet(f10);
 			
-		WriteBlobTablesToDb.writeBlobSetTables(f10.getConnBook().getConn(), blobSet);
+		WriteBlobTablesToDb.writeBlobSetTables(f10.getConnBlob().getConn(), blobSet);
 		
 	/*	ReadBookTablesFromDb.postProcessBookSet(f10.getBookSet());
 		

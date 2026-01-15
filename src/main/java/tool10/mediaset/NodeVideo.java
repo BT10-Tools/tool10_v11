@@ -65,6 +65,25 @@ public class NodeVideo implements Serializable  {
 		this.creationDate = creationDate;
 		this.listFrame = new ArrayList<NodeFrame>();
 	}
+	public void updateFields01(String colorModel, Long sizeX,Long sizeY,Long pixelNum,Double aspectRatio,  
+			Long durationMs,Double fps,Double dataRateBPS,Long cntFrame,Long cntSection,String videoQuality, 
+			String videoCompression,String videoFormat,String videoEncoding)	{
+		this.colorModel = colorModel;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+		this.pixelNum = pixelNum;
+		this.aspectRatio = aspectRatio;
+		this.durationMs = durationMs;
+		this.fps = fps;
+		this.dataRateBPS = dataRateBPS;
+		this.cntFrame = cntFrame;
+		this.cntSection = cntSection;
+		this.videoQuality = videoQuality;
+		this.videoCompression = videoCompression;
+		this.videoFormat = videoFormat;
+		this.videoEncoding = videoEncoding;
+	}
+	
 	private Long videoId;
 	private Long mediaSetId;
 	private Long mediaFileId;
@@ -96,8 +115,8 @@ public class NodeVideo implements Serializable  {
 	private ZonedDateTime creationDate;
 	private ZonedDateTime modificationDate;
 	
-	private NodeMediaFile imageFile;
-	private NodeMediaBlob videoBlob;
+	private NodeMediaFile refMediaFile;
+	private NodeMediaBlob refMediaBlob;
 	
 	ArrayList<NodeFrame> listFrame;
 
@@ -276,18 +295,6 @@ public class NodeVideo implements Serializable  {
 	public void setModificationDate(ZonedDateTime modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-	public NodeMediaFile getImageFile() {
-		return imageFile;
-	}
-	public void setImageFile(NodeMediaFile imageFile) {
-		this.imageFile = imageFile;
-	}
-	public NodeMediaBlob getVideoBlob() {
-		return videoBlob;
-	}
-	public void setVideoBlob(NodeMediaBlob videoBlob) {
-		this.videoBlob = videoBlob;
-	}
 	public ArrayList<NodeFrame> getListFrame() {
 		return listFrame;
 	}
@@ -297,5 +304,18 @@ public class NodeVideo implements Serializable  {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	public NodeMediaFile getRefMediaFile() {
+		return refMediaFile;
+	}
+	public void setRefMediaFile(NodeMediaFile refMediaFile) {
+		this.refMediaFile = refMediaFile;
+	}
+	public NodeMediaBlob getRefMediaBlob() {
+		return refMediaBlob;
+	}
+	public void setRefMediaBlob(NodeMediaBlob refMediaBlob) {
+		this.refMediaBlob = refMediaBlob;
+	}
+
 	
 }

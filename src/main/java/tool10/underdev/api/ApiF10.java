@@ -4,10 +4,10 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import tool10.f10.CliRun;
 import tool10.f10.NodeF10;
 import tool10.f10.RunF10;
 import tool10.f10.Tool10;
+import tool10.f10.cli.CliRun;
 
 public class ApiF10 {
 

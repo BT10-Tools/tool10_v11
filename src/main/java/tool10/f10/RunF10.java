@@ -2,7 +2,11 @@ package tool10.f10;
 
 import tool10.blobset.MakeBlob;
 import tool10.blobset.RunBlob;
-import tool10.bookset.RunBook;
+import tool10.docset.RunDoc;
+import tool10.f10.cli.CliInitialize;
+import tool10.f10.cli.CliParameter;
+import tool10.f10.cli.CliParseAndValidate;
+import tool10.f10.cli.CliPrint;
 import tool10.fileset.ExportFileSet;
 import tool10.fileset.ExtractorFile;
 import tool10.fileset.MainFileSet;
@@ -13,7 +17,7 @@ import tool10.fileset.nodes.NodeFileSet;
 import tool10.fileset.transform.TransformFileSet;
 import tool10.fileset.transform.UnembedFileSet;
 import tool10.fileset.transform.UnzipFileSet;
-import tool10.mediaset.RunImage;
+import tool10.mediaset.RunMedia;
 import tool10.simset.RunSim;
 import tool10.sql.Conn10;
 import tool10.tagset.RunTag;
@@ -137,22 +141,22 @@ public class RunF10 {
         }
         f10.getConn10().closeConnection();
 	}
-	public static void runImage(NodeF10 f10) {
+	public static void runMedia(NodeF10 f10) {
         NodeFileSet fileSet = getReadFileSet(f10);
         if (fileSet==null) return;
         f10.setFileSet(fileSet);
-        RunImage.runImage4FileSet(f10,fileSet); 	
+        RunMedia.runMedia4FileSet(f10,fileSet); 	
         if (f10.getOutputFileSet()!=null)	{
         	//write tag files 
         	//writeFileSetTables (f10.getConn10(),f10.getOutputFileSet());
         }
         f10.getConn10().closeConnection();
 	}
-	public static void runBook(NodeF10 f10) {
+	public static void runDoc(NodeF10 f10) {
         NodeFileSet fileSet = getReadFileSet(f10);
         if (fileSet==null) return;
         f10.setFileSet(fileSet);
-        RunBook.runBook4FileSet(f10,fileSet); 	
+        RunDoc.runDoc4FileSet(f10,fileSet); 	
         if (f10.getOutputFileSet()!=null)	{
         	//write tag files 
         	//writeFileSetTables (f10.getConn10(),f10.getOutputFileSet());
@@ -184,8 +188,8 @@ public class RunF10 {
 		else if ("unembed".equals(action))		{runUnembed(f10);}
 		else if ("transform".equals(action))	{runTransform(f10);}
 		else if ("tag".equals(action))			{runTag(f10);}
-		else if ("image".equals(action))		{runImage(f10);}
-		else if ("book".equals(action))			{runBook(f10);}
+		else if ("media".equals(action))		{runMedia(f10);}
+		else if ("book".equals(action))			{runDoc(f10);}
 		else if ("similarity".equals(action))	{runSimilarity(f10);}
 		else if ("help".equals(action))			{CliPrint.printHelp(f10.getCliParams().getCommandLine(), f10.getCliParams().getOpt()); }
 		else if ("credits".equals(action))		{CliPrint.printCredits();}

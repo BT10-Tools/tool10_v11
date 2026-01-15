@@ -17,7 +17,7 @@ public class MakeTagSet {
 		Long tagSetId = f10.getTagSet().getTagSetId();
     	Long sourceId = nodeFile.getFileId(); 
         String sourceAbsolutePath = nodeFile.getFileNameAbsolute();
-        String sourceDirName = nodeFile.getDirNameAbsolute(); 
+        String sourceDirName = nodeFile.getRefFileName().getDirNameAbsolute(); 
         String sourceFileName = nodeFile.getFileName();
 		//String sourceFileName = shortFilename;
         String sourceExtensionName = nodeFile.getExtensionName();
@@ -44,7 +44,7 @@ public class MakeTagSet {
 		int cnt = 0; 
 		for (NodeFile nodeFile : f10.getFileSet().getListFile())	{
 			if ("yes".equals(nodeFile.getIsDirectory())) continue;
-			if ("yes".equals(nodeFile.getIsSymbolicLink())) continue;
+			if ("yes".equals(nodeFile.getRefFileProp().getIsSymbolicLink())) continue;
 			//other filters can come here like wildcards
 			
 			if (!"pdf".equals(nodeFile.getExtensionName())) continue; 

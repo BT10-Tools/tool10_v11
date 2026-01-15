@@ -4,86 +4,100 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import tool10.bookset.MakeBookSetTables;
-import tool10.bookset.NodeBookSet;
 import tool10.f10.NodeF10;
-import tool10.fileset.CreateFileSetTables;
-import tool10.fileset.nodes.NodeFile;
-import tool10.fileset.nodes.NodeFileBlob;
 import tool10.fileset.nodes.NodeHash;
-import tool10.sql.Conn10;
 
 public class MakeBlobBigAndRegular {
 	
-	public static HashSet<NodeFile> createFileBlobsBig(NodeF10 f10, int blockSize, int minBigFileSize, HashSet<NodeFile> setCacheFile)	{
-		HashSet<NodeFile> setNodeFileBig = new HashSet<NodeFile>();
+	public static HashSet<NodeBlobEntity> createFileBlobsBig(NodeF10 f10, int blockSize, int minBigFileSize, 
+			HashSet<NodeBlobEntity> setCacheBlobEntity)	{
+		
+		HashSet<NodeBlobEntity> setNodeBlobEntity = new HashSet<NodeBlobEntity>();
 		ArrayList<NodeBlob> listNodeBlobBig = new ArrayList<>();
 		String blobType="bigfile";
-		for (NodeFile nodeFile : f10.getFileSet().getListFile())	{
-			if (setCacheFile.contains(nodeFile)) continue;
-			if (nodeFile.getFileSize() < minBigFileSize) continue;
+		long totalWritten2DbFileBlob = 0; 
+		long totalWritten2DbBlobEntity = 0; 
+		long totalBlobSize = 0 ; 
+		for (NodeBlobEntity blobEntity : f10.getBlobSet().getListBlobEntity())	{
+			if (setCacheBlobEntity.contains(blobEntity)) continue;
+			if (blobEntity.getSourceSize() < minBigFileSize) continue;
 			
-			File2BlobReader blobReader = new File2BlobReader(nodeFile.getFileNameAbsolute(), blockSize);
+			File2BlobReader blobReader = new File2BlobReader(blobEntity.getEntityName(), blockSize);
 			byte[] fileBytesPart = blobReader.getNextBytes(); 
 			if (fileBytesPart==null) continue;
 		
 			long partNumber = 0; 
+			int cntWritten2DbBlob = 0;
+			long sumBlobSize = 0 ; 
 			while (fileBytesPart!=null)	{
 
 				Long blobSize = (long) fileBytesPart.length;
-				NodeHash hash = MakeFileSetHash.createOneHashForBigFile(f10, nodeFile.getFileSize(), fileBytesPart);
+				sumBlobSize += (long) fileBytesPart.length;
+				NodeHash hash = MakeFileSetHash.createOneHashForBigFile(f10, blobSize, fileBytesPart);
 				Long hashId = hash.getHashId();
-				
-				//public static NodeFileBlob createOneFileBlob(NodeF10 f10, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId)
-				NodeFileBlob fileBlob = MakeBlobSetTables.createOneFileBlob(f10,nodeFile.getFileId(),nodeFile.getFileSize(),blobSize,blobType,hashId);
-				
-				//public static NodeBlob createOneBlob(NodeF10 f10, Long fileId, Long fileSize, String blobType, Long cntPart,Long partNumber,  Long hashId)	{
-				NodeBlob blob = MakeBlobSetTables.createOneBlob(f10,nodeFile.getFileId(),nodeFile.getFileSize(),blobType,null,partNumber,hashId);
+			
+				//public static NodeBlob createOneBlob(NodeF10 f10, Long blobEntityId, Long fileSize, String blobType, Long cntPart,Long partNumber,
+				//byte[] blobBytes, Long hashId)	{
+				NodeBlob blob = MakeBlobSetTables.createOneBlob(f10,blobEntity.getBlobEntityId(),blobEntity.getSourceSize(),blobType,null,partNumber,fileBytesPart,hashId);
 				listNodeBlobBig.add(blob);
-				MakeFileBlobAndBlob.updateOneBlobBytes(f10, blob, fileBytesPart);
+				//MakeFileBlobAndBlob.updateOneBlobBytes(f10, blob, fileBytesPart);
 				
-				int cntWritten2DbFileBlob = MakeBlobSetTables.writeFileBlob2Db (f10.getConn10().getConn(), fileBlob);
-				int cntWritten2DbBlob = MakeBlobSetTables.writeBlob2Db (f10.getConnBlob().getConn(), blob);
+				cntWritten2DbBlob += MakeBlobSetTables.writeBlob2Db (f10.getConnBlob().getConn(), blob);
 				
 				fileBytesPart = blobReader.getNextBytes();
 				if (fileBytesPart!=null) partNumber++;
 			}
 			blobReader.closeAll();
-			setNodeFileBig.add(nodeFile);
+			setNodeBlobEntity.add(blobEntity);
+			int cntWritten2DbFileBlob 	= MakeBlobSetTables.writeFileBlob2Db (f10.getConn10().getConn(), blobEntity.getRefFileBlob());
+			int cntWritten2DbBlobEntity = MakeBlobSetTables.writeBlobEntity2Db (f10.getConnBlob().getConn(), blobEntity);
+			
+			System.out.println("MakeBlobBigAndRegular createBlobEntityRegular cntWritten2DbFileBlob:"+cntWritten2DbFileBlob+
+					" ,cntWritten2DbBlobEntity:"+cntWritten2DbBlobEntity+"  ,cntWritten2DbBlob:"+cntWritten2DbBlob + " ,sumBlobSize:" + sumBlobSize );
+			
+			totalWritten2DbFileBlob  += cntWritten2DbFileBlob;
+			totalWritten2DbBlobEntity += cntWritten2DbBlobEntity; 
+			totalBlobSize += sumBlobSize;
 		}
 		for (NodeBlob blob : listNodeBlobBig)	{
 			blob.setCntPart((long) listNodeBlobBig.size());
 		}
-		return(setNodeFileBig);
+		System.out.println("MakeBlobBigAndRegular createBlobEntityRegular totalWritten2DbFileBlob:"+totalWritten2DbFileBlob+
+				" ,totalWritten2DbBlobEntity:"+totalWritten2DbBlobEntity+ " ,totalBlobSize:" + totalBlobSize );
+		return(setNodeBlobEntity);
 	}
-	public static HashSet<NodeFile> createFileBlobsRegular(NodeF10 f10, int blockSize, 
-			HashMap<NodeFile,Integer> mapNodeFile2BinNumber, HashSet<NodeFile> setNodeFileBig, HashSet<NodeFile> setCacheFile)	{
-		HashSet<NodeFile> setNodeFileRegular = new HashSet<NodeFile>(); 
-		for (NodeFile nodeFile : f10.getFileSet().getListFile())	{
-			if (mapNodeFile2BinNumber.get(nodeFile) != null) continue;
-			if (setNodeFileBig.contains(nodeFile)) continue;
-			if (setCacheFile.contains(nodeFile)) continue;
+	public static HashSet<NodeBlobEntity> createBlobEntityRegular(NodeF10 f10, int blockSize, 
+			HashMap<NodeBlobEntity,Integer> mapBlobEntity2BinNumber, 
+			HashSet<NodeBlobEntity> setNodeBlobEntityBig, HashSet<NodeBlobEntity> setCacheBlobEntity)	{
+		
+		HashSet<NodeBlobEntity> setBlobEntityRegular = new HashSet<NodeBlobEntity>(); 
+		for (NodeBlobEntity blobEntity : f10.getBlobSet().getListBlobEntity())	{
+			if (mapBlobEntity2BinNumber.get(blobEntity) != null) continue;
+			if (setNodeBlobEntityBig.contains(blobEntity)) continue;
+			if (setCacheBlobEntity.contains(blobEntity)) continue;
 			
-			byte[] fileBytesRegular = File2BlobReader.readRegularFileBytes(nodeFile.getFileNameAbsolute());
+			byte[] fileBytesRegular = File2BlobReader.readRegularFileBytes(blobEntity.getEntityName()); //entityName = fileNameAbsolute);
 			
 			if (fileBytesRegular==null) continue;
 			String blobType="regularfile";
 			Long blobSize = (long) fileBytesRegular.length;
 			
-			NodeHash hash = MakeFileSetHash.createOneHashForRegularFile(f10, nodeFile.getFileSize(), fileBytesRegular);
+			NodeHash hash = MakeFileSetHash.createOneHashForRegularFile(f10, blobSize, fileBytesRegular);
 			Long hashId = hash.getHashId();
-			nodeFile.setHashId(hashId);
+			blobEntity.setHashId(hashId);
+			blobEntity.getRefFileBlob().setHashId(hashId);
 			
-			//public static NodeFileBlob createOneFileBlob(NodeF10 f10, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId)
-			NodeFileBlob fileBlob = MakeBlobSetTables.createOneFileBlob(f10,nodeFile.getFileId(),nodeFile.getFileSize(),blobSize,blobType,hashId);
+			//public static NodeBlob createOneBlob(NodeF10 f10, Long blobEntityId, Long fileSize, String blobType, Long cntPart,Long partNumber,
+			//byte[] blobBytes, Long hashId)	{
+			NodeBlob blob = MakeBlobSetTables.createOneBlob(f10,blobEntity.getBlobEntityId(),blobEntity.getSourceSize(),blobType,1l,0l,fileBytesRegular,hashId);
+			//MakeFileBlobAndBlob.updateOneBlobBytes(f10, blob, fileBytesRegular);
 			
-			//public static NodeBlob createOneBlob(NodeF10 f10, Long fileId, Long fileSize, String blobType, Long cntPart,Long partNumber,  Long hashId)	{
-			NodeBlob blob = MakeBlobSetTables.createOneBlob(f10,nodeFile.getFileId(),nodeFile.getFileSize(),blobType,1l,0l,hashId);
-			MakeFileBlobAndBlob.updateOneBlobBytes(f10, blob, fileBytesRegular);
-			
-			int cntWritten2DbFileBlob = MakeBlobSetTables.writeFileBlob2Db (f10.getConn10().getConn(), fileBlob);
-			int cntWritten2DbBlob = MakeBlobSetTables.writeBlob2Db (f10.getConnBlob().getConn(), blob);
+			int cntWritten2DbFileBlob 	= MakeBlobSetTables.writeFileBlob2Db (f10.getConn10().getConn(), blobEntity.getRefFileBlob());
+			int cntWritten2DbBlobEntity = MakeBlobSetTables.writeBlobEntity2Db (f10.getConnBlob().getConn(), blobEntity);
+			int cntWritten2DbBlob 		= MakeBlobSetTables.writeBlob2Db (f10.getConnBlob().getConn(), blob);
+			System.out.println("MakeBlobBigAndRegular createBlobEntityRegular cntWritten2DbFileBlob:"+cntWritten2DbFileBlob+
+					" ,cntWritten2DbBlobEntity:"+cntWritten2DbBlobEntity+"  ,cntWritten2DbBlob:"+cntWritten2DbBlob + " ,blobSize:" + blobSize );
 		}
-		return(setNodeFileRegular);
+		return(setBlobEntityRegular);
 	}
 }

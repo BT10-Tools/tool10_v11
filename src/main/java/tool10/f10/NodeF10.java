@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import tool10.blobset.NodeBlobSet;
-import tool10.bookset.NodeBookSet;
+import tool10.docset.NodeDocSet;
+import tool10.f10.cli.CliParameter;
 import tool10.fileset.nodes.NodeFileSet;
 import tool10.mediaset.NodeMediaSet;
 import tool10.simset.NodeSimSet;
@@ -28,7 +29,7 @@ public class NodeF10 {
 	private ArrayList<Conn10> listConnBlob;	
 	private Conn10 connTag; //current tag database name, the first db assigned as default 
 	private Conn10 connMedia; //current media database name, the first db assigned as default 
-	private Conn10 connBook; //current book database name, the first db assigned as default 
+	private Conn10 connDoc; //current doc database name, the first db assigned as default 
 	private Conn10 connSim; //current sim database name, the first db assigned as default 
 	private PropConfig propConfig; 
 	private NodeFileSet fileSet; 
@@ -36,7 +37,7 @@ public class NodeF10 {
 	private NodeBlobSet blobSet; 
 	private NodeTagSet tagSet; 
 	private NodeMediaSet mediaSet; 
-	private NodeBookSet bookSet; 
+	private NodeDocSet docSet; 
 	private NodeSimSet simSet; 
 	private ZonedDateTime startTime;  
 	private ZonedDateTime currentTime; 
@@ -46,7 +47,7 @@ public class NodeF10 {
 	private ArrayList<NodeBlobSet> listBlobSet;
 	private ArrayList<NodeTagSet> listTagSet;
 	private ArrayList<NodeMediaSet> listMediaSet;
-	private ArrayList<NodeBookSet> listBookSet;
+	private ArrayList<NodeDocSet> listBookSet;
 	private ArrayList<NodeSimSet> listSimSet;
 	
 	public void updateCurrentTime()	{
@@ -77,14 +78,14 @@ public class NodeF10 {
 		"ArrayList<Conn10> listConnBlob:"+listConnBlob+"\n"+	
 		"Conn10 connTag:"+connTag+"\n"+ 
 		"Conn10 connMedia:"+connMedia+"\n"+ 
-		"Conn10 connBook:"+connBook +"\n"+
+		"Conn10 connDoc:"+connDoc +"\n"+
 		"Conn10 connSim:"+connSim +"\n"+
 		"PropConfig propConfig:"+propConfig+"\n"+ 
 		"NodeFileSet fileSet:"+fileSet +"\n"+
 		"NodeFileSet outputFileSet:"+outputFileSet +"\n"+
 		"NodeTagSet tagSet:"+tagSet +"\n"+
 		"NodeMediaSet mediaSet:"+mediaSet+"\n"+ 
-		"NodeBookSet bookSet"+bookSet+"\n"+
+		"NodeDocSet docSet"+docSet+"\n"+
 		"NodeSimSet simSet:"+simSet +"\n"+
 		"ZonedDateTime startTime:"+startTime+"\n"+  
 		"ZonedDateTime currentTime:"+startTime +"\n"+
@@ -169,17 +170,17 @@ public class NodeF10 {
 	public void setConnMedia(Conn10 connMedia) {
 		this.connMedia = connMedia;
 	}
-	public Conn10 getConnBook() {
-		return connBook;
+	public Conn10 getConnDoc() {
+		return connDoc;
 	}
-	public void setConnBook(Conn10 connBook) {
-		this.connBook = connBook;
+	public void setConnDoc(Conn10 connDoc) {
+		this.connDoc = connDoc;
 	}
-	public NodeBookSet getBookSet() {
-		return bookSet;
+	public NodeDocSet getDocSet() {
+		return docSet;
 	}
-	public void setBookSet(NodeBookSet bookSet) {
-		this.bookSet = bookSet;
+	public void setDocSet(NodeDocSet docSet) {
+		this.docSet = docSet;
 	}
 	public NodeSimSet getSimSet() {
 		return simSet;
@@ -223,7 +224,7 @@ public class NodeF10 {
 	public ArrayList<NodeMediaSet> getListMediaSet() {
 		return listMediaSet;
 	}
-	public ArrayList<NodeBookSet> getListBookSet() {
+	public ArrayList<NodeDocSet> getListBookSet() {
 		return listBookSet;
 	}
 	public ArrayList<NodeSimSet> getListSimSet() {

@@ -1,13 +1,14 @@
 package tool10.sql;
 
 import tool10.blobset.CreateBlobSetTables;
-import tool10.bookset.CreateBookSetTables;
+import tool10.docset.CreateDocSetTables;
 import tool10.f10.NodeF10;
 import tool10.fileset.CreateFileSetTables;
+import tool10.mediaset.CreateMediaSetTables;
 
 public class DbManager {
 
-	public static Conn10 createBblobDatabase(NodeF10 f10)	{
+	public static Conn10 createBlobDatabase(NodeF10 f10)	{
 		String dbFileName = f10.getCliParams().getBlobDbName();
 		String connectionName = "blobDb";
 		String dbType = f10.getCliParams().getBlobDbType();
@@ -30,28 +31,28 @@ public class DbManager {
 		System.out.println("DbManager createBlobDatabase f10.getConn10():"+f10.getConn10());
 		return(connBlob);
 	}
-	public static Conn10 createBookDatabase(NodeF10 f10)	{
-		String dbFileName = f10.getCliParams().getBookDbName();
-		String connectionName = "bookDb";
-		String dbType = f10.getCliParams().getBookDbType();
-		Conn10 connBook = null; 
+	public static Conn10 createDocDatabase(NodeF10 f10)	{
+		String dbFileName = f10.getCliParams().getDocDbName();
+		String connectionName = "docDb";
+		String dbType = f10.getCliParams().getDocDbType();
+		Conn10 connDoc = null; 
 		if ((dbFileName==null) || (f10.getConn10().getDbFileName().equals(dbFileName)))	{
-			System.out.println("RunBook createBookDatabase dbFileName:"+dbFileName+" ,f10.getConn10().getDbFileName():"+f10.getConn10().getDbFileName());	
-			connBook = new Conn10(connectionName, f10.getConn10().getDbType(), f10.getConn10().getDbFileName());;
+			System.out.println("DbManager createDocDatabase dbFileName:"+dbFileName+" ,f10.getConn10().getDbFileName():"+f10.getConn10().getDbFileName());	
+			connDoc = new Conn10(connectionName, f10.getConn10().getDbType(), f10.getConn10().getDbFileName());;
 		} else {
-			System.out.println("RunBook createBookDatabase dbFileName:"+dbFileName+" ,dbType"+dbType);	
-			connBook = new Conn10(connectionName, dbType, dbFileName);
+			System.out.println("DbManager createDocDatabase dbFileName:"+dbFileName+" ,dbType"+dbType);	
+			connDoc = new Conn10(connectionName, dbType, dbFileName);
 		}
 		//connBook = f10.getConn10();
-		if (connBook==null)	{
-			System.out.println("RunBook createBookDatabase connBook is null");	
+		if (connDoc==null)	{
+			System.out.println("DbManager createDocDatabase connDoc is null");	
 			return(null);
 		}
-		f10.setConnBook(connBook);	
-		CreateBookSetTables.createBookSetTables(connBook);
-		System.out.println("RunBook createBookDatabase connBook:"+connBook);
-		System.out.println("RunBook createBookDatabase f10.getConn10():"+f10.getConn10());
-		return(connBook);
+		f10.setConnDoc(connDoc);	
+		CreateDocSetTables.createDocSetTables(connDoc);
+		System.out.println("DbManager createDocDatabase connDoc:"+connDoc);
+		System.out.println("DbManager createDocDatabase f10.getConn10():"+f10.getConn10());
+		return(connDoc);
 	}
 	public static void createMediaDatabase(NodeF10 f10)	{
 		String dbFileName = f10.getCliParams().getMediaDbName();
@@ -64,7 +65,7 @@ public class DbManager {
 			connMedia = new Conn10(connectionName, dbType, dbFileName);
 		}
 		f10.setConnMedia(connMedia);	
-		CreateFileSetTables.createFileSetTables(connMedia);
+		CreateMediaSetTables.createMediaSetTables(connMedia);
 	}
 	
 	public static void createTagDatabase(NodeF10 f10)	{

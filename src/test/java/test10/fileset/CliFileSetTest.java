@@ -1,9 +1,9 @@
 package test10.fileset;
 
-import tool10.f10.CliInitialize;
-import tool10.f10.CliParseAndValidate;
-import tool10.f10.CliParameter;
 import tool10.f10.NodeF10;
+import tool10.f10.cli.CliInitialize;
+import tool10.f10.cli.CliParameter;
+import tool10.f10.cli.CliParseAndValidate;
 import tool10.fileset.MainFileSet;
 
 public class CliFileSetTest {

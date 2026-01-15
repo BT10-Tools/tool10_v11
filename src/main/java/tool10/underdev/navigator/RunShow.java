@@ -10,7 +10,7 @@ import tool10.mediaset.NodeMediaSet;
 import tool10.simset.NodeSimSet;
 import tool10.tagset.NodeTagSet;
 import tool10.blobset.NodeBlobSet;
-import tool10.bookset.NodeBookSet;
+import tool10.docset.NodeDocSet;
 import tool10.util.FileUtil;
 
 public class RunShow {
@@ -44,7 +44,7 @@ public class RunShow {
 	}
 	public static void runMediaSet(NodeF10 f10, NodeMediaSet mediaSet, NodeShow show, String outType,  String showFileNamePrefix) {
 	}
-	public static void runBookSet(NodeF10 f10, NodeBookSet bookSet, NodeShow show, String outType,  String showFileNamePrefix) {
+	public static void runBookSet(NodeF10 f10, NodeDocSet bookSet, NodeShow show, String outType,  String showFileNamePrefix) {
 	}
 	
 	public static void runShow(NodeF10 f10, String outType) {
@@ -56,7 +56,7 @@ public class RunShow {
 		for (NodeBlobSet blobSet : 		f10.getListBlobSet())	{runBlobSet(f10,blobSet,show,outType,showFileNamePrefix+"\\blobSet"+blobSet.getBlobSetId()+"\\");}
 		for (NodeTagSet tagSet : 		f10.getListTagSet())	{runTagSet(f10,tagSet,show,outType,showFileNamePrefix+"\\tagSet"+tagSet.getTagSetId()+"\\");}
 		for (NodeMediaSet mediaSet : 	f10.getListMediaSet())	{runMediaSet(f10,mediaSet,show,outType,showFileNamePrefix+"\\mediaSet"+mediaSet.getMediaSetId()+"\\");}
-		for (NodeBookSet bookSet : 		f10.getListBookSet())	{runBookSet(f10,bookSet,show,outType,showFileNamePrefix+"\\bookSet"+bookSet.getBookSetId()+"\\");}
+		for (NodeDocSet bookSet : 		f10.getListBookSet())	{runBookSet(f10,bookSet,show,outType,showFileNamePrefix+"\\bookSet"+bookSet.getBookSetId()+"\\");}
 			
 		//runFileSet(args);
 		//tagSet, imageSet, docSet, winRegistry,        		

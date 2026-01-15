@@ -2,7 +2,6 @@ package tool10.mediaset;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 
 public class NodeAudio implements Serializable  {
 
@@ -102,8 +101,8 @@ public class NodeAudio implements Serializable  {
 	private ZonedDateTime creationDate;
 	private ZonedDateTime modificationDate;
 	
-	private NodeMediaFile imageFile;
-	private NodeMediaBlob audioBlob;
+	private NodeMediaFile refMediaFile;
+	private NodeMediaBlob refMediaBlob;
 
 	//GETTERS AND SETTERS
 	public static long getSerialversionuid() {
@@ -202,12 +201,6 @@ public class NodeAudio implements Serializable  {
 	public ZonedDateTime getModificationDate() {
 		return modificationDate;
 	}
-	public NodeMediaFile getImageFile() {
-		return imageFile;
-	}
-	public NodeMediaBlob getAudioBlob() {
-		return audioBlob;
-	}
 	public void setAudioId(Long audioId) {
 		this.audioId = audioId;
 	}
@@ -301,11 +294,17 @@ public class NodeAudio implements Serializable  {
 	public void setModificationDate(ZonedDateTime modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-	public void setImageFile(NodeMediaFile imageFile) {
-		this.imageFile = imageFile;
+	public NodeMediaFile getRefMediaFile() {
+		return refMediaFile;
 	}
-	public void setAudioBlob(NodeMediaBlob audioBlob) {
-		this.audioBlob = audioBlob;
+	public void setRefMediaFile(NodeMediaFile refMediaFile) {
+		this.refMediaFile = refMediaFile;
+	}
+	public NodeMediaBlob getRefMediaBlob() {
+		return refMediaBlob;
+	}
+	public void setRefMediaBlob(NodeMediaBlob refMediaBlob) {
+		this.refMediaBlob = refMediaBlob;
 	}
 	
 }

@@ -207,6 +207,22 @@
 		    <artifactId>bcprov-jdk15on</artifactId>
 		    <version>1.70</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.k-pan/ssdeep4j -->
+		<dependency>
+		    <groupId>net.k-pan</groupId>
+		    <artifactId>ssdeep4j</artifactId>
+		    <version>1.1.0</version>
+		    <scope>compile</scope>
+		</dependency>
+		<!-- Source: https://mvnrepository.com/artifact/org.bytedeco/javacv-platform -->
+		<dependency>
+		    <groupId>org.bytedeco</groupId>
+		    <artifactId>javacv-platform</artifactId>
+		    <version>1.5.12</version>
+		    <scope>compile</scope>
+		</dependency>
+		
+		
  	</dependencies>
  	
 </project>

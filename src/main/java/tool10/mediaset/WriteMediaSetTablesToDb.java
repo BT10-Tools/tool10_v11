@@ -4,13 +4,55 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.ZonedDateTime;
 
 public class WriteMediaSetTablesToDb {
 	
+	public static int writeTableMediaProp(Connection conn,NodeMediaSet mediaSet)	{
+		int cntInserted = 0;
+		String query =  "INSERT INTO MED_MEDIAPROP(mediaPropId,mediaId,mediaSetId,mediaPropType,engineName,propKeyGroup,propKey,propValue,displayOrder,valueLong,\r\n"
+				+ "		valueDouble,valueBoolean, valueZDT, valueBytes,valueStringArray, creationDate,modificationDate) "+
+				" VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ? )";
+		//public NodeMediaProp(Long mediaPropId, Long mediaId, Long mediaSetId, String mediaPropType,
+		//		String engineName, String propKeyGroup, String propKey, String propValue, Long displayOrder, Long valueLong,
+		//		Double valueDouble, String valueBoolean, ZonedDateTime valueZDT, byte[] valueBytes,
+		//		String[] valueStringArray, ZonedDateTime creationDate, ZonedDateTime modificationDate) 
+		//mediaPropId,mediaId,mediaSetId,mediaPropType,engineName,propKeyGroup,propKey,propValue,displayOrder,valueLong,
+		//valueDouble,valueBoolean, valueZDT, valueBytes,valueStringArray, creationDate,modificationDate
+		try	{  
+		    PreparedStatement ps = conn.prepareStatement(query);
+		    for (NodeMediaProp ent : mediaSet.getListMediaProp())	{
+			    int cnt=1;
+			    if (ent.getMediaPropId()!=null) {ps.setLong(cnt++, ent.getMediaPropId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getMediaId()!=null) {ps.setLong(cnt++, ent.getMediaId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getMediaSetId()!=null) {ps.setLong(cnt++, ent.getMediaSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getMediaPropType());
+			    ps.setString(cnt++, ent.getEngineName());
+			    ps.setString(cnt++, ent.getPropKeyGroup());
+			    ps.setString(cnt++, ent.getPropKey());
+			    ps.setString(cnt++, ent.getPropValue());
+			    
+			    if (ent.getDisplayOrder()!=null) {ps.setLong(cnt++, ent.getDisplayOrder());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getValueLong()!=null) {ps.setLong(cnt++, ent.getValueLong());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getValueDouble()!=null) {ps.setDouble(cnt++, ent.getValueDouble());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getValueBoolean());
+			    if (ent.getValueZDT()!=null) {ps.setString(cnt++, ent.getValueZDT().toString());} else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getValueBytes()!=null) {ps.setBytes(cnt++, ent.getValueBytes());} else {ps.setNull(cnt++,Types.BLOB);}
+			    if (ent.getValueStringArray()!=null) {ps.setString(cnt++, ent.getValueStringArray().toString());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    
+			    if (ent.getCreationDate()!=null) {ps.setString(cnt++, ent.getCreationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    if (ent.getModificationDate()!=null) {ps.setString(cnt++, ent.getModificationDate().toString()); } 	else {ps.setNull(cnt++,Types.VARCHAR);}
+			    cntInserted += ps.executeUpdate();
+		    }
+		    System.out.println("writeTableMediaProp: cntInserted = " + cntInserted);
+		    ps.close();
+		} catch(SQLException e)	{
+		      e.printStackTrace(System.err);
+		}
+		return(cntInserted);
+	}
 	public static int writeTableVideo(Connection conn,NodeMediaSet mediaSet)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO IMG_VIDEO (videoId,mediaSetId, mediaFileId,sourceMediaId,rootVideoId,\r\n"
+		String query =  "INSERT INTO MED_VIDEO (videoId,mediaSetId, mediaFileId,sourceMediaId,rootVideoId,\r\n"
 				+ "		nextVideoId,previousVideoId,defaultSubtitleId,videoName,videoDesc,videoGroupName,videoType,colorModel,videoSize,sizeX,sizeY,\r\n"
 				+ "		pixelNum,aspectRatio, durationMs,fps,dataRateBPS,cntFrame,\r\n"
 				+ "		cntSection,videoQuality,videoCompression,videoFormat,videoEncoding,creationDate,modificationDate) "+
@@ -33,7 +75,7 @@ public class WriteMediaSetTablesToDb {
 			    int cnt=1;
 			    if (ent.getVideoId()!=null) {ps.setLong(cnt++, ent.getVideoId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getMediaSetId()!=null) {ps.setLong(cnt++, ent.getMediaSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getMediaFileId()!=null) {ps.setLong(cnt++, ent.getSourceMediaId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getMediaFileId()!=null) {ps.setLong(cnt++, ent.getMediaFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getSourceMediaId()!=null) {ps.setLong(cnt++, ent.getSourceMediaId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getRootVideoId()!=null) {ps.setLong(cnt++, ent.getRootVideoId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getNextVideoId()!=null) {ps.setLong(cnt++, ent.getNextVideoId());} else {ps.setNull(cnt++,Types.INTEGER);}
@@ -70,7 +112,7 @@ public class WriteMediaSetTablesToDb {
 	}
 	public static int writeTableFrame(Connection conn,NodeMediaSet mediaSet)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO IMG_FRAME (frameId,videoId,mediaSetId,imageId,firstFrameId,nextFrameId,\r\n"
+		String query =  "INSERT INTO MED_FRAME (frameId,videoId,mediaSetId,imageId,firstFrameId,nextFrameId,\r\n"
 				+ "		previousFrameId,frameName,frameDesc,frameGroupName,frameType,\r\n"
 				+ "		sectionName,frameSize,numFrame,cntFrame,startMs,endMs,\r\n"
 				+ "		durationMs,similarityRatioPrevious,similarityRatioNext,subtitleLineNum,creationDate,modificationDate) "+
@@ -125,11 +167,11 @@ public class WriteMediaSetTablesToDb {
 	}
 	public static int writeTableAudio(Connection conn,NodeMediaSet mediaSet)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO IMG_AUDIO (audioId,mediaSetId,mediaFileId,sourceImageId,videoId,\r\n"
+		String query =  "INSERT INTO MED_AUDIO (audioId,mediaSetId,mediaFileId,sourceMediaId,videoId,\r\n"
 				+ "		rootAudioId,nextAudioId,previousAudioId,defaultSubtitleId,lyricsId,audioName,audioDesc,audioGroupName,audioType,\r\n"
 				+ "		contentType,artistName,albumName,songName,audioSize,durationMs,bitRateBPS,dataRateBPS,sampleRateKHZ,cntChannel,cntSection,\r\n"
 				+ "		audioQuality,audioCompression,audioFormat,audioEncoding,creationDate,modificationDate) "+
-				" VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ? )";
+				" VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ? )";
 		//public NodeAudio(Long audioId, Long mediaSetId, Long mediaFileId, Long sourceImageId, Long videoId,
 		//Long rootAudioId, Long nextAudioId, Long previousAudioId, Long defaultSubtitleId, Long lyricsId,
 		//String audioName, String audioDesc, String audioGroupName, String audioType, 
@@ -191,8 +233,8 @@ public class WriteMediaSetTablesToDb {
 	}
 	public static int writeTableMediaBlob(Connection conn,NodeMediaSet mediaSet)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO IMG_MEDIABLOB (mediaBlobId,mediaId,mediaSetId,fileBlobId,mediaType,blobType,mediaSize,mediaBytes,crc64,creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?)";
+		String query =  "INSERT INTO MED_MEDIABLOB (mediaBlobId,mediaId,mediaSetId,fileBlobId,mediaType,blobType,mediaSize,mediaBytes,crc64,creationDate,modificationDate) "+
+						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?)";
 		//public NodeMediaBlob(Long mediaBlobId, Long mediaId, Long mediaSetId, Long fileBlobId, String mediaType, String blobType, Long mediaSize, 
 		//byte[] mediaBytes, Long crc64, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -221,8 +263,8 @@ public class WriteMediaSetTablesToDb {
 	}
 	public static int writeTableMediaFile(Connection conn,NodeMediaSet mediaSet)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO IMG_MEDIAFILE (mediaFileId,mediaId,fileId,mediaSetId,mediaFileType,sourceAbsolutePath,sourceDirName,sourceFileName,sourceExtensionName,"+
-						"sourceFileSize,sourceFileCreationDate,creationDate,modificationDate) VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?)";
+		String query =  "INSERT INTO MED_MEDIAFILE (mediaFileId,mediaId,fileId,mediaSetId,mediaFileType,sourceAbsolutePath,sourceDirName,sourceFileName,sourceExtensionName,"+
+						"sourceFileSize,sourceFileCreationDate,creationDate,modificationDate) VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?)";
 		//public NodeMediaFile(Long mediaFileId, Long mediaId, Long fileId, Long mediaSetId, String mediaFileType, String sourceAbsolutePath, String sourceDirName, 
 		//String sourceFileName, String sourceExtensionName, Long sourceFileSize, ZonedDateTime sourceFileCreationDate,ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -253,7 +295,7 @@ public class WriteMediaSetTablesToDb {
 	}
 	public static int writeTableImage(Connection conn,NodeMediaSet mediaSet)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO IMG_IMAGE (imageId,mediaSetId,mediaFileId,sourceMediaId,imageName,imageType,imageSize,sizeX, sizeY,pixelNum,creationDate,modificationDate) "+
+		String query =  "INSERT INTO MED_IMAGE (imageId,mediaSetId,mediaFileId,sourceMediaId,imageName,imageType,imageSize,sizeX, sizeY,pixelNum,creationDate,modificationDate) "+
 						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?)";
 		//String fieldStr = 	"imageId INTEGER,mediaSetId INTEGER,imageFileId INTEGER,sourceImageId INTEGER,imageName TEXT, imageType TEXT,imageSize INTEGER,sizeX INTEGER, sizeY INTEGER, 
 		//pixelNum INTEGER, creationDate TEXT";
@@ -284,8 +326,8 @@ public class WriteMediaSetTablesToDb {
 	}
 	public static int writeTableMediaSet(Connection conn,NodeMediaSet mediaSet)	{
 		int cntInserted = 0;
-		String query = "INSERT INTO IMG_MEDIASET (mediaSetId,fileSetId,mediaSetName,mediaSetDesc,sourceName,sourceURL,cntMedia,sumMediaSize,avgMediaSize,"+
-					   "sourceFileSize,creationDate,modificationDate) VALUES ( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ?, ?)";
+		String query = "INSERT INTO MED_MEDIASET (mediaSetId,fileSetId,mediaSetName,mediaSetDesc,sourceName,sourceURL,cntMedia,sumMediaSize,avgMediaSize,"+
+					   "sourceFileSize,creationDate,modificationDate) VALUES ( ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ?)";
 		//public NodeImageSet(Long mediaSetId, Long fileSetId, String mediaSetName, String mediaSetDesc, String sourceName,
 		//String sourceURL, Long cntMedia, Long sumMediaSize, Double avgMediaSize, Long sourceFileSize,	ZonedDateTime creationDate) {
 		try	{  
@@ -316,12 +358,13 @@ public class WriteMediaSetTablesToDb {
 		int cntInsertedImage = writeTableImage(conn,mediaSet);
 		int cntInsertedMediaFile = writeTableMediaFile(conn,mediaSet);
 		int cntInsertedMediaBlob = writeTableMediaBlob(conn,mediaSet);
+		int cntInsertedMediaProp = writeTableMediaProp(conn,mediaSet);
 		int cntInsertedVideo = writeTableVideo(conn,mediaSet);
 		int cntInsertedFrame = writeTableFrame(conn,mediaSet);
 		int cntInsertedAudio = writeTableAudio(conn,mediaSet);
 		
-		int cntInserted = cntInsertedMediaSet + cntInsertedImage + cntInsertedMediaFile + cntInsertedMediaBlob + cntInsertedVideo + 
-				cntInsertedFrame + cntInsertedAudio;
+		int cntInserted = cntInsertedMediaSet + cntInsertedImage + cntInsertedMediaFile + cntInsertedMediaBlob + 
+				cntInsertedMediaProp +cntInsertedVideo + cntInsertedFrame + cntInsertedAudio;
 		return(cntInserted);
 	}	
 	public static void writeMediaSetTables(Connection conn, NodeMediaSet mediaSet)	{

@@ -5,67 +5,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import tool10.bookset.MakeBookSetTables;
-import tool10.bookset.MakeBookSetTanzil;
-import tool10.bookset.NodeBook;
-import tool10.bookset.NodeBookBlob;
-import tool10.bookset.NodeBookFile;
-import tool10.bookset.NodeBookSet;
 import tool10.f10.NodeF10;
-import tool10.fileset.CreateFileSetTables;
 import tool10.fileset.nodes.NodeFile;
 import tool10.fileset.nodes.NodeFileBlob;
-import tool10.fileset.nodes.NodeHash;
 import tool10.sql.Conn10;
 
 public class MakeBlob {
 	
-	private static void printBlobSummary(NodeF10 f10, HashMap<NodeFile,Integer> mapNodeFile2BinNumber, 
-			HashSet<NodeFile> setNodeFileBig, HashSet<NodeFile> setNodeFileRegular)	{
+	private static void printBlobSummary(NodeF10 f10, HashMap<NodeBlobEntity,Integer> mapBlobEntity2BinNumber, 
+			HashSet<NodeBlobEntity> setBlobEntityBig, HashSet<NodeBlobEntity> setBlobEntityRegular)	{
 		long sumBlobSize = 0l; 
 		long sumCompressedSize = 0l;
 		for (NodeBlob blob : f10.getBlobSet().getListBlob())	{
 			sumBlobSize += blob.getBlobSize();   
 			sumCompressedSize += blob.getCompressedSize();
 		}
-		System.out.println("MakeFileSetBlob printBlobSummary f10.getFileSet().getListBlob().size():"+f10.getBlobSet().getListBlob().size() + 
+		System.out.println("MakeBlob printBlobSummary f10.getFileSet().getListBlob().size():"+f10.getBlobSet().getListBlob().size() + 
 				" ,sumBlobSize:"+sumBlobSize + " ,sumCompressedSize:"+sumCompressedSize);
-		for (NodeFile smallFile : mapNodeFile2BinNumber.keySet())	{
+		
+		for (NodeBlobEntity blobEntity : mapBlobEntity2BinNumber.keySet())	{
 			
 		}
-		System.out.println("MakeFileSetBlob printBlobSummary setNodeFileBig.size():"+setNodeFileBig.size()); 
-		System.out.println("MakeFileSetBlob printBlobSummary setNodeFileRegular.size():"+setNodeFileRegular.size()); 
+		System.out.println("MakeBlob printBlobSummary setBlobEntityBig.size():"+setBlobEntityBig.size()); 
+		System.out.println("MakeBlob printBlobSummary setBlobEntityRegular.size():"+setBlobEntityRegular.size()); 
 		
 		//HashSet<NodeFile> setNodeFileBig 
 		//HashSet<NodeFile> setNodeFileRegular 
 	}
-	public static void createFileBlobsXXX(NodeF10 f10)	{
-	/*	if (!"yes".equals(f10.getCliParams().getBlob()))	{
-			return;
-		}
-	*/	
-		//create a set of already written file blobs , for not to compute them again
-		HashSet<NodeFile> setCacheFile = new HashSet<>();
-		for (NodeFileBlob fileBlob : f10.getFileSet().getListFileBlob())	{
-			if (fileBlob.getFileId()==null) continue;
-			NodeFile nodeFile = f10.getFileSet().getMapId2File().get(fileBlob.getFileId());
-			setCacheFile.add(nodeFile);
-		}
-		
-		MakeFileSetBlobDatabase.createBlobDatabase(f10);
-		
-		int blockSize = 96*1024*1024;
-		int binSize = blockSize; 
-		int minFileSizeForPacking = (4*binSize / 5); 
-		int minBigFileSize = 64*1024*1024;
-		
-		HashMap<NodeFile,Integer> mapNodeFile2BinNumber = MakeBlobSmallFile.createFileBlobsSmall(f10, blockSize, binSize, minFileSizeForPacking, setCacheFile);
-		HashSet<NodeFile> setNodeFileBig = MakeBlobBigAndRegular.createFileBlobsBig(f10,blockSize, minBigFileSize, setCacheFile);
-		HashSet<NodeFile> setNodeFileRegular = MakeBlobBigAndRegular.createFileBlobsRegular(f10,blockSize, mapNodeFile2BinNumber, setNodeFileBig, setCacheFile);
-		
-		printBlobSummary(f10, mapNodeFile2BinNumber, setNodeFileBig, setNodeFileRegular); 
-	}
-	//**************************
 	private static HashSet<NodeBlobEntity> getCacheBlobEntity(NodeF10 f10)	{
 		//create a set of already written file blobs , for not to compute them again
 		HashSet<NodeBlobEntity> setCacheBlobEntity = new HashSet<>();
@@ -84,29 +50,44 @@ public class MakeBlob {
 		//create a set of already written file blobs , for not to compute them again
 		HashSet<NodeBlobEntity> setCacheBlobEntity = getCacheBlobEntity(f10); 
 		
-		MakeFileSetBlobDatabase.createBlobDatabase(f10);
+	//	MakeFileSetBlobDatabase.createBlobDatabase(f10);
 		
 		int blockSize = 96*1024*1024;
 		int binSize = blockSize; 
 		int minFileSizeForPacking = (4*binSize / 5); 
 		int minBigFileSize = 64*1024*1024;
 		
-		HashMap<NodeBlobEntity,Integer> mapNodeFile2BinNumber = MakeBlobSmallFile.createFileBlobsSmall(f10, blockSize, binSize, minFileSizeForPacking, setCacheBlobEntity);
-		HashSet<NodeBlobEntity> setNodeFileBig = MakeBlobBigAndRegular.createFileBlobsBig(f10,blockSize, minBigFileSize, setCacheBlobEntity);
-		HashSet<NodeBlobEntity> setNodeFileRegular = MakeBlobBigAndRegular.createFileBlobsRegular(f10,blockSize, mapNodeFile2BinNumber, setNodeFileBig, setCacheBlobEntity);
+		HashMap<NodeBlobEntity,Integer> mapBlobEntity2BinNumber = MakeBlobSmallFile.createBlobEntitySmall(f10, blockSize, binSize, minFileSizeForPacking, setCacheBlobEntity);
+		HashSet<NodeBlobEntity> setBlobEntityBig = MakeBlobBigAndRegular.createBlobEntityBig(f10,blockSize, minBigFileSize, setCacheBlobEntity);
+		HashSet<NodeBlobEntity> setBlobEntityRegular = MakeBlobBigAndRegular.createBlobEntityRegular(f10,blockSize, mapBlobEntity2BinNumber, setBlobEntityBig, setCacheBlobEntity);
 		
-		printBlobSummary(f10, mapNodeFile2BinNumber, setNodeFileBig, setNodeFileRegular); 
+		printBlobSummary(f10, mapBlobEntity2BinNumber, setBlobEntityBig, setBlobEntityRegular); 
 	}
 	public static int createBlobEntitiesFromFileList(NodeF10 f10, ArrayList<NodeFile> fileList4Blob)	{
-		//public static NodeBlobEntity createOneBlobEntity(NodeF10 f10, Long blobId, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId)	{
+		//public static NodeBlobEntity createOneBlobEntity(NodeF10 f10, Long blobId, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId, String entityName)	{
 		int cntCreated = 0;
 		for (NodeFile nodeFile : fileList4Blob)	{
-			NodeBlobEntity blobEntity = MakeBlobSetTables.createOneBlobEntity(f10, null, nodeFile.getFileId(), nodeFile.getFileSize(),null,null,null);
+			NodeBlobEntity blobEntity = MakeBlobSetTables.createOneBlobEntity(f10, null, nodeFile.getFileId(), nodeFile.getFileSize(),null,"file",null,nodeFile.getFileNameAbsolute() );
 			if (blobEntity!=null) {
 				cntCreated++;
 			} 
 		}
 		System.out.println("MakeBlobSet createBlobEntitiesFromFileList f10.getBlobSet().getListBlobEntity().size():"+f10.getBlobSet().getListBlobEntity().size() + 
+				"    ,cntCreated:"+cntCreated);
+		return(cntCreated);
+	}
+	public static int createFileBlobFromBlobEntities(NodeF10 f10)	{
+		//public static NodeFileBlob createOneFileBlobs(NodeF10 f10, Long fileId, Long fileSize, Long blobSize, String blobType, Long hashId)	{
+		int cntCreated = 0;
+		for (NodeBlobEntity blobEntity : f10.getBlobSet().getListBlobEntity())	{
+			NodeFileBlob fileBlob = MakeBlobSetTables.createOneFileBlob(f10, null, blobEntity.getEntityId(), blobEntity.getSourceSize(),"file",null);
+			blobEntity.setRefFileBlob(fileBlob);
+			if (fileBlob!=null) {
+				fileBlob.setRefBlobEntity(blobEntity);
+				cntCreated++;
+			} 
+		}
+		System.out.println("MakeBlobSet createFileBlobFromBlobEntities f10.getFileSet().getListFileBlob().size():"+f10.getFileSet().getListFileBlob().size() + 
 				"    ,cntCreated:"+cntCreated);
 		return(cntCreated);
 	}
@@ -141,6 +122,7 @@ public class MakeBlob {
 		
 		ArrayList<NodeFile> fileList4Blob = getFileList4BlobFromFileSet(f10);
 		createBlobEntitiesFromFileList(f10, fileList4Blob);
+		createFileBlobFromBlobEntities(f10);
 		
 		createBlobs(f10);
 				

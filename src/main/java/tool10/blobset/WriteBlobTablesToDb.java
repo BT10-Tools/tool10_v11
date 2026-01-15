@@ -65,12 +65,12 @@ public class WriteBlobTablesToDb {
 	public static int writeTableBlobEntity(Connection conn, ArrayList<NodeBlobEntity> listBlobEntity)	{
 		int cntInserted = 0;
 		String query =  "INSERT INTO BLOB_BLOBENTITY (blobEntityId,entityId,blobId,blobSetId, blobType, blobSize, \r\n"+
-						"sourceSize, hashId, blobDbName, blobDbAttachmentName, blobTableName, \r\n" +
+						"sourceSize, hashId, entityName, blobDbName, blobDbAttachmentName, blobTableName, \r\n" +
 				 		"bigPartNumber, bigCntPart, smallByteIndexStart, smallByteIndexEnd, \r\n"+
 				 		"creationDate,modificationDate) "+
-						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?)";
+						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?)";
 		//public NodeBlobEntity(Long blobEntityId, Long entityId, Long blobId, Long blobSetId, String blobType, Long blobSize,
-		//Long sourceSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
+		//Long sourceSize, Long hashId, String entityName, String blobDbName, String blobDbAttachmentName, String blobTableName,
 		//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
 		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{  
@@ -85,6 +85,7 @@ public class WriteBlobTablesToDb {
 			    if (ent.getBlobSize()!=null) {ps.setLong(cnt++, ent.getBlobSize());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getSourceSize()!=null) {ps.setLong(cnt++, ent.getSourceSize());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getHashId()!=null) {ps.setLong(cnt++, ent.getHashId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    ps.setString(cnt++, ent.getEntityName());
 			    ps.setString(cnt++, ent.getBlobDbName());
 			    ps.setString(cnt++, ent.getBlobDbAttachmentName());
 			    ps.setString(cnt++, ent.getBlobTableName());
@@ -107,13 +108,13 @@ public class WriteBlobTablesToDb {
 	}
 	public static int writeTableBlob(Connection conn, ArrayList<NodeBlob> listBlob)	{ //String blobTableName2, String blobDbAttachmentName2,
 		int cntInserted = 0;
-		String query =  "INSERT INTO BLOB_BLOB (blobId,sourceId,blobSetId,firstPartBlobId,partNumber,cntPart,blobType,"+
+		String query =  "INSERT INTO BLOB_BLOB (blobId,blobEntityId,blobSetId,firstPartBlobId,partNumber,cntPart,blobType,"+
 						"blobSize,compressionType,compressedSize,compressionGainRatio,\r\n"+
 						"compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType, "+
 						"encryptedSize,encrytedByteHashId,blobBytes,compressedBytes,encryptedBytes, \r\n"+
 				 		"blobHashId,creationDate,modificationDate) "+
 						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?)";
-		//public NodeBlob(Long blobId, Long sourceId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+		//public NodeBlob(Long blobId, Long blobEntityId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
 		//Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
 		//Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
 		//Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
@@ -123,7 +124,7 @@ public class WriteBlobTablesToDb {
 		    for (NodeBlob ent : listBlob)	{
 			    int cnt=1;
 			    if (ent.getBlobId()!=null) {ps.setLong(cnt++, ent.getBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getSourceId()!=null) {ps.setLong(cnt++, ent.getSourceId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getBlobEntityId()!=null) {ps.setLong(cnt++, ent.getBlobEntityId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getBlobSetId()!=null) {ps.setLong(cnt++, ent.getBlobSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getFirstPartBlobId()!=null) {ps.setLong(cnt++, ent.getFirstPartBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getPartNumber()!=null) {ps.setLong(cnt++, ent.getPartNumber());} else {ps.setNull(cnt++,Types.INTEGER);}

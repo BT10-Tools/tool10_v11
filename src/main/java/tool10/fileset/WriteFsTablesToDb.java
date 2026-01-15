@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 import tool10.fileset.nodes.NodeFile;
@@ -238,12 +239,12 @@ public class WriteFsTablesToDb {
 	}
 	public static int writeTableFileBlob(Connection conn, ArrayList<NodeFileBlob> listFileBlob)	{
 		int cntInserted = 0;
-		String query =  "INSERT INTO FS_FILEBLOB (fileBlobId,fileId,blobId,fileSetId, blobType, blobSize, \r\n"+
+		String query =  "INSERT INTO FS_FILEBLOB (fileBlobId,fileId,blobEntityId,fileSetId, blobType, blobSize, \r\n"+
 						"fileSize, hashId, blobDbName, blobDbAttachmentName, blobTableName, \r\n" +
 				 		"bigPartNumber, bigCntPart, smallByteIndexStart, smallByteIndexEnd, \r\n"+
 				 		"creationDate,modificationDate) "+
 						"VALUES( ?, ?, ?, ?, ?,    ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,   ?, ?)";
-		//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobId, Long fileSetId, String blobType, Long blobSize,
+		//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobEntityId, Long fileSetId, String blobType, Long blobSize,
 		//Long fileSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
 		//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
 		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
@@ -253,7 +254,7 @@ public class WriteFsTablesToDb {
 			    int cnt=1;
 			    if (ent.getFileBlobId()!=null) {ps.setLong(cnt++, ent.getFileBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getFileId()!=null) {ps.setLong(cnt++, ent.getFileId());} else {ps.setNull(cnt++,Types.INTEGER);}
-			    if (ent.getBlobId()!=null) {ps.setLong(cnt++, ent.getBlobId());} else {ps.setNull(cnt++,Types.INTEGER);}
+			    if (ent.getBlobEntityId()!=null) {ps.setLong(cnt++, ent.getBlobEntityId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    if (ent.getFileSetId()!=null) {ps.setLong(cnt++, ent.getFileSetId());} else {ps.setNull(cnt++,Types.INTEGER);}
 			    ps.setString(cnt++, ent.getBlobType());
 			    if (ent.getBlobSize()!=null) {ps.setLong(cnt++, ent.getBlobSize());} else {ps.setNull(cnt++,Types.INTEGER);}

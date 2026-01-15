@@ -24,6 +24,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import tool10.f10.cli.CliRun;
+
 /**
  * The main program for Tool10.  
  * It processes the arguments and calls other tool10 programs. 
@@ -79,7 +81,7 @@ public class Tool10 {
 		NodeF10 f10 = new NodeF10();
 	    f10.startAll(logger);
 		
-	    String[] args0 = CliRun.getArgs0("loadblob");
+	    String[] args0 = CliRun.getArgs0("media"); //load, media
 	    RunF10.runF10(f10,args0);
 	    
 	    f10.endAll(logger);

@@ -102,11 +102,11 @@ public class CreateFileSetTableSql {
 			"fileLastAccessTime TEXT, fileRemark TEXT, creationDate TEXT, modificationDate TEXT \r\n";			
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
 		} else if ("FS_FILEBLOB".equals(tableName))	{
-			//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobId, Long fileSetId, String blobType, Long blobSize,
+			//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobEntityId, Long fileSetId, String blobType, Long blobSize,
 			//Long fileSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
 			//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
 			//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
-			String fieldStr = 	"fileBlobId INTEGER PRIMARY KEY, fileId INTEGER, blobId INTEGER, fileSetId INTEGER, blobType TEXT, blobSize INTEGER, "+
+			String fieldStr = 	"fileBlobId INTEGER PRIMARY KEY, fileId INTEGER, blobEntityId INTEGER, fileSetId INTEGER, blobType TEXT, blobSize INTEGER, "+
 								"fileSize INTEGER, hashId INTEGER, blobDbName TEXT, blobDbAttachmentName TEXT, blobTableName TEXT, "+
 								"bigPartNumber INTEGER, bigCntPart INTEGER, smallByteIndexStart INTEGER,smallByteIndexEnd INTEGER, "+
 								"creationDate TEXT, modificationDate TEXT";

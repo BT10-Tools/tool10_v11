@@ -15,12 +15,12 @@ public class CreateBlobSetTableSql {
 								"displayOrder INTEGER, creationDate TEXT, modificationDate TEXT";
 			sqlStr="CREATE TABLE IF NOT EXISTS "+tableName+" ("+fieldStr.toUpperCase()+") ";
 		} else if ("BLOB_BLOB".equals(tableName))	{
-			//public NodeBlob(Long blobId, Long sourceId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+			//public NodeBlob(Long blobId, Long blobEntityId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
 			//Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
 			//Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
 			//Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
-			//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {			
-			String fieldStr = 	"blobId INTEGER PRIMARY KEY, sourceId INTEGER, blobSetId INTEGER, firstPartBlobId INTEGER, partNumber INTEGER, cntPart INTEGER, blobType TEXT,"+
+			//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
+			String fieldStr = 	"blobId INTEGER PRIMARY KEY, blobEntityId INTEGER, blobSetId INTEGER, firstPartBlobId INTEGER, partNumber INTEGER, cntPart INTEGER, blobType TEXT,"+
 								"blobSize INTEGER, compressionType TEXT, compressedSize INTEGER, compressionGainRatio REAL, "+
 								"compressionGainBytes INTEGER, compressedByteHashId INTEGER, sandByteLengthHead INTEGER, "+ 
 								"sandByteLengthTail INTEGER, encryptionBlobKey TEXT, encryptionType TEXT, encryptedSize INTEGER, encrytedByteHashId INTEGER, "+

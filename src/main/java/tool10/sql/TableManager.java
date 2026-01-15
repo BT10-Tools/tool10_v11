@@ -3,7 +3,7 @@ package tool10.sql;
 import java.sql.Connection;
 
 import tool10.blobset.CreateBlobSetTables;
-import tool10.bookset.CreateBookSetTables;
+import tool10.docset.CreateDocSetTables;
 import tool10.fileset.CreateFileSetTables;
 import tool10.mediaset.CreateMediaSetTables;
 import tool10.simset.CreateSimSetTables;
@@ -72,8 +72,8 @@ public class TableManager {
 		for (String tblName : tableList)	{
 			if ("fsDb".equals(managerName))			{	CreateFileSetTables.createTable(conn, tblName); } 
 			else if ("tagDb".equals(managerName))	{	CreateTagSetTables.createTable(conn, tblName); }
-			else if ("imageDb".equals(managerName))	{	CreateMediaSetTables.createTable(conn, tblName); }
-			else if ("bookDb".equals(managerName))	{	CreateBookSetTables.createTable(conn, tblName); }
+			else if ("mediaDb".equals(managerName))	{	CreateMediaSetTables.createTable(conn, tblName); }
+			else if ("bookDb".equals(managerName))	{	CreateDocSetTables.createTable(conn, tblName); }
 			//else if ("blobDb".equals(managerName))	{	CreateBlobSetTables.createTable(conn, tblName); }
 			else if ("simDb".equals(managerName))	{	CreateSimSetTables.createTable(conn, tblName); }
 			else if ("blobDb".equals(managerName))	{	CreateBlobSetTables.createTable(conn, tblName); }
@@ -89,8 +89,9 @@ public class TableManager {
 		} else if ("tagDb".equals(managerName))			{
 			tblList = new String[] {"TAG_TAGSET","TAG_TAG","TAG_TAGTYPE","TAG_TAGFILE","TAG_TAGFILETYPE","TAG_TAGSTR","TAG_TAGENGINE",
 					"TAG_EMBEDDED","REG_ENTITYID"}; 
-		} else if ("imageDb".equals(managerName))			{
-			tblList = new String[] {"IMG_IMAGESET","IMG_IMAGE","IMG_IMAGEFILE","IMG_IMAGEBLOB","IMG_VIDEO","IMG_FRAME","IMG_AUDIO","REG_ENTITYID"}; 
+		} else if ("mediaDb".equals(managerName))			{
+			tblList = new String[] {"MED_MEDIASET","MED_IMAGE","MED_MEDIAFILE","MED_MEDIABLOB","MED_MEDIAPROP","MED_VIDEO","MED_FRAME",
+					"MED_AUDIO","REG_ENTITYID"}; 
 		} else if ("bookDb".equals(managerName))			{
 			tblList = new String[] {"BOOK_BOOKSET","BOOK_LANGUAGE","BOOK_BOOK","BOOK_BOOKFILE","BOOK_BOOKIMAGE","BOOK_BOOKBLOB","BOOK_CHAPTER",
 					"BOOK_SECTION","BOOK_PARAGRAPH","BOOK_SENTENCE","BOOK_TOKEN","REG_ENTITYID"}; 

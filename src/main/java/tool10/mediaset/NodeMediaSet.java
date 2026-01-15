@@ -35,6 +35,7 @@ public class NodeMediaSet  implements Serializable {
 		this.listImage = new  ArrayList<NodeImage>();
 		this.listMediaFile = new  ArrayList<NodeMediaFile>();
 		this.listMediaBlob = new  ArrayList<NodeMediaBlob>();
+		this.listMediaProp = new  ArrayList<NodeMediaProp>();
 		this.listVideo = new  ArrayList<NodeVideo>();
 		this.listFrame = new  ArrayList<NodeFrame>();
 		this.listAudio = new  ArrayList<NodeAudio>();
@@ -42,6 +43,7 @@ public class NodeMediaSet  implements Serializable {
 		this.mapId2Image = new HashMap<Long,NodeImage>();
 		this.mapId2MediaFile = new HashMap<Long,NodeMediaFile>();
 		this.mapId2MediaBlob =  new HashMap<Long,NodeMediaBlob>();
+		this.mapId2MediaProp =  new HashMap<Long,NodeMediaProp>();
 		this.mapId2Video = new HashMap<Long,NodeVideo>();
 		this.mapId2Frame = new HashMap<Long,NodeFrame>();
 		this.mapId2Audio = new HashMap<Long,NodeAudio>();
@@ -64,6 +66,7 @@ public class NodeMediaSet  implements Serializable {
 	private ArrayList<NodeImage> listImage;
 	private ArrayList<NodeMediaFile> listMediaFile;
 	private ArrayList<NodeMediaBlob> listMediaBlob;
+	private ArrayList<NodeMediaProp> listMediaProp;
 	private ArrayList<NodeVideo> listVideo;
 	private ArrayList<NodeFrame> listFrame;
 	private ArrayList<NodeAudio> listAudio;
@@ -71,6 +74,7 @@ public class NodeMediaSet  implements Serializable {
 	private HashMap<Long,NodeImage> mapId2Image;
 	private HashMap<Long,NodeMediaFile> mapId2MediaFile;
 	private HashMap<Long,NodeMediaBlob> mapId2MediaBlob;
+	private HashMap<Long,NodeMediaProp> mapId2MediaProp;
 	private HashMap<Long,NodeVideo> mapId2Video;
 	private HashMap<Long,NodeFrame> mapId2Frame;
 	private HashMap<Long,NodeAudio> mapId2Audio;
@@ -208,6 +212,12 @@ public class NodeMediaSet  implements Serializable {
 	}
 	public HashMap<Long, NodeAudio> getMapId2Audio() {
 		return mapId2Audio;
+	}
+	public ArrayList<NodeMediaProp> getListMediaProp() {
+		return listMediaProp;
+	}
+	public HashMap<Long, NodeMediaProp> getMapId2MediaProp() {
+		return mapId2MediaProp;
 	}
 	
 	

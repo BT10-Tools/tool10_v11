@@ -1,8 +1,8 @@
 package tool10.simset;
 
-import tool10.bookset.MakeBookSet;
-import tool10.bookset.NodeBookSet;
-import tool10.bookset.WriteBookSetTablesToDb;
+import tool10.docset.MakeDocSet;
+import tool10.docset.NodeDocSet;
+import tool10.docset.WriteDocSetTablesToDb;
 import tool10.f10.NodeF10;
 import tool10.f10.RunF10;
 import tool10.fileset.CreateFileSetTables;
@@ -19,9 +19,9 @@ public class RunSim {
 		Conn10 connBook = DbManager.createBookDatabase(f10);
 		if (connBook==null)	return;
 	
-		NodeBookSet bookSet = MakeBookSet.makeBookSetFromFileSet(f10);
+		NodeDocSet bookSet = MakeDocSet.makeBookSetFromFileSet(f10);
 		
-		WriteBookSetTablesToDb.writeBookSetTables(f10.getConnBook().getConn(), bookSet);
+		WriteDocSetTablesToDb.writeBookSetTables(f10.getConnBook().getConn(), bookSet);
 		
 	/*	ReadBookTablesFromDb.postProcessBookSet(f10.getBookSet());
 		

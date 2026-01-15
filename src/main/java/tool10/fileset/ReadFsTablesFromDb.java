@@ -420,11 +420,11 @@ public class ReadFsTablesFromDb {
 	}
 	public static int readTableFileBlob(Connection conn, NodeFileSet fileSet)	{ 
 		int cntRead = 0; 
-		String query = 	" SELECT fileBlobId,fileId,blobId,fileSetId, blobType, blobSize, \r\n" + 
+		String query = 	" SELECT fileBlobId,fileId,blobEntityId,fileSetId, blobType, blobSize, \r\n" + 
 				" fileSize, hashId, blobDbName, blobDbAttachmentName, blobTableName, \r\n" + 
 				" bigPartNumber, bigCntPart, smallByteIndexStart, smallByteIndexEnd, creationDate,modificationDate"+
 				" FROM FS_FILEBLOB WHERE fileSetId = ? ORDER BY fileBlobId"; 
-		//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobId, Long fileSetId, String blobType, Long blobSize,
+		//public NodeFileBlob(Long fileBlobId, Long fileId, Long blobEntityId, Long fileSetId, String blobType, Long blobSize,
 		//Long fileSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
 		//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
 		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
@@ -435,7 +435,7 @@ public class ReadFsTablesFromDb {
 			while (rs.next()) { 
 				Long fileBlobId = rs.getLong("fileBlobId");	if (rs.wasNull()) {fileBlobId = null;}
 				Long fileId = rs.getLong("fileId");	if (rs.wasNull()) {fileId = null;}
-				Long blobId = rs.getLong("blobId");	if (rs.wasNull()) {blobId = null;}
+				Long blobEntityId = rs.getLong("blobEntityId");	if (rs.wasNull()) {blobEntityId = null;}
 				Long fileSetId = rs.getLong("fileSetId");	if (rs.wasNull()) {fileSetId = null;}
 				String blobType = rs.getString("blobType");
 				Long blobSize = rs.getLong("blobSize");	if (rs.wasNull()) {blobSize = null;}
@@ -453,7 +453,7 @@ public class ReadFsTablesFromDb {
 				String modificationDateStr = rs.getString("modificationDate");
 				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
 				NodeFileBlob newFileBlob = new NodeFileBlob(
-						fileBlobId,fileId,blobId,fileSetId,blobType,blobSize,fileSize, hashId,blobDbName,blobDbAttachmentName,blobTableName,
+						fileBlobId,fileId,blobEntityId,fileSetId,blobType,blobSize,fileSize, hashId,blobDbName,blobDbAttachmentName,blobTableName,
 						bigPartNumber,bigCntPart,smallByteIndexStart,smallByteIndexEnd,creationDate,modificationDate);
 				
 				fileSet.getListFileBlob().add(newFileBlob); 

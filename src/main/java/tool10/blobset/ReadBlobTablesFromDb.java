@@ -15,11 +15,11 @@ public class ReadBlobTablesFromDb {
 	public static int readTableBlobEntity(Connection conn, NodeBlobSet blobSet)	{ 
 		int cntRead = 0; 
 		String query = 	" SELECT blobEntityId,entityId,blobId,blobSetId, blobType, blobSize, \r\n" + 
-				" sourceSize, hashId, blobDbName, blobDbAttachmentName, blobTableName, \r\n" + 
+				" sourceSize, hashId, entityName, blobDbName, blobDbAttachmentName, blobTableName, \r\n" + 
 				" bigPartNumber, bigCntPart, smallByteIndexStart, smallByteIndexEnd, creationDate,modificationDate"+
-				" FROM FS_FILEBLOB WHERE blobSetId = ? ORDER BY fileBlobId"; 
+				" FROM BLOB_BLOBENTITY WHERE blobSetId = ? ORDER BY blobEntityId"; 
 		//public NodeBlobEntity(Long blobEntityId, Long entityId, Long blobId, Long blobSetId, String blobType, Long blobSize,
-		//Long sourceSize, Long hashId, String blobDbName, String blobDbAttachmentName, String blobTableName,
+		//Long sourceSize, Long hashId, String entityName, String blobDbName, String blobDbAttachmentName, String blobTableName,
 		//Long bigPartNumber, Long bigCntPart, Long smallByteIndexStart, Long smallByteIndexEnd,
 		//ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{
@@ -35,6 +35,7 @@ public class ReadBlobTablesFromDb {
 				Long blobSize = rs.getLong("blobSize");	if (rs.wasNull()) {blobSize = null;}
 				Long sourceSize = rs.getLong("sourceSize");	if (rs.wasNull()) {sourceSize = null;}
 				Long hashId = rs.getLong("hashId");	if (rs.wasNull()) {hashId = null;}
+				String entityName = rs.getString("entityName");
 				String blobDbName = rs.getString("blobDbName");
 				String blobDbAttachmentName = rs.getString("blobDbAttachmentName");
 				String blobTableName = rs.getString("blobTableName");
@@ -47,7 +48,7 @@ public class ReadBlobTablesFromDb {
 				String modificationDateStr = rs.getString("modificationDate");
 				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
 				NodeBlobEntity newBlobEntity = new NodeBlobEntity(
-						blobEntityId,entityId,blobId,blobSetId,blobType,blobSize,sourceSize, hashId,blobDbName,blobDbAttachmentName,blobTableName,
+						blobEntityId,entityId,blobId,blobSetId,blobType,blobSize,sourceSize, hashId,entityName, blobDbName,blobDbAttachmentName,blobTableName,
 						bigPartNumber,bigCntPart,smallByteIndexStart,smallByteIndexEnd,creationDate,modificationDate);
 				blobSet.getListBlobEntity().add(newBlobEntity); 
 				blobSet.getMapId2BlobEntity().put(newBlobEntity.getBlobEntityId(),newBlobEntity);
@@ -63,23 +64,23 @@ public class ReadBlobTablesFromDb {
 	}
 	public static int readTableBlob(Connection conn, NodeBlobSet blobSet)	{ 
 		int cntRead = 0; 
-		String query = 	" SELECT blobId,sourceId,blobSetId,firstPartBlobId,partNumber,cntPart,blobType, "+
+		String query = 	" SELECT blobId,blobEntityId,blobSetId,firstPartBlobId,partNumber,cntPart,blobType, "+
 				" blobSize,compressionType,compressedSize,compressionGainRatio,"+
 				" compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType,"+
 				" encryptedSize,encrytedByteHashId,blobBytes,compressedBytes,encryptedBytes,blobHashId,creationDate,modificationDate "+
 				" FROM BLOB_BLOB WHERE blobSetId = ? ORDER BY blobId"; 
-		//public NodeBlob(Long blobId, Long sourceId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+		//public NodeBlob(Long blobId, Long blobEntityId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
 		//Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
 		//Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
 		//Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
-		//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {		 		
+		//Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		try	{
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setLong(1, blobSet.getBlobSetId());
 			ResultSet rs = ps.executeQuery(); 
 			while (rs.next()) { 
 				Long blobId = rs.getLong("blobId");	if (rs.wasNull()) {blobId = null;}
-				Long sourceId = rs.getLong("sourceId");	if (rs.wasNull()) {sourceId = null;}
+				Long blobEntityId = rs.getLong("blobEntityId");	if (rs.wasNull()) {blobEntityId = null;}
 				Long blobSetId = rs.getLong("blobSetId");	if (rs.wasNull()) {blobSetId = null;}
 				Long firstPartBlobId = rs.getLong("firstPartBlobId");	if (rs.wasNull()) {firstPartBlobId = null;}
 				Long partNumber = rs.getLong("partNumber");	if (rs.wasNull()) {partNumber = null;}
@@ -106,7 +107,7 @@ public class ReadBlobTablesFromDb {
 				String modificationDateStr = rs.getString("modificationDate");
 				ZonedDateTime modificationDate = ((modificationDateStr!=null) ? ZonedDateTime.parse(modificationDateStr) : null); 
 				NodeBlob newBlob = new NodeBlob(
-						blobId,sourceId,blobSetId,firstPartBlobId,partNumber,cntPart,blobType,
+						blobId,blobEntityId,blobSetId,firstPartBlobId,partNumber,cntPart,blobType,
 						blobSize,compressionType,compressedSize,compressionGainRatio,
 						compressionGainBytes,compressedByteHashId,sandByteLengthHead,sandByteLengthTail,encryptionBlobKey,encryptionType,
 						encryptedSize,encrytedByteHashId,blobBytes,compressedBytes,encryptedBytes,blobHashId,creationDate,modificationDate);

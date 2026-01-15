@@ -5,14 +5,14 @@ import java.time.ZonedDateTime;
 
 public class NodeBlob implements Serializable  {
 
-	public NodeBlob(Long blobId, Long sourceId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+	public NodeBlob(Long blobId, Long blobEntityId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
 			Long blobSize, String compressionType, Long compressedSize, Double compressionGainRatio,
 			Long compressionGainBytes, Long compressedByteHashId, Long sandByteLengthHead, Long sandByteLengthTail,String encryptionBlobKey, String encryptionType, 
 			Long encryptedSize, Long encrytedByteHashId,byte[] blobBytes, byte[] compressedBytes, byte[] encryptedBytes, 
 			Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
 		this.blobId = blobId;
-		this.sourceId = sourceId;
+		this.blobEntityId = blobEntityId;
 		this.blobSetId = blobSetId;
 		this.firstPartBlobId = firstPartBlobId;
 		this.partNumber = partNumber;
@@ -37,11 +37,11 @@ public class NodeBlob implements Serializable  {
 		this.creationDate = creationDate;
 		this.modificationDate = modificationDate;
 	}	
-	public NodeBlob(Long blobId, Long sourceId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
+	public NodeBlob(Long blobId, Long blobEntityId, Long blobSetId, Long firstPartBlobId, Long partNumber, Long cntPart, String blobType,
 			Long blobSize, Long fileSize, byte[] blobBytes, Long blobHashId, ZonedDateTime creationDate, ZonedDateTime modificationDate) {
 		super();
 		this.blobId = blobId;
-		this.sourceId = sourceId;
+		this.blobEntityId = blobEntityId;
 		this.blobSetId = blobSetId;
 		this.firstPartBlobId = firstPartBlobId;
 		this.partNumber = partNumber;
@@ -59,7 +59,7 @@ public class NodeBlob implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	
 	private Long blobId;
-	private Long sourceId;
+	private Long blobEntityId;
 	private Long blobSetId;
 	private Long firstPartBlobId;
 	private Long partNumber;
@@ -111,8 +111,8 @@ public class NodeBlob implements Serializable  {
 	public Long getBlobId() {
 		return blobId;
 	}
-	public Long getSourceId() {
-		return sourceId;
+	public Long getBlobEntityId() {
+		return blobEntityId;
 	}
 	public Long getPartNumber() {
 		return partNumber;
